@@ -39,10 +39,12 @@ type Generation = {
 function Dashboard() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  const [plan, setPlan] = useState<{ plan: string; status: string; current_period_end: string | null } | null>(null);
+  const { subscription, isPro } = useSubscription(user?.id);
+  const { openCheckout, loading: checkoutLoading } = usePaddleCheckout();
   const [history, setHistory] = useState<Generation[]>([]);
   const [todayCount, setTodayCount] = useState(0);
   const [loadingData, setLoadingData] = useState(true);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/auth" });
@@ -52,28 +54,55 @@ function Dashboard() {
     if (!user) return;
     let active = true;
 
-    async function load(userId: string) {
+    async function load() {
       const since = new Date();
       since.setUTCHours(0, 0, 0, 0);
 
-      const [sub, gens, usage] = await Promise.all([
-        supabase.from("subscriptions").select("plan, status, current_period_end").eq("user_id", userId).maybeSingle(),
+      const [gens, usage] = await Promise.all([
         supabase.from("generations").select("id, tool_slug, output, created_at").order("created_at", { ascending: false }).limit(20),
         supabase.from("usage_logs").select("id", { count: "exact", head: true }).gte("created_at", since.toISOString()),
       ]);
 
       if (!active) return;
-      setPlan(sub.data ?? { plan: "free", status: "inactive", current_period_end: null });
       setHistory((gens.data as Generation[]) ?? []);
       setTodayCount(usage.count ?? 0);
       setLoadingData(false);
     }
 
-    load(user.id);
+    load();
     return () => {
       active = false;
     };
   }, [user]);
+
+  async function upgrade() {
+    if (!user) return;
+    try {
+      await openCheckout({
+        priceId: PRO_PRICE_ID,
+        customerEmail: user.email ?? undefined,
+        customData: { userId: user.id },
+        successUrl: `${window.location.origin}/dashboard?checkout=success`,
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't open checkout. Please try again.");
+    }
+  }
+
+  async function manageBilling() {
+    setPortalLoading(true);
+    try {
+      const { url } = await createPortalSession({ data: { environment: getPaddleEnvironment() } });
+      window.open(url, "_blank", "noopener");
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't open the billing portal.");
+    } finally {
+      setPortalLoading(false);
+    }
+  }
+
 
   async function remove(id: string) {
     const { error } = await supabase.from("generations").delete().eq("id", id);
