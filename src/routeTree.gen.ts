@@ -21,6 +21,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
@@ -88,6 +89,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -123,7 +129,7 @@ const ApiPublicPaymentsWebhookRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
@@ -135,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/api/public/image/$': typeof ApiPublicImageSplatRoute
@@ -143,7 +150,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
@@ -155,6 +161,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/tools': typeof ToolsIndexRoute
   '/api/public/image/$': typeof ApiPublicImageSplatRoute
@@ -164,7 +171,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
@@ -176,6 +183,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/tools/': typeof ToolsIndexRoute
   '/api/public/image/$': typeof ApiPublicImageSplatRoute
@@ -198,6 +206,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/blog/$slug'
     | '/tools/$slug'
+    | '/admin/'
     | '/blog/'
     | '/tools/'
     | '/api/public/image/$'
@@ -206,7 +215,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/admin'
     | '/auth'
     | '/contact'
     | '/dashboard'
@@ -218,6 +226,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/blog/$slug'
     | '/tools/$slug'
+    | '/admin'
     | '/blog'
     | '/tools'
     | '/api/public/image/$'
@@ -238,6 +247,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/blog/$slug'
     | '/tools/$slug'
+    | '/admin/'
     | '/blog/'
     | '/tools/'
     | '/api/public/image/$'
@@ -247,7 +257,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
@@ -351,6 +361,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -396,10 +413,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
