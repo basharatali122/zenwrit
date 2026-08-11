@@ -201,16 +201,17 @@ function Dashboard() {
               {portalLoading ? <Loader2 className="animate-spin" /> : <ExternalLink />} Manage billing
             </Button>
           ) : null}
+          {!isPro ? (
+            <Button size="sm" className="mt-4" onClick={upgrade} disabled={checkoutLoading}>
+              {checkoutLoading ? <Loader2 className="animate-spin" /> : null} Upgrade to Pro
+            </Button>
+          ) : null}
           {isPro && !subscription?.cancel_at_period_end && subscription?.status !== "canceled" ? (
             <Button size="sm" variant="ghost" className="mt-2" onClick={switchPlan} disabled={switching}>
               {switching ? <Loader2 className="animate-spin" /> : null}
               {isYearly ? "Switch to monthly" : "Switch to yearly · save 2 months"}
             </Button>
-          ) : (
-            <Button size="sm" className="mt-4" onClick={upgrade} disabled={checkoutLoading}>
-              {checkoutLoading ? <Loader2 className="animate-spin" /> : null} Upgrade to Pro
-            </Button>
-          )}
+          ) : null}
         </div>
 
 
