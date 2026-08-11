@@ -1,0 +1,102 @@
+import { createServerFn } from "@tanstack/react-start";
+import { streamText } from "ai";
+import { z } from "zod";
+import { getTool } from "./tools";
+import {
+  createLovableAiGatewayProvider,
+  getQuota,
+  recordGeneration,
+  resolveOptionalUserId,
+} from "./ai.server";
+
+const GenerateInput = z.object({
+  slug: z.string().min(1),
+  visitorKey: z.string().min(6).max(64),
+  values: z.record(z.string().max(4000)),
+});
+
+const QuotaInput = z.object({ visitorKey: z.string().min(6).max(64) });
+
+export const getUsageQuota = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => QuotaInput.parse(input))
+  .handler(async ({ data }) => {
+    const userId = await resolveOptionalUserId();
+    const quota = await getQuota(userId, data.visitorKey);
+    return {
+      isPro: quota.isPro,
+      used: quota.used,
+      limit: quota.isPro ? null : quota.limit,
+      remaining: quota.isPro ? null : quota.remaining,
+      signedIn: Boolean(userId),
+    };
+  });
+
+export const generateContent = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => GenerateInput.parse(input))
+  .handler(async ({ data }) => {
+    const tool = getTool(data.slug);
+    if (!tool) throw new Error("Unknown tool");
+
+    const apiKey = process.env["LOVABLE_API_KEY"];
+    if (!apiKey) throw new Error("AI is not configured yet. Please try again later.");
+
+    const userId = await resolveOptionalUserId();
+    const quota = await getQuota(userId, data.visitorKey);
+
+    if (!quota.isPro && quota.remaining <= 0) {
+      return {
+        ok: false as const,
+        reason: "limit" as const,
+        output: "",
+        used: quota.used,
+        limit: quota.limit,
+        remaining: 0,
+        isPro: false,
+      };
+    }
+
+    const details = tool.fields
+      .map((field) => {
+        const value = (data.values[field.name] ?? "").trim();
+        return value ? `${field.label}: ${value}` : null;
+      })
+      .filter(Boolean)
+      .join("\n");
+
+    const gateway = createLovableAiGatewayProvider(apiKey);
+
+    let text: string;
+    try {
+      const result = streamText({
+        model: gateway("google/gemini-3.6-flash"),
+        system: tool.systemPrompt,
+        prompt: `${details}\n\nProduce the output now.`,
+        maxOutputTokens: 1200,
+      });
+      text = (await result.text).trim();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      if (message.includes("429")) throw new Error("Too many requests right now — please retry in a moment.");
+      if (message.includes("402")) throw new Error("AI credits are exhausted. Please try again later.");
+      throw new Error("Generation failed. Please try again.");
+    }
+
+    await recordGeneration({
+      userId,
+      visitorKey: data.visitorKey,
+      toolSlug: data.slug,
+      input: data.values,
+      output: text,
+    });
+
+    const used = quota.used + 1;
+    return {
+      ok: true as const,
+      reason: null,
+      output: text,
+      used,
+      limit: quota.isPro ? Number.POSITIVE_INFINITY : quota.limit,
+      remaining: quota.isPro ? Number.POSITIVE_INFINITY : Math.max(0, quota.limit - used),
+      isPro: quota.isPro,
+    };
+  });

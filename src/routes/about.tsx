@@ -1,0 +1,58 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { AdSlot } from "@/components/site/AdSlot";
+
+export const Route = createFileRoute("/about")({
+  head: () => ({
+    meta: [
+      { title: "About SaaScript — Small AI Tools, Fairly Priced" },
+      {
+        name: "description",
+        content:
+          "SaaScript builds fast, single-purpose AI writing tools for creators and job seekers. Free to try, $5/month for unlimited use.",
+      },
+      { property: "og:title", content: "About SaaScript" },
+      { property: "og:description", content: "Why we build small, focused AI tools instead of one bloated assistant." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: About,
+});
+
+function About() {
+  return (
+    <div className="container-page py-12">
+      <h1 className="text-3xl font-bold sm:text-4xl">About SaaScript</h1>
+      <div className="prose-article mt-6 max-w-2xl">
+        <p>
+          SaaScript is a small collection of AI micro-tools built around a simple belief: most people
+          do not want a general assistant, they want one specific piece of writing finished well and
+          quickly. A resume bullet. A cover letter. Ten title options before a Sunday upload.
+        </p>
+        <h2>What we build</h2>
+        <p>
+          Every tool here is single-purpose and opinionated. Instead of a blank chat box, you get a
+          short form built around what the output actually needs, and a prompt tuned by someone who
+          has written that kind of copy for a living. That constraint is why the results are usable
+          in one pass rather than five.
+        </p>
+        <h2>How we make money</h2>
+        <p>
+          Free users get three generations a day and see ads. Pro users pay $5 a month for unlimited
+          generations, no ads and priority speed. There is no enterprise tier, no annual lock-in and
+          no sales call — the whole point is that the price is small enough to be an easy decision.
+        </p>
+        <h2>Privacy</h2>
+        <p>
+          You can use every tool without an account. If you create one, we store your generations so
+          you can find them again, and you can delete any of them from your dashboard at any time.
+          Read the <Link to="/privacy">privacy policy</Link> for the details.
+        </p>
+      </div>
+
+      <div className="mt-10 max-w-2xl">
+        <AdSlot id="ad-slot-about" label="Ad slot — footer" />
+      </div>
+    </div>
+  );
+}

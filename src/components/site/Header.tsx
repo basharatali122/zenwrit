@@ -1,0 +1,100 @@
+import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { Menu, Sparkles, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "./ThemeToggle";
+import { useAuth } from "@/hooks/useAuth";
+
+const NAV = [
+  { to: "/tools", label: "Tools" },
+  { to: "/pricing", label: "Pricing" },
+  { to: "/blog", label: "Blog" },
+  { to: "/about", label: "About" },
+] as const;
+
+export function Header() {
+  const [open, setOpen] = useState(false);
+  const { user, loading } = useAuth();
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-border/80 bg-background/85 backdrop-blur">
+      <div className="container-page flex h-16 items-center justify-between gap-4">
+        <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight">
+          <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Sparkles className="size-4" />
+          </span>
+          SaaScript
+        </Link>
+
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
+          {NAV.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              activeProps={{ className: "text-foreground" }}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <div className="hidden items-center gap-2 md:flex">
+            {!loading && user ? (
+              <Button asChild size="sm">
+                <Link to="/dashboard">Dashboard</Link>
+              </Button>
+            ) : (
+              <>
+                <Button asChild variant="ghost" size="sm">
+                  <Link to="/auth">Log in</Link>
+                </Button>
+                <Button asChild size="sm">
+                  <Link to="/auth" search={{ mode: "signup" }}>
+                    Get started
+                  </Link>
+                </Button>
+              </>
+            )}
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Toggle menu"
+            aria-expanded={open}
+          >
+            {open ? <X /> : <Menu />}
+          </Button>
+        </div>
+      </div>
+
+      {open ? (
+        <div className="border-t border-border bg-background md:hidden">
+          <nav className="container-page flex flex-col py-3" aria-label="Mobile">
+            {NAV.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => setOpen(false)}
+                className="rounded-md px-2 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <Link
+              to={user ? "/dashboard" : "/auth"}
+              onClick={() => setOpen(false)}
+              className="mt-2 rounded-md bg-primary px-3 py-2.5 text-center text-sm font-medium text-primary-foreground"
+            >
+              {user ? "Dashboard" : "Log in / Sign up"}
+            </Link>
+          </nav>
+        </div>
+      ) : null}
+    </header>
+  );
+}
