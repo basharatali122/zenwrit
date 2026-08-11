@@ -14,7 +14,111 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      generations: {
+        Row: {
+          created_at: string
+          id: string
+          input: Json
+          output: string
+          tool_slug: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          input?: Json
+          output: string
+          tool_slug: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          input?: Json
+          output?: string
+          tool_slug?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          plan: string
+          provider_customer_id: string | null
+          provider_subscription_id: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          plan?: string
+          provider_customer_id?: string | null
+          provider_subscription_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          plan?: string
+          provider_customer_id?: string | null
+          provider_subscription_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      usage_logs: {
+        Row: {
+          created_at: string
+          id: string
+          tool_slug: string
+          user_id: string | null
+          visitor_key: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          tool_slug: string
+          user_id?: string | null
+          visitor_key?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          tool_slug?: string
+          user_id?: string | null
+          visitor_key?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
