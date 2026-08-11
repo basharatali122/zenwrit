@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { AdSlot } from "@/components/site/AdSlot";
 import { ToolIcon } from "@/components/site/ToolIcon";
 import { ToolRunner } from "@/components/site/ToolRunner";
-import { TOOLS, getTool } from "@/lib/tools";
+import { TOOLS, getTool, type Tool } from "@/lib/tools";
 
 export const Route = createFileRoute("/tools/$slug")({
   loader: ({ params }) => {
@@ -59,7 +59,7 @@ export const Route = createFileRoute("/tools/$slug")({
 });
 
 function ToolPage() {
-  const { tool } = Route.useLoaderData();
+  const { tool } = Route.useLoaderData() as { tool: Tool };
   const others = TOOLS.filter((t) => t.slug !== tool.slug).slice(0, 4);
   const { intro, sections, title } = tool.article;
 
