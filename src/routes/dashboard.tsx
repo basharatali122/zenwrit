@@ -12,6 +12,9 @@ import { createPortalSession } from "@/utils/payments.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/dashboard")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    checkout: search["checkout"] === "success" ? ("success" as const) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Your Dashboard | SaaScript" },
