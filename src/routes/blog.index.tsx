@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AdSlot } from "@/components/site/AdSlot";
-import { BLOG_POSTS } from "@/lib/blog";
+import { listPublishedPosts } from "@/lib/content.functions";
+import type { BlogPostRecord } from "@/lib/content";
 
 export const Route = createFileRoute("/blog/")({
+  loader: async () => ({ posts: await listPublishedPosts() }),
   head: () => ({
     meta: [
       { title: "Blog — Career & Creator Writing Guides | SaaScript" },
@@ -21,6 +23,8 @@ export const Route = createFileRoute("/blog/")({
 });
 
 function BlogIndex() {
+  const { posts } = Route.useLoaderData() as { posts: BlogPostRecord[] };
+
   return (
     <div className="container-page py-12">
       <h1 className="text-3xl font-bold sm:text-4xl">Blog</h1>
@@ -33,18 +37,27 @@ function BlogIndex() {
       </div>
 
       <ul className="mt-8 grid gap-4 md:grid-cols-2">
-        {BLOG_POSTS.map((post) => (
+        {posts.map((post) => (
           <li key={post.slug}>
             <Link
               to="/blog/$slug"
               params={{ slug: post.slug }}
               className="flex h-full flex-col surface-panel p-5 transition-colors hover:border-primary/50"
             >
+              {post.cover_image_url ? (
+                <img
+                  src={post.cover_image_url}
+                  alt={post.title}
+                  className="mb-4 aspect-[16/9] w-full rounded-lg border border-border object-cover"
+                  loading="lazy"
+                />
+              ) : null}
               <p className="text-xs font-medium uppercase tracking-wide text-primary">{post.category}</p>
               <h2 className="mt-2 text-lg font-semibold">{post.title}</h2>
-              <p className="mt-2 flex-1 text-sm text-muted-foreground">{post.description}</p>
+              <p className="mt-2 flex-1 text-sm text-muted-foreground">{post.excerpt}</p>
               <p className="mt-4 text-xs text-muted-foreground">
-                {new Date(post.date).toLocaleDateString()} · {post.readingTime}
+                {post.published_at ? `${new Date(post.published_at).toLocaleDateString()} · ` : ""}
+                {post.reading_time}
               </p>
             </Link>
           </li>
