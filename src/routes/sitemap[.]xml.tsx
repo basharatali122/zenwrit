@@ -15,7 +15,7 @@ const STATIC_PATHS = [
   "/disclaimer",
 ];
 
-export const Route = createFileRoute("/sitemap[.]xml")({
+export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: ({ request }) => {
