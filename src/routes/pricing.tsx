@@ -46,6 +46,8 @@ function PricingPage() {
   const navigate = useNavigate();
   const { isPro } = useSubscription(user?.id);
   const { openCheckout, loading } = usePaddleCheckout();
+  const [cycle, setCycle] = useState<BillingCycle>("monthly");
+  const plan = PRO_PRICES[cycle];
 
   async function startCheckout() {
     if (!user) {
@@ -59,7 +61,7 @@ function PricingPage() {
     }
     try {
       await openCheckout({
-        priceId: PRO_PRICE_ID,
+        priceId: plan.priceId,
         customerEmail: user.email ?? undefined,
         customData: { userId: user.id },
         successUrl: `${window.location.origin}/dashboard?checkout=success`,
