@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Loader2, LogOut, Trash2 } from "lucide-react";
+import { ExternalLink, Loader2, LogOut, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
+import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { getPaddleEnvironment, PRO_PRICE_ID } from "@/lib/paddle";
+import { createPortalSession } from "@/utils/payments.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/dashboard")({
@@ -34,10 +39,12 @@ type Generation = {
 function Dashboard() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  const [plan, setPlan] = useState<{ plan: string; status: string; current_period_end: string | null } | null>(null);
+  const { subscription, isPro } = useSubscription(user?.id);
+  const { openCheckout, loading: checkoutLoading } = usePaddleCheckout();
   const [history, setHistory] = useState<Generation[]>([]);
   const [todayCount, setTodayCount] = useState(0);
   const [loadingData, setLoadingData] = useState(true);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/auth" });
@@ -47,28 +54,55 @@ function Dashboard() {
     if (!user) return;
     let active = true;
 
-    async function load(userId: string) {
+    async function load() {
       const since = new Date();
       since.setUTCHours(0, 0, 0, 0);
 
-      const [sub, gens, usage] = await Promise.all([
-        supabase.from("subscriptions").select("plan, status, current_period_end").eq("user_id", userId).maybeSingle(),
+      const [gens, usage] = await Promise.all([
         supabase.from("generations").select("id, tool_slug, output, created_at").order("created_at", { ascending: false }).limit(20),
         supabase.from("usage_logs").select("id", { count: "exact", head: true }).gte("created_at", since.toISOString()),
       ]);
 
       if (!active) return;
-      setPlan(sub.data ?? { plan: "free", status: "inactive", current_period_end: null });
       setHistory((gens.data as Generation[]) ?? []);
       setTodayCount(usage.count ?? 0);
       setLoadingData(false);
     }
 
-    load(user.id);
+    load();
     return () => {
       active = false;
     };
   }, [user]);
+
+  async function upgrade() {
+    if (!user) return;
+    try {
+      await openCheckout({
+        priceId: PRO_PRICE_ID,
+        customerEmail: user.email ?? undefined,
+        customData: { userId: user.id },
+        successUrl: `${window.location.origin}/dashboard?checkout=success`,
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't open checkout. Please try again.");
+    }
+  }
+
+  async function manageBilling() {
+    setPortalLoading(true);
+    try {
+      const { url } = await createPortalSession({ data: { environment: getPaddleEnvironment() } });
+      window.open(url, "_blank", "noopener");
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't open the billing portal.");
+    } finally {
+      setPortalLoading(false);
+    }
+  }
+
 
   async function remove(id: string) {
     const { error } = await supabase.from("generations").delete().eq("id", id);
@@ -88,10 +122,10 @@ function Dashboard() {
     );
   }
 
-  const isPro = plan?.plan === "pro" && plan?.status === "active";
-
   return (
-    <div className="container-page py-12">
+    <div>
+      <PaymentTestModeBanner />
+      <div className="container-page py-12">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -108,17 +142,27 @@ function Dashboard() {
           <p className="mt-2 text-2xl font-bold">{isPro ? "Pro" : "Free"}</p>
           <p className="mt-1 text-sm text-muted-foreground">
             {isPro
-              ? plan?.current_period_end
-                ? `Renews ${new Date(plan.current_period_end).toLocaleDateString()}`
+              ? subscription?.current_period_end
+                ? `${subscription.cancel_at_period_end || subscription.status === "canceled" ? "Ends" : "Renews"} ${new Date(subscription.current_period_end).toLocaleDateString()}`
                 : "Active subscription"
               : "$0 · 3 generations per day"}
           </p>
-          {!isPro ? (
-            <Button asChild size="sm" className="mt-4">
-              <Link to="/pricing">Upgrade to Pro</Link>
-            </Button>
+          {subscription?.status === "past_due" ? (
+            <p className="mt-1 text-sm text-destructive">
+              Your last payment failed — update your card to keep Pro.
+            </p>
           ) : null}
+          {isPro ? (
+            <Button size="sm" variant="outline" className="mt-4" onClick={manageBilling} disabled={portalLoading}>
+              {portalLoading ? <Loader2 className="animate-spin" /> : <ExternalLink />} Manage billing
+            </Button>
+          ) : (
+            <Button size="sm" className="mt-4" onClick={upgrade} disabled={checkoutLoading}>
+              {checkoutLoading ? <Loader2 className="animate-spin" /> : null} Upgrade to Pro
+            </Button>
+          )}
         </div>
+
 
         <div className="surface-panel p-5">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Today's usage</h2>
@@ -169,6 +213,7 @@ function Dashboard() {
           </ul>
         )}
       </section>
+      </div>
     </div>
   );
 }

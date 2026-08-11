@@ -1,9 +1,13 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, X } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Check, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { AdSlot } from "@/components/site/AdSlot";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
+import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { PRO_PRICE_ID } from "@/lib/paddle";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -38,17 +42,37 @@ const ROWS = [
 
 function PricingPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { isPro } = useSubscription(user?.id);
+  const { openCheckout, loading } = usePaddleCheckout();
 
-  function startCheckout() {
+  async function startCheckout() {
     if (!user) {
       toast.info("Create a free account first — then you can upgrade in one click.");
+      navigate({ to: "/auth" });
       return;
     }
-    toast.info("Card checkout is being connected. Your account is ready for Pro.");
+    if (isPro) {
+      navigate({ to: "/dashboard" });
+      return;
+    }
+    try {
+      await openCheckout({
+        priceId: PRO_PRICE_ID,
+        customerEmail: user.email ?? undefined,
+        customData: { userId: user.id },
+        successUrl: `${window.location.origin}/dashboard?checkout=success`,
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't open checkout. Please try again.");
+    }
   }
 
   return (
-    <div className="container-page py-12">
+    <div>
+      <PaymentTestModeBanner />
+      <div className="container-page py-12">
       <h1 className="text-3xl font-bold sm:text-4xl">Pricing</h1>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
         Start free with three generations a day. Upgrade when you need volume — cancel any time.
@@ -81,8 +105,9 @@ function PricingPage() {
             <li className="flex gap-2"><Check className="size-4 text-success" /> Full generation history</li>
             <li className="flex gap-2"><Check className="size-4 text-success" /> Early access to new tools</li>
           </ul>
-          <Button className="mt-6" onClick={startCheckout}>
-            Subscribe — $5/month
+          <Button className="mt-6" onClick={startCheckout} disabled={loading}>
+            {loading ? <Loader2 className="animate-spin" /> : null}
+            {isPro ? "You're on Pro" : "Subscribe — $5/month"}
           </Button>
           <p className="mt-2 text-center text-xs text-muted-foreground">
             Secure card checkout. Cancel anytime from your dashboard.
@@ -146,6 +171,7 @@ function PricingPage() {
           </div>
         </dl>
       </section>
+      </div>
     </div>
   );
 }
