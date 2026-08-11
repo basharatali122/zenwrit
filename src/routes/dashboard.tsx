@@ -12,9 +12,8 @@ import { changeSubscriptionPlan, createPortalSession } from "@/utils/payments.fu
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/dashboard")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    checkout: search["checkout"] === "success" ? ("success" as const) : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { checkout?: "success" } =>
+    search["checkout"] === "success" ? { checkout: "success" } : {},
   head: () => ({
     meta: [
       { title: "Your Dashboard | SaaScript" },
