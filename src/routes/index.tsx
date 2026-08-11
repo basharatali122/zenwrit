@@ -39,6 +39,8 @@ const COMPARISON = [
 ];
 
 function Home() {
+  const { tools } = Route.useLoaderData() as { tools: ToolRecord[] };
+
   return (
     <>
       <section className="relative overflow-hidden border-b border-border">
