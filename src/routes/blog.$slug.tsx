@@ -1,10 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { AdSlot } from "@/components/site/AdSlot";
-import { getPost, type BlogPost } from "@/lib/blog";
+import { MarkdownArticle } from "@/components/site/MarkdownArticle";
+import { getPublishedPost } from "@/lib/content.functions";
+import type { BlogPostRecord } from "@/lib/content";
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => {
-    const post = getPost(params.slug);
+  loader: async ({ params }) => {
+    const post = await getPublishedPost({ data: { slug: params.slug } });
     if (!post) throw notFound();
     return { post };
   },
@@ -13,12 +15,14 @@ export const Route = createFileRoute("/blog/$slug")({
       return { meta: [{ title: "Article not found | SaaScript" }, { name: "robots", content: "noindex" }] };
     }
     const { post } = loaderData;
+    const title = post.meta_title || `${post.title} | SaaScript`;
+    const description = post.meta_description || post.excerpt;
     return {
       meta: [
-        { title: `${post.title} | SaaScript` },
-        { name: "description", content: post.description },
+        { title },
+        { name: "description", content: description },
         { property: "og:title", content: post.title },
-        { property: "og:description", content: post.description },
+        { property: "og:description", content: description },
         { property: "og:type", content: "article" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
@@ -29,8 +33,8 @@ export const Route = createFileRoute("/blog/$slug")({
             "@context": "https://schema.org",
             "@type": "Article",
             headline: post.title,
-            description: post.description,
-            datePublished: post.date,
+            description,
+            datePublished: post.published_at,
             author: { "@type": "Organization", name: "SaaScript" },
           }),
         },
@@ -41,7 +45,7 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function BlogPostPage() {
-  const { post } = Route.useLoaderData() as { post: BlogPost };
+  const { post } = Route.useLoaderData() as { post: BlogPostRecord };
 
   return (
     <div className="container-page py-12">
@@ -54,25 +58,25 @@ function BlogPostPage() {
       <article className="mx-auto mt-5 max-w-2xl">
         <h1 className="text-3xl font-bold sm:text-4xl">{post.title}</h1>
         <p className="mt-3 text-sm text-muted-foreground">
-          {new Date(post.date).toLocaleDateString()} · {post.readingTime}
+          {post.published_at ? `${new Date(post.published_at).toLocaleDateString()} · ` : ""}
+          {post.reading_time}
         </p>
+
+        {post.cover_image_url ? (
+          <img
+            src={post.cover_image_url}
+            alt={post.title}
+            className="mt-6 aspect-[16/9] w-full rounded-xl border border-border object-cover"
+            loading="lazy"
+          />
+        ) : null}
 
         <div className="my-8">
           <AdSlot id="ad-slot-1" label="Ad slot 1 — below hero" />
         </div>
 
         <div className="prose-article">
-          {post.body.map((block, index) => (
-            <section key={index}>
-              {block.heading ? <h2>{block.heading}</h2> : null}
-              {block.paragraphs.map((paragraph, i) => (
-                <p key={i}>{paragraph}</p>
-              ))}
-              {index === 1 ? (
-                <AdSlot id="ad-slot-2" label="Ad slot 2 — in content" variant="inline" className="my-6" />
-              ) : null}
-            </section>
-          ))}
+          <MarkdownArticle markdown={post.content} />
         </div>
       </article>
     </div>
