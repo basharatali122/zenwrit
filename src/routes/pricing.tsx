@@ -78,7 +78,23 @@ function PricingPage() {
         Start free with three generations a day. Upgrade when you need volume — cancel any time.
       </p>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-2">
+      <div className="mt-6 inline-flex rounded-lg border border-border bg-surface p-1" role="group" aria-label="Billing cycle">
+        {(["monthly", "yearly"] as const).map((option) => (
+          <button
+            key={option}
+            type="button"
+            onClick={() => setCycle(option)}
+            aria-pressed={cycle === option}
+            className={`rounded-md px-4 py-1.5 text-sm font-medium transition ${
+              cycle === option ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {option === "monthly" ? "Monthly" : "Yearly · 2 months free"}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-6 grid gap-4 md:grid-cols-3">
         <div className="surface-panel flex flex-col p-6">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Free</h2>
           <p className="mt-3 text-4xl font-bold">$0</p>
@@ -96,9 +112,10 @@ function PricingPage() {
         <div className="surface-panel flex flex-col border-primary/60 p-6">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">Pro</h2>
           <p className="mt-3 text-4xl font-bold">
-            $5<span className="text-base font-medium text-muted-foreground">/month</span>
+            {plan.amount}
+            <span className="text-base font-medium text-muted-foreground">{plan.suffix}</span>
           </p>
-          <p className="mt-1 text-sm text-muted-foreground">Unlimited, ad-free, priority speed.</p>
+          <p className="mt-1 text-sm text-muted-foreground">{plan.note}</p>
           <ul className="mt-6 flex-1 space-y-2 text-sm text-muted-foreground">
             <li className="flex gap-2"><Check className="size-4 text-success" /> Unlimited generations</li>
             <li className="flex gap-2"><Check className="size-4 text-success" /> No ads anywhere</li>
@@ -107,12 +124,28 @@ function PricingPage() {
           </ul>
           <Button className="mt-6" onClick={startCheckout} disabled={loading}>
             {loading ? <Loader2 className="animate-spin" /> : null}
-            {isPro ? "You're on Pro" : "Subscribe — $5/month"}
+            {isPro ? "Manage your plan" : `Subscribe — ${plan.amount}${plan.suffix}`}
           </Button>
           <p className="mt-2 text-center text-xs text-muted-foreground">
             Secure card checkout. Cancel anytime from your dashboard.
           </p>
         </div>
+
+        <div className="surface-panel flex flex-col p-6">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Custom</h2>
+          <p className="mt-3 text-4xl font-bold">Let's talk</p>
+          <p className="mt-1 text-sm text-muted-foreground">Teams, high volume or bespoke tools.</p>
+          <ul className="mt-6 flex-1 space-y-2 text-sm text-muted-foreground">
+            <li className="flex gap-2"><Check className="size-4 text-success" /> Multiple seats</li>
+            <li className="flex gap-2"><Check className="size-4 text-success" /> Custom tools & prompts</li>
+            <li className="flex gap-2"><Check className="size-4 text-success" /> Invoiced billing</li>
+            <li className="flex gap-2"><Check className="size-4 text-success" /> Priority support</li>
+          </ul>
+          <Button asChild variant="outline" className="mt-6">
+            <Link to="/contact">Contact us</Link>
+          </Button>
+        </div>
+
       </div>
 
       <div className="mt-10">
