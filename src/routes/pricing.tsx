@@ -105,8 +105,9 @@ function PricingPage() {
             <li className="flex gap-2"><Check className="size-4 text-success" /> Full generation history</li>
             <li className="flex gap-2"><Check className="size-4 text-success" /> Early access to new tools</li>
           </ul>
-          <Button className="mt-6" onClick={startCheckout}>
-            Subscribe — $5/month
+          <Button className="mt-6" onClick={startCheckout} disabled={loading}>
+            {loading ? <Loader2 className="animate-spin" /> : null}
+            {isPro ? "You're on Pro" : "Subscribe — $5/month"}
           </Button>
           <p className="mt-2 text-center text-xs text-muted-foreground">
             Secure card checkout. Cancel anytime from your dashboard.
