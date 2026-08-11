@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -20,10 +21,14 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
+import { Route as AdminBlogIdRouteImport } from './routes/admin.blog.$id'
+import { Route as AdminToolsIdRouteImport } from './routes/admin.tools.$id'
+import { Route as ApiPublicImageSplatRouteImport } from './routes/api/public/image.$'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -34,6 +39,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -81,6 +91,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -101,6 +116,21 @@ const ToolsSlugRoute = ToolsSlugRouteImport.update({
   path: '/tools/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminBlogIdRoute = AdminBlogIdRouteImport.update({
+  id: '/blog/$id',
+  path: '/blog/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminToolsIdRoute = AdminToolsIdRouteImport.update({
+  id: '/tools/$id',
+  path: '/tools/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
+const ApiPublicImageSplatRoute = ApiPublicImageSplatRouteImport.update({
+  id: '/api/public/image/$',
+  path: '/api/public/image/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -111,6 +141,7 @@ const ApiPublicPaymentsWebhookRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
@@ -122,8 +153,12 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/tools/': typeof ToolsIndexRoute
+  '/admin/blog/$id': typeof AdminBlogIdRoute
+  '/admin/tools/$id': typeof AdminToolsIdRoute
+  '/api/public/image/$': typeof ApiPublicImageSplatRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -140,14 +175,19 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/tools': typeof ToolsIndexRoute
+  '/admin/blog/$id': typeof AdminBlogIdRoute
+  '/admin/tools/$id': typeof AdminToolsIdRoute
+  '/api/public/image/$': typeof ApiPublicImageSplatRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
@@ -159,8 +199,12 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/tools/': typeof ToolsIndexRoute
+  '/admin/blog/$id': typeof AdminBlogIdRoute
+  '/admin/tools/$id': typeof AdminToolsIdRoute
+  '/api/public/image/$': typeof ApiPublicImageSplatRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
@@ -168,6 +212,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/admin'
     | '/auth'
     | '/contact'
     | '/dashboard'
@@ -179,8 +224,12 @@ export interface FileRouteTypes {
     | '/terms'
     | '/blog/$slug'
     | '/tools/$slug'
+    | '/admin/'
     | '/blog/'
     | '/tools/'
+    | '/admin/blog/$id'
+    | '/admin/tools/$id'
+    | '/api/public/image/$'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -197,13 +246,18 @@ export interface FileRouteTypes {
     | '/terms'
     | '/blog/$slug'
     | '/tools/$slug'
+    | '/admin'
     | '/blog'
     | '/tools'
+    | '/admin/blog/$id'
+    | '/admin/tools/$id'
+    | '/api/public/image/$'
     | '/api/public/payments/webhook'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/admin'
     | '/auth'
     | '/contact'
     | '/dashboard'
@@ -215,14 +269,19 @@ export interface FileRouteTypes {
     | '/terms'
     | '/blog/$slug'
     | '/tools/$slug'
+    | '/admin/'
     | '/blog/'
     | '/tools/'
+    | '/admin/blog/$id'
+    | '/admin/tools/$id'
+    | '/api/public/image/$'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
@@ -236,6 +295,7 @@ export interface RootRouteChildren {
   ToolsSlugRoute: typeof ToolsSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
+  ApiPublicImageSplatRoute: typeof ApiPublicImageSplatRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -253,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -318,6 +385,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -346,6 +420,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/blog/$id': {
+      id: '/admin/blog/$id'
+      path: '/blog/$id'
+      fullPath: '/admin/blog/$id'
+      preLoaderRoute: typeof AdminBlogIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/tools/$id': {
+      id: '/admin/tools/$id'
+      path: '/tools/$id'
+      fullPath: '/admin/tools/$id'
+      preLoaderRoute: typeof AdminToolsIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/api/public/image/$': {
+      id: '/api/public/image/$'
+      path: '/api/public/image/$'
+      fullPath: '/api/public/image/$'
+      preLoaderRoute: typeof ApiPublicImageSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -356,9 +451,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminBlogIdRoute: typeof AdminBlogIdRoute
+  AdminToolsIdRoute: typeof AdminToolsIdRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+  AdminBlogIdRoute: AdminBlogIdRoute,
+  AdminToolsIdRoute: AdminToolsIdRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
@@ -372,6 +482,7 @@ const rootRouteChildren: RootRouteChildren = {
   ToolsSlugRoute: ToolsSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
+  ApiPublicImageSplatRoute: ApiPublicImageSplatRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport

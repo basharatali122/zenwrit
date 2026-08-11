@@ -3,9 +3,11 @@ import { ArrowRight, BadgeCheck, Check, Gauge, ShieldOff, Sparkles, X, Zap } fro
 import { Button } from "@/components/ui/button";
 import { AdSlot } from "@/components/site/AdSlot";
 import { ToolIcon } from "@/components/site/ToolIcon";
-import { TOOLS } from "@/lib/tools";
+import { listPublishedTools } from "@/lib/content.functions";
+import type { ToolRecord } from "@/lib/content";
 
 export const Route = createFileRoute("/")({
+  loader: async () => ({ tools: await listPublishedTools() }),
   head: () => ({
     meta: [
       { title: "SaaScript — Free AI Tools for Creators & Professionals" },
@@ -37,6 +39,8 @@ const COMPARISON = [
 ];
 
 function Home() {
+  const { tools } = Route.useLoaderData() as { tools: ToolRecord[] };
+
   return (
     <>
       <section className="relative overflow-hidden border-b border-border">
@@ -95,7 +99,7 @@ function Home() {
         </p>
 
         <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {TOOLS.map((tool) => (
+          {tools.map((tool) => (
             <li key={tool.slug}>
               <Link
                 to="/tools/$slug"
@@ -106,7 +110,7 @@ function Home() {
                   <ToolIcon icon={tool.icon} className="size-5" />
                 </span>
                 <h3 className="mt-4 text-base font-semibold">{tool.name}</h3>
-                <p className="mt-1.5 flex-1 text-sm text-muted-foreground">{tool.tagline}</p>
+                <p className="mt-1.5 flex-1 text-sm text-muted-foreground">{tool.short_description}</p>
                 <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary">
                   Open tool <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </span>

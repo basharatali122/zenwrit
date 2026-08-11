@@ -9,11 +9,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { getVisitorKey } from "@/hooks/useAuth";
 import { generateContent, getUsageQuota } from "@/lib/generate.functions";
-import type { Tool } from "@/lib/tools";
+import type { ToolRecord } from "@/lib/content";
 
 type Quota = { isPro: boolean; used: number; limit: number | null; remaining: number | null };
 
-export function ToolRunner({ tool }: { tool: Tool }) {
+export function ToolRunner({ tool }: { tool: ToolRecord }) {
   const generate = useServerFn(generateContent);
   const fetchQuota = useServerFn(getUsageQuota);
 
@@ -39,7 +39,7 @@ export function ToolRunner({ tool }: { tool: Tool }) {
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
-    const missing = tool.fields.find((f) => f.required && !(values[f.name] ?? "").trim());
+    const missing = tool.form_fields.find((f) => f.required && !(values[f.name] ?? "").trim());
     if (missing) {
       toast.error(`Please fill in "${missing.label}"`);
       return;
@@ -83,7 +83,7 @@ export function ToolRunner({ tool }: { tool: Tool }) {
   return (
     <div className="surface-panel p-5 sm:p-6">
       <form onSubmit={onSubmit} className="space-y-4">
-        {tool.fields.map((field) => (
+        {tool.form_fields.map((field) => (
           <div key={field.name} className="space-y-1.5">
             <Label htmlFor={field.name}>
               {field.label}
@@ -150,7 +150,7 @@ export function ToolRunner({ tool }: { tool: Tool }) {
 
       <div className="mt-6">
         <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-sm font-semibold">{tool.outputLabel}</h2>
+          <h2 className="text-sm font-semibold">{tool.output_label}</h2>
           <Button variant="outline" size="sm" onClick={copy} disabled={!output}>
             {copied ? <Check /> : <Copy />}
             {copied ? "Copied" : "Copy"}
