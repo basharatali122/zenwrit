@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Check, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
@@ -7,7 +8,7 @@ import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
-import { PRO_PRICE_ID } from "@/lib/paddle";
+import { PRO_PRICES, type BillingCycle } from "@/lib/paddle";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
