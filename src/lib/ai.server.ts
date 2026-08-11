@@ -1,7 +1,7 @@
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { getRequest } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
-import { FREE_DAILY_LIMIT } from "./tools";
+import { FREE_DAILY_LIMIT } from "./content";
 
 export function createLovableAiGatewayProvider(apiKey: string) {
   return createOpenAICompatible({

@@ -1,7 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { streamText } from "ai";
 import { z } from "zod";
-import { getTool } from "./tools";
 import {
   createLovableAiGatewayProvider,
   getQuota,
@@ -34,8 +33,18 @@ export const getUsageQuota = createServerFn({ method: "POST" })
 export const generateContent = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => GenerateInput.parse(input))
   .handler(async ({ data }) => {
-    const tool = getTool(data.slug);
-    if (!tool) throw new Error("Unknown tool");
+    const { getPublicSupabase } = await import("./content.server");
+    const { data: toolRow } = await getPublicSupabase()
+      .from("tools")
+      .select("slug, form_fields, system_prompt")
+      .eq("slug", data.slug)
+      .eq("is_published", true)
+      .maybeSingle();
+    if (!toolRow) throw new Error("Unknown tool");
+    const tool = toolRow as unknown as {
+      form_fields: { name: string; label: string }[];
+      system_prompt: string;
+    };
 
     const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) throw new Error("AI is not configured yet. Please try again later.");
@@ -55,7 +64,7 @@ export const generateContent = createServerFn({ method: "POST" })
       };
     }
 
-    const details = tool.fields
+    const details = tool.form_fields
       .map((field) => {
         const value = (data.values[field.name] ?? "").trim();
         return value ? `${field.label}: ${value}` : null;
@@ -69,7 +78,7 @@ export const generateContent = createServerFn({ method: "POST" })
     try {
       const result = streamText({
         model: gateway("google/gemini-3.6-flash"),
-        system: tool.systemPrompt,
+        system: tool.system_prompt,
         prompt: `${details}\n\nProduce the output now.`,
         maxOutputTokens: 1200,
       });
