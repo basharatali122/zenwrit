@@ -61,12 +61,22 @@ export async function getQuota(userId: string | null, visitorKey: string): Promi
 
   let isPro = false;
   if (userId) {
+    const environment = import.meta.env.PROD ? "live" : "sandbox";
     const { data } = await supabaseAdmin
       .from("subscriptions")
-      .select("plan, status")
+      .select("status, current_period_end")
       .eq("user_id", userId)
+      .eq("environment", environment)
+      .order("created_at", { ascending: false })
+      .limit(1)
       .maybeSingle();
-    isPro = data?.plan === "pro" && data?.status === "active";
+    if (data) {
+      const notExpired = !data.current_period_end || new Date(data.current_period_end) > new Date();
+      isPro =
+        notExpired &&
+        (["active", "trialing", "past_due"].includes(data.status) ||
+          (data.status === "canceled" && Boolean(data.current_period_end)));
+    }
   }
 
   if (isPro) {
