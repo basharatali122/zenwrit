@@ -171,6 +171,7 @@ function PricingPage() {
           </div>
         </dl>
       </section>
+      </div>
     </div>
   );
 }
