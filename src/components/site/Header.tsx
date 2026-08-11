@@ -4,6 +4,8 @@ import { Menu, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { useAuth } from "@/hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import { checkIsAdmin } from "@/lib/content.functions";
 
 const NAV = [
   { to: "/tools", label: "Tools" },
@@ -15,6 +17,12 @@ const NAV = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const { user, loading } = useAuth();
+  const { data: adminCheck } = useQuery({
+    queryKey: ["is-admin", user?.id ?? null],
+    queryFn: () => checkIsAdmin(),
+    enabled: Boolean(user),
+    retry: false,
+  });
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/85 backdrop-blur">
@@ -43,9 +51,16 @@ export function Header() {
           <ThemeToggle />
           <div className="hidden items-center gap-2 md:flex">
             {!loading && user ? (
-              <Button asChild size="sm">
-                <Link to="/dashboard">Dashboard</Link>
-              </Button>
+              <>
+                {adminCheck?.isAdmin ? (
+                  <Button asChild variant="ghost" size="sm">
+                    <Link to="/admin">Admin</Link>
+                  </Button>
+                ) : null}
+                <Button asChild size="sm">
+                  <Link to="/dashboard">Dashboard</Link>
+                </Button>
+              </>
             ) : (
               <>
                 <Button asChild variant="ghost" size="sm">
