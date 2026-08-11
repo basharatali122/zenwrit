@@ -1,15 +1,14 @@
-import { FileText, Linkedin, PenLine, ShoppingBag, Youtube } from "lucide-react";
-import type { Tool } from "@/lib/tools";
+import { FileText, Linkedin, PenLine, ShoppingBag, Sparkles, Youtube } from "lucide-react";
 
-const ICONS = {
+const ICONS: Record<string, typeof FileText> = {
   resume: FileText,
   letter: PenLine,
   linkedin: Linkedin,
   youtube: Youtube,
   product: ShoppingBag,
-} as const;
+};
 
-export function ToolIcon({ icon, className }: { icon: Tool["icon"]; className?: string }) {
-  const Icon = ICONS[icon];
+export function ToolIcon({ icon, className }: { icon: string; className?: string }) {
+  const Icon = ICONS[icon] ?? Sparkles;
   return <Icon className={className} />;
 }

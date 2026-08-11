@@ -2,25 +2,29 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { AdSlot } from "@/components/site/AdSlot";
 import { ToolIcon } from "@/components/site/ToolIcon";
 import { ToolRunner } from "@/components/site/ToolRunner";
-import { TOOLS, getTool, type Tool } from "@/lib/tools";
+import { MarkdownArticle } from "@/components/site/MarkdownArticle";
+import { getPublishedTool } from "@/lib/content.functions";
+import type { ToolRecord } from "@/lib/content";
 
 export const Route = createFileRoute("/tools/$slug")({
-  loader: ({ params }) => {
-    const tool = getTool(params.slug);
-    if (!tool) throw notFound();
-    return { tool };
+  loader: async ({ params }) => {
+    const result = await getPublishedTool({ data: { slug: params.slug } });
+    if (!result) throw notFound();
+    return result;
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
       return { meta: [{ title: "Tool not found | SaaScript" }, { name: "robots", content: "noindex" }] };
     }
     const { tool } = loaderData;
+    const title = tool.meta_title || `${tool.name} | SaaScript`;
+    const description = tool.meta_description || tool.short_description;
     return {
       meta: [
-        { title: tool.seoTitle },
-        { name: "description", content: tool.seoDescription },
-        { property: "og:title", content: tool.seoTitle },
-        { property: "og:description", content: tool.seoDescription },
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
@@ -35,7 +39,7 @@ export const Route = createFileRoute("/tools/$slug")({
                 name: tool.name,
                 applicationCategory: "BusinessApplication",
                 operatingSystem: "Web",
-                description: tool.seoDescription,
+                description,
                 offers: [
                   { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
                   { "@type": "Offer", price: "5", priceCurrency: "USD", name: "Pro (monthly)" },
@@ -59,9 +63,10 @@ export const Route = createFileRoute("/tools/$slug")({
 });
 
 function ToolPage() {
-  const { tool } = Route.useLoaderData() as { tool: Tool };
-  const others = TOOLS.filter((t) => t.slug !== tool.slug).slice(0, 4);
-  const { intro, sections, title } = tool.article;
+  const { tool, others } = Route.useLoaderData() as {
+    tool: ToolRecord;
+    others: { slug: string; name: string }[];
+  };
 
   return (
     <div className="container-page py-10">
@@ -79,7 +84,7 @@ function ToolPage() {
         </span>
         <div>
           <h1 className="text-3xl font-bold sm:text-4xl">{tool.name}</h1>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground sm:text-base">{tool.tagline}</p>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground sm:text-base">{tool.short_description}</p>
         </div>
       </header>
 
@@ -92,46 +97,22 @@ function ToolPage() {
           <ToolRunner tool={tool} />
 
           <article className="prose-article mt-12 max-w-none">
-            <h2 className="!mt-0 text-2xl">{title}</h2>
-            {intro.map((paragraph, index) => (
-              <div key={index}>
-                <p>{paragraph}</p>
-                {index === 1 ? (
-                  <AdSlot
-                    id="ad-slot-2"
-                    label="Ad slot 2 — in content"
-                    variant="inline"
-                    className="my-6"
-                  />
-                ) : null}
-              </div>
-            ))}
+            {tool.article_title ? <h2 className="!mt-0 text-2xl">{tool.article_title}</h2> : null}
+            <MarkdownArticle markdown={tool.article_content} />
 
-            {sections.map((section) => (
-              <section key={section.heading}>
-                <h2>{section.heading}</h2>
-                {section.paragraphs.map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
-                {section.bullets ? (
-                  <ul>
-                    {section.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </section>
-            ))}
-
-            <h2>Frequently asked questions</h2>
-            <dl>
-              {tool.faqs.map((faq) => (
-                <div key={faq.q} className="mb-4">
-                  <dt className="font-semibold">{faq.q}</dt>
-                  <dd className="mt-1 text-muted-foreground">{faq.a}</dd>
-                </div>
-              ))}
-            </dl>
+            {tool.faqs.length ? (
+              <>
+                <h2>Frequently asked questions</h2>
+                <dl>
+                  {tool.faqs.map((faq) => (
+                    <div key={faq.q} className="mb-4">
+                      <dt className="font-semibold">{faq.q}</dt>
+                      <dd className="mt-1 text-muted-foreground">{faq.a}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </>
+            ) : null}
           </article>
         </div>
 
