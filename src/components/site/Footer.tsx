@@ -1,9 +1,16 @@
 import { Link } from "@tanstack/react-router";
 import { Sparkles } from "lucide-react";
-import { TOOLS } from "@/lib/tools";
+import { useQuery } from "@tanstack/react-query";
+import { listPublishedTools } from "@/lib/content.functions";
 import { AdSlot } from "./AdSlot";
 
 export function Footer() {
+  const { data: tools = [] } = useQuery({
+    queryKey: ["footer-tools"],
+    queryFn: () => listPublishedTools(),
+    staleTime: 60_000,
+  });
+
   return (
     <footer className="mt-20 border-t border-border bg-surface">
       <div className="container-page py-8">
@@ -26,7 +33,7 @@ export function Footer() {
         <div>
           <h2 className="text-sm font-semibold">Tools</h2>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            {TOOLS.map((tool) => (
+            {tools.map((tool) => (
               <li key={tool.slug}>
                 <Link
                   to="/tools/$slug"
