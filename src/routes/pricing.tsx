@@ -42,17 +42,37 @@ const ROWS = [
 
 function PricingPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { isPro } = useSubscription(user?.id);
+  const { openCheckout, loading } = usePaddleCheckout();
 
-  function startCheckout() {
+  async function startCheckout() {
     if (!user) {
       toast.info("Create a free account first — then you can upgrade in one click.");
+      navigate({ to: "/auth" });
       return;
     }
-    toast.info("Card checkout is being connected. Your account is ready for Pro.");
+    if (isPro) {
+      navigate({ to: "/dashboard" });
+      return;
+    }
+    try {
+      await openCheckout({
+        priceId: PRO_PRICE_ID,
+        customerEmail: user.email ?? undefined,
+        customData: { userId: user.id },
+        successUrl: `${window.location.origin}/dashboard?checkout=success`,
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't open checkout. Please try again.");
+    }
   }
 
   return (
-    <div className="container-page py-12">
+    <div>
+      <PaymentTestModeBanner />
+      <div className="container-page py-12">
       <h1 className="text-3xl font-bold sm:text-4xl">Pricing</h1>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
         Start free with three generations a day. Upgrade when you need volume — cancel any time.
