@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ExternalLink, Loader2, LogOut, Trash2 } from "lucide-react";
+import { ExternalLink, Loader2, LogOut, PartyPopper, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
-import { getPaddleEnvironment, PRO_PRICE_ID } from "@/lib/paddle";
-import { createPortalSession } from "@/utils/payments.functions";
+import { getPaddleEnvironment, PRO_MONTHLY_PRICE_ID, PRO_YEARLY_PRICE_ID } from "@/lib/paddle";
+import { changeSubscriptionPlan, createPortalSession } from "@/utils/payments.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/dashboard")({
@@ -48,6 +48,9 @@ function Dashboard() {
   const [todayCount, setTodayCount] = useState(0);
   const [loadingData, setLoadingData] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [switching, setSwitching] = useState(false);
+  const { checkout } = Route.useSearch();
+  const isYearly = subscription?.price_id === PRO_YEARLY_PRICE_ID;
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/auth" });
@@ -82,7 +85,7 @@ function Dashboard() {
     if (!user) return;
     try {
       await openCheckout({
-        priceId: PRO_PRICE_ID,
+        priceId: PRO_MONTHLY_PRICE_ID,
         customerEmail: user.email ?? undefined,
         customData: { userId: user.id },
         successUrl: `${window.location.origin}/dashboard?checkout=success`,
@@ -103,6 +106,28 @@ function Dashboard() {
       toast.error("Couldn't open the billing portal.");
     } finally {
       setPortalLoading(false);
+    }
+  }
+
+  async function switchPlan() {
+    setSwitching(true);
+    try {
+      await changeSubscriptionPlan({
+        data: {
+          environment: getPaddleEnvironment(),
+          priceId: isYearly ? PRO_MONTHLY_PRICE_ID : PRO_YEARLY_PRICE_ID,
+        },
+      });
+      toast.success(
+        isYearly
+          ? "Switched to monthly billing — the difference has been credited."
+          : "Switched to yearly billing — you were charged the pro-rated difference.",
+      );
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't change your plan. Try the billing portal instead.");
+    } finally {
+      setSwitching(false);
     }
   }
 
@@ -139,10 +164,26 @@ function Dashboard() {
         </Button>
       </div>
 
+      {checkout === "success" ? (
+        <div className="mt-6 flex items-start gap-3 rounded-lg border border-success/40 bg-success/10 p-4">
+          <PartyPopper className="mt-0.5 size-5 text-success" />
+          <div>
+            <p className="font-semibold">Welcome to Pro!</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Unlimited generations are unlocked and ads are gone. If your plan still shows as Free, give it a few
+              seconds — it updates automatically.
+            </p>
+            <Button asChild size="sm" className="mt-3">
+              <Link to="/tools">Start generating</Link>
+            </Button>
+          </div>
+        </div>
+      ) : null}
+
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         <div className="surface-panel p-5">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Plan</h2>
-          <p className="mt-2 text-2xl font-bold">{isPro ? "Pro" : "Free"}</p>
+          <p className="mt-2 text-2xl font-bold">{isPro ? (isYearly ? "Pro · Yearly" : "Pro · Monthly") : "Free"}</p>
           <p className="mt-1 text-sm text-muted-foreground">
             {isPro
               ? subscription?.current_period_end
@@ -158,6 +199,12 @@ function Dashboard() {
           {isPro ? (
             <Button size="sm" variant="outline" className="mt-4" onClick={manageBilling} disabled={portalLoading}>
               {portalLoading ? <Loader2 className="animate-spin" /> : <ExternalLink />} Manage billing
+            </Button>
+          ) : null}
+          {isPro && !subscription?.cancel_at_period_end && subscription?.status !== "canceled" ? (
+            <Button size="sm" variant="ghost" className="mt-2" onClick={switchPlan} disabled={switching}>
+              {switching ? <Loader2 className="animate-spin" /> : null}
+              {isYearly ? "Switch to monthly" : "Switch to yearly · save 2 months"}
             </Button>
           ) : (
             <Button size="sm" className="mt-4" onClick={upgrade} disabled={checkoutLoading}>
