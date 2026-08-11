@@ -26,6 +26,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
+import { Route as AdminBlogIdRouteImport } from './routes/admin.blog.$id'
 import { Route as ApiPublicImageSplatRouteImport } from './routes/api/public/image.$'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
@@ -114,6 +115,11 @@ const ToolsSlugRoute = ToolsSlugRouteImport.update({
   path: '/tools/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminBlogIdRoute = AdminBlogIdRouteImport.update({
+  id: '/blog/$id',
+  path: '/blog/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ApiPublicImageSplatRoute = ApiPublicImageSplatRouteImport.update({
   id: '/api/public/image/$',
   path: '/api/public/image/$',
@@ -144,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/tools/': typeof ToolsIndexRoute
+  '/admin/blog/$id': typeof AdminBlogIdRoute
   '/api/public/image/$': typeof ApiPublicImageSplatRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -164,6 +171,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/tools': typeof ToolsIndexRoute
+  '/admin/blog/$id': typeof AdminBlogIdRoute
   '/api/public/image/$': typeof ApiPublicImageSplatRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -186,6 +194,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/tools/': typeof ToolsIndexRoute
+  '/admin/blog/$id': typeof AdminBlogIdRoute
   '/api/public/image/$': typeof ApiPublicImageSplatRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -209,6 +218,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/tools/'
+    | '/admin/blog/$id'
     | '/api/public/image/$'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/tools'
+    | '/admin/blog/$id'
     | '/api/public/image/$'
     | '/api/public/payments/webhook'
   id:
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blog/'
     | '/tools/'
+    | '/admin/blog/$id'
     | '/api/public/image/$'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
@@ -396,6 +408,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/blog/$id': {
+      id: '/admin/blog/$id'
+      path: '/blog/$id'
+      fullPath: '/admin/blog/$id'
+      preLoaderRoute: typeof AdminBlogIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/api/public/image/$': {
       id: '/api/public/image/$'
       path: '/api/public/image/$'
@@ -415,10 +434,12 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminBlogIdRoute: typeof AdminBlogIdRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
+  AdminBlogIdRoute: AdminBlogIdRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
