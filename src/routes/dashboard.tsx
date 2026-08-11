@@ -122,10 +122,10 @@ function Dashboard() {
     );
   }
 
-  const isPro = plan?.plan === "pro" && plan?.status === "active";
-
   return (
-    <div className="container-page py-12">
+    <div>
+      <PaymentTestModeBanner />
+      <div className="container-page py-12">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -142,17 +142,27 @@ function Dashboard() {
           <p className="mt-2 text-2xl font-bold">{isPro ? "Pro" : "Free"}</p>
           <p className="mt-1 text-sm text-muted-foreground">
             {isPro
-              ? plan?.current_period_end
-                ? `Renews ${new Date(plan.current_period_end).toLocaleDateString()}`
+              ? subscription?.current_period_end
+                ? `${subscription.cancel_at_period_end || subscription.status === "canceled" ? "Ends" : "Renews"} ${new Date(subscription.current_period_end).toLocaleDateString()}`
                 : "Active subscription"
               : "$0 · 3 generations per day"}
           </p>
-          {!isPro ? (
-            <Button asChild size="sm" className="mt-4">
-              <Link to="/pricing">Upgrade to Pro</Link>
-            </Button>
+          {subscription?.status === "past_due" ? (
+            <p className="mt-1 text-sm text-destructive">
+              Your last payment failed — update your card to keep Pro.
+            </p>
           ) : null}
+          {isPro ? (
+            <Button size="sm" variant="outline" className="mt-4" onClick={manageBilling} disabled={portalLoading}>
+              {portalLoading ? <Loader2 className="animate-spin" /> : <ExternalLink />} Manage billing
+            </Button>
+          ) : (
+            <Button size="sm" className="mt-4" onClick={upgrade} disabled={checkoutLoading}>
+              {checkoutLoading ? <Loader2 className="animate-spin" /> : null} Upgrade to Pro
+            </Button>
+          )}
         </div>
+
 
         <div className="surface-panel p-5">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Today's usage</h2>
