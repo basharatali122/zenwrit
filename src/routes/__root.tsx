@@ -130,6 +130,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { tools } = Route.useLoaderData() as { tools: ToolRecord[] };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -139,7 +140,7 @@ function RootComponent() {
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
         </main>
-        <Footer />
+        <Footer tools={tools} />
       </div>
       <Toaster />
     </QueryClientProvider>
