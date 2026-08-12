@@ -16,6 +16,8 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { themeInitScript } from "@/components/site/ThemeToggle";
 import { Toaster } from "@/components/ui/sonner";
+import { listPublishedTools } from "@/lib/content.functions";
+import type { ToolRecord } from "@/lib/content";
 
 function NotFoundComponent() {
   return (
