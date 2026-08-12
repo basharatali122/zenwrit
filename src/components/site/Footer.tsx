@@ -1,16 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { Sparkles } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { listPublishedTools } from "@/lib/content.functions";
+import type { ToolRecord } from "@/lib/content";
 import { AdSlot } from "./AdSlot";
 
-export function Footer() {
-  const { data: tools = [] } = useQuery({
-    queryKey: ["footer-tools"],
-    queryFn: () => listPublishedTools(),
-    staleTime: 60_000,
-  });
-
+export function Footer({ tools }: { tools: ToolRecord[] }) {
   return (
     <footer className="mt-20 border-t border-border bg-surface">
       <div className="container-page py-8">

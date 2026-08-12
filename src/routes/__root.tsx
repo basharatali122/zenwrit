@@ -16,6 +16,8 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { themeInitScript } from "@/components/site/ThemeToggle";
 import { Toaster } from "@/components/ui/sonner";
+import { listPublishedTools } from "@/lib/content.functions";
+import type { ToolRecord } from "@/lib/content";
 
 function NotFoundComponent() {
   return (
@@ -104,6 +106,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
     ],
   }),
+  loader: async () => ({ tools: await listPublishedTools() }),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -127,6 +130,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { tools } = Route.useLoaderData() as { tools: ToolRecord[] };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -136,7 +140,7 @@ function RootComponent() {
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
         </main>
-        <Footer />
+        <Footer tools={tools} />
       </div>
       <Toaster />
     </QueryClientProvider>
