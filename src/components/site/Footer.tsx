@@ -17,15 +17,20 @@ export function Footer({ tools }: { tools: ToolRecord[] }) {
             </span>
             SaaScript
           </Link>
-          <p className="mt-3 max-w-xs text-sm text-muted-foreground">
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
             Free AI micro-tools for creators and professionals. Go Pro for $5/month for unlimited,
             ad-free generations.
+          </p>
+          <p className="mt-4 max-w-xs text-xs leading-relaxed text-muted-foreground">
+            SaaScript is committed to accurate, helpful content. Ads on this site help keep our
+            tools free.
           </p>
         </div>
 
         <div>
-          <h2 className="text-sm font-semibold">Tools</h2>
-          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground">Tools</h2>
+          <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
+
             {tools.map((tool) => (
               <li key={tool.slug}>
                 <Link
