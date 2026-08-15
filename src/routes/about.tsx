@@ -50,9 +50,7 @@ function About() {
         </p>
       </div>
 
-      <div className="mt-10 max-w-2xl">
-        <AdSlot id="ad-slot-about" label="Ad slot — footer" />
-      </div>
+      <AdSlot id="ad-slot-about" label="Ad slot — footer" className="mt-10 max-w-2xl" />
     </div>
   );
 }

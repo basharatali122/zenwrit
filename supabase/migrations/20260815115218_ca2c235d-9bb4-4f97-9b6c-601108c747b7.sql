@@ -1,0 +1,1 @@
+UPDATE public.tools SET system_prompt = replace(system_prompt, 'You won''''t Believe', 'You won''t Believe') WHERE slug = 'youtube-title-generator';

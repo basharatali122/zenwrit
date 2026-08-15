@@ -131,9 +131,7 @@ function Home() {
         </ul>
       </section>
 
-      <div className="container-page py-10">
-        <AdSlot id="ad-slot-home-hero" label="Ad slot — below hero" />
-      </div>
+      <AdSlot id="ad-slot-home-hero" label="Ad slot — below hero" className="container-page py-10" />
 
       <section className="container-page py-14" aria-labelledby="tools-heading">
         <h2 id="tools-heading" className="text-3xl font-bold tracking-tight sm:text-4xl">
