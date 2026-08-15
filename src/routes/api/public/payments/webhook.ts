@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import { verifyWebhook, EventName, type PaddleEnv } from "@/lib/paddle.server";
-import { sendWelcomeEmail } from "@/lib/email.server";
+import { sendTemplateEmail } from "@/lib/email-templates/send-email";
 
 let _supabase: ReturnType<typeof createClient<Database>> | null = null;
 function getSupabase() {
@@ -157,10 +157,9 @@ async function handleSubscriptionActivated(data: any, env: PaddleEnv) {
       .maybeSingle();
     const email = profile?.email as string | undefined;
     if (email) {
-      await sendWelcomeEmail({
-        to: email,
-        yearly: result.priceId.includes("yearly"),
-        siteUrl: SITE_URL,
+      await sendTemplateEmail("pro-welcome", email, {
+        templateData: { yearly: result.priceId.includes("yearly"), siteUrl: SITE_URL },
+        idempotencyKey: `pro-welcome-${data?.id ?? result.userId}`,
       });
     }
   } catch (error) {
