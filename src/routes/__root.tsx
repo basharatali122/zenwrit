@@ -91,6 +91,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Free AI micro-tools for resumes, cover letters, LinkedIn posts, YouTube titles and product copy.",
       },
       { name: "author", content: "ZenWrit" },
+      {
+        name: "google-site-verification",
+        content: "QphQXbLie7_yWBsecBlIAyebbgwFfA4npWbntWKTQtM",
+      },
       { property: "og:site_name", content: "ZenWrit" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
