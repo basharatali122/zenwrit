@@ -4,7 +4,12 @@
 //     nitro (build-only using cloudflare as a default target), VITE_* env injection, @ path alias,
 //     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
+import path from "node:path";
+import { loadEnv } from "vite";
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+
+// Server routes (email sending, webhooks) need non-VITE_ env vars in process.env.
+Object.assign(process.env, loadEnv(process.env["NODE_ENV"] ?? "development", process.cwd(), ""));
 
 // On Vercel, build with Nitro's `vercel` preset (Build Output API in .vercel/output).
 // Elsewhere (Lovable / Cloudflare) the default preset is kept.
