@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+const BASE_URL = "https://zenwrit.com";
+
 const STATIC_PATHS = [
   "/",
   "/tools",
@@ -16,11 +18,8 @@ const STATIC_PATHS = [
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
-      GET: async ({ request }) => {
-        const url = new URL(request.url);
-        const origin = `${request.headers.get("x-forwarded-proto") ?? url.protocol.replace(":", "")}://${
-          request.headers.get("host") ?? url.host
-        }`;
+      GET: async () => {
+        const origin = BASE_URL;
 
         const { getPublicSupabase } = await import("@/lib/content.server");
         const client = getPublicSupabase();

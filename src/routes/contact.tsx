@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
+import { submitContactMessage } from "@/lib/contact.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,6 +27,32 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const [sent, setSent] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const send = useServerFn(submitContactMessage);
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    setBusy(true);
+    try {
+      await send({
+        data: {
+          name: String(formData.get("name") ?? ""),
+          email: String(formData.get("email") ?? ""),
+          message: String(formData.get("message") ?? ""),
+        },
+      });
+      setSent(true);
+      form.reset();
+      toast.success("Thanks — we'll get back to you shortly.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not send your message.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
 
   return (
     <div className="container-page py-12">
@@ -40,26 +68,22 @@ function Contact() {
 
       <form
         className="mt-8 max-w-lg space-y-4 surface-panel p-6"
-        onSubmit={(e) => {
-          e.preventDefault();
-          setSent(true);
-          toast.success("Thanks — we'll get back to you shortly.");
-        }}
+        onSubmit={onSubmit}
       >
         <div className="space-y-1.5">
           <Label htmlFor="name">Your name</Label>
-          <Input id="name" required />
+          <Input id="name" name="name" required />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" required />
+          <Input id="email" name="email" type="email" required />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="message">Message</Label>
-          <Textarea id="message" rows={5} required />
+          <Textarea id="message" name="message" rows={5} minLength={5} required />
         </div>
-        <Button type="submit" disabled={sent}>
-          {sent ? "Message sent" : "Send message"}
+        <Button type="submit" disabled={busy}>
+          {busy ? "Sending…" : sent ? "Message sent" : "Send message"}
         </Button>
       </form>
     </div>
