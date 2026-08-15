@@ -151,9 +151,7 @@ function PricingPage() {
 
       </div>
 
-      <div className="mt-10">
-        <AdSlot id="ad-slot-pricing" label="Ad slot — pricing" />
-      </div>
+      <AdSlot id="ad-slot-pricing" label="Ad slot — pricing" className="mt-10" />
 
       <section className="mt-10" aria-labelledby="compare">
         <h2 id="compare" className="text-2xl font-bold">

@@ -38,9 +38,7 @@ function ToolsIndex() {
         Every tool works without an account. Free plans include three generations per day.
       </p>
 
-      <div className="mt-8">
-        <AdSlot id="ad-slot-tools-top" label="Ad slot — below hero" />
-      </div>
+      <AdSlot id="ad-slot-tools-top" label="Ad slot — below hero" className="mt-8" />
 
       {groups.map((group) => (
         <section key={group} className="mt-10" aria-labelledby={`group-${group}`}>

@@ -32,9 +32,7 @@ function BlogIndex() {
         Writing, careers and distribution — the things our tools can't do for you.
       </p>
 
-      <div className="mt-8">
-        <AdSlot id="ad-slot-blog-top" label="Ad slot — below hero" />
-      </div>
+      <AdSlot id="ad-slot-blog-top" label="Ad slot — below hero" className="mt-8" />
 
       <ul className="mt-8 grid gap-4 md:grid-cols-2">
         {posts.map((post) => (

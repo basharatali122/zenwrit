@@ -71,9 +71,7 @@ function BlogPostPage() {
           />
         ) : null}
 
-        <div className="my-8">
-          <AdSlot id="ad-slot-1" label="Ad slot 1 — below hero" />
-        </div>
+      <AdSlot id="ad-slot-1" label="Ad slot 1 — below hero" className="my-8" />
 
         <div className="prose-article">
           <MarkdownArticle markdown={post.content} />

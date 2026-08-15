@@ -6,9 +6,7 @@ import { AdSlot } from "./AdSlot";
 export function Footer({ tools }: { tools: ToolRecord[] }) {
   return (
     <footer className="mt-20 border-t border-border bg-surface">
-      <div className="container-page py-8">
-        <AdSlot id="ad-slot-footer" label="Ad slot — footer" variant="banner" />
-      </div>
+      <AdSlot id="ad-slot-footer" label="Ad slot — footer" variant="banner" className="container-page py-8" />
       <div className="container-page grid gap-10 pb-12 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <Link to="/" className="flex items-center gap-2 font-display text-base font-bold">

@@ -88,9 +88,7 @@ function ToolPage() {
         </div>
       </header>
 
-      <div className="mt-6">
-        <AdSlot id="ad-slot-1" label="Ad slot 1 — below hero" />
-      </div>
+      <AdSlot id="ad-slot-1" label="Ad slot 1 — below hero" className="mt-6" />
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div>
