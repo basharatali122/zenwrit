@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import { template as proWelcomeTemplate } from './pro-welcome'
+import { template as paymentFailedTemplate } from './payment-failed'
 
 export interface TemplateEntry {
   component: ComponentType<any>
