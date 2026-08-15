@@ -345,9 +345,36 @@ function Dashboard() {
               {savingName ? <Loader2 className="animate-spin" /> : <Check />}
             </Button>
           </div>
-          <Button asChild size="sm" variant="ghost" className="mt-3 px-0">
-            <Link to="/contact">Contact support</Link>
-          </Button>
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <Button asChild size="sm" variant="ghost" className="px-0">
+              <Link to="/contact">Contact support</Link>
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button size="sm" variant="ghost" className="px-0 text-destructive hover:text-destructive" disabled={deleting}>
+                  {deleting ? <Loader2 className="animate-spin" /> : null} Delete account
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete your account permanently?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This removes your profile, saved generations and usage history, and immediately
+                    ends any active subscription. This can't be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Keep my account</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={removeAccount}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Delete account
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
       </div>
 
