@@ -93,7 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "ZenWrit" },
       {
         name: "google-site-verification",
-        content: "QphQXbLie7_yWBsecBlIAyebbgwFfA4npWbntWKTQtM",
+        content: "aENF7cv2YaQFIXv5Xqgbsm1MQe6J_fjPrrX0PimVgho",
       },
       { property: "og:site_name", content: "ZenWrit" },
       { property: "og:type", content: "website" },
