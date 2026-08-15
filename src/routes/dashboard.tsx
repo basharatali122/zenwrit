@@ -9,7 +9,23 @@ import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 import { getPaddleEnvironment, PRO_MONTHLY_PRICE_ID, PRO_YEARLY_PRICE_ID } from "@/lib/paddle";
-import { changeSubscriptionPlan, createPortalSession } from "@/utils/payments.functions";
+import {
+  cancelSubscription,
+  changeSubscriptionPlan,
+  createPortalSession,
+} from "@/utils/payments.functions";
+import { deleteAccount } from "@/utils/account.functions";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/dashboard")({
