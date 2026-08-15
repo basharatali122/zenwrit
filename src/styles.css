@@ -219,3 +219,22 @@
     margin-bottom: 0.4rem;
   }
 }
+
+@utility hero-glow {
+  background-image:
+    radial-gradient(60rem 32rem at 15% -10%, color-mix(in oklch, var(--color-primary) 22%, transparent), transparent 70%),
+    radial-gradient(50rem 28rem at 90% 0%, color-mix(in oklch, var(--color-chart-2) 18%, transparent), transparent 70%);
+}
+
+@utility tag-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  color: var(--color-muted-foreground);
+}
