@@ -17,7 +17,7 @@ export const Route = createFileRoute("/pricing")({
       {
         name: "description",
         content:
-          "Compare ZenWrit Free (3 AI generations per day, with ads) and Pro ($5/month, unlimited generations, no ads, priority speed). Cancel anytime.",
+          "Compare ZenWrit Free (3 AI generations per day, with ads) and Pro ($5/month, unlimited generations, no ads, and our most advanced AI model). Cancel anytime.",
       },
       { property: "og:title", content: "ZenWrit Pricing — Free vs Pro" },
       {
@@ -35,7 +35,7 @@ const ROWS = [
   { feature: "All 5 AI tools", free: true, pro: true },
   { feature: "Generations per day", free: "3", pro: "Unlimited" },
   { feature: "Ads", free: "Shown", pro: "None" },
-  { feature: "Priority generation speed", free: false, pro: true },
+  { feature: "Advanced AI model (higher quality)", free: false, pro: true },
   { feature: "Generation history", free: "Last 3", pro: "Full history" },
   { feature: "Early access to new tools", free: false, pro: true },
   { feature: "Email support", free: false, pro: true },

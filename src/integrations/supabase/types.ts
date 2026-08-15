@@ -116,6 +116,36 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_events: {
+        Row: {
+          created_at: string
+          environment: string
+          event_id: string
+          event_type: string
+          id: string
+          occurred_at: string | null
+          payload: Json
+        }
+        Insert: {
+          created_at?: string
+          environment: string
+          event_id: string
+          event_type: string
+          id?: string
+          occurred_at?: string | null
+          payload?: Json
+        }
+        Update: {
+          created_at?: string
+          environment?: string
+          event_id?: string
+          event_type?: string
+          id?: string
+          occurred_at?: string | null
+          payload?: Json
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -261,6 +291,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          ip_hash: string | null
           tool_slug: string
           user_id: string | null
           visitor_key: string | null
@@ -268,6 +299,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          ip_hash?: string | null
           tool_slug: string
           user_id?: string | null
           visitor_key?: string | null
@@ -275,6 +307,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          ip_hash?: string | null
           tool_slug?: string
           user_id?: string | null
           visitor_key?: string | null

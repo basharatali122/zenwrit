@@ -47,7 +47,7 @@ const COMPARISON = [
   { feature: "Access to all 5 tools", free: true, pro: true },
   { feature: "Daily generations", free: "3 per day", pro: "Unlimited" },
   { feature: "Ads", free: "Shown", pro: "None" },
-  { feature: "Priority generation speed", free: false, pro: true },
+  { feature: "Advanced AI model (higher quality)", free: false, pro: true },
   { feature: "Saved generation history", free: "Last 3", pro: "Full history" },
   { feature: "Early access to new tools", free: false, pro: true },
 ];
@@ -275,7 +275,7 @@ function Home() {
             <ul className="mt-6 flex-1 space-y-2.5 text-sm text-muted-foreground">
               <li className="flex gap-2"><Zap className="size-4 shrink-0 text-primary" /> Unlimited daily generations</li>
               <li className="flex gap-2"><Zap className="size-4 shrink-0 text-primary" /> Ad-free interface</li>
-              <li className="flex gap-2"><Zap className="size-4 shrink-0 text-primary" /> Priority speed &amp; full history</li>
+              <li className="flex gap-2"><Zap className="size-4 shrink-0 text-primary" /> Advanced model &amp; full history</li>
             </ul>
             <Button asChild className="mt-7">
               <Link to="/pricing">Go Pro — $5/month</Link>
