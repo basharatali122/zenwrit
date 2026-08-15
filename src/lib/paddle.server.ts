@@ -16,9 +16,19 @@ export function getConnectionApiKey(env: PaddleEnv): string {
   return env === "sandbox" ? getEnv("PADDLE_SANDBOX_API_KEY") : getEnv("PADDLE_LIVE_API_KEY");
 }
 
+const DIRECT_BASE_URL = (env: PaddleEnv) =>
+  env === "sandbox" ? "https://sandbox-api.paddle.com" : "https://api.paddle.com";
+
 export function getPaddleClient(env: PaddleEnv): Paddle {
   const connectionApiKey = getConnectionApiKey(env);
-  const lovableApiKey = getEnv("LOVABLE_API_KEY");
+  const lovableApiKey = process.env["LOVABLE_API_KEY"];
+
+  // Outside Lovable (e.g. Vercel) there is no connector gateway — talk to Paddle directly.
+  if (!lovableApiKey) {
+    return new Paddle(connectionApiKey, {
+      environment: (env === "sandbox" ? Environment.sandbox : Environment.production),
+    });
+  }
 
   return new Paddle(connectionApiKey, {
     environment: GATEWAY_BASE_URL as unknown as Environment,
@@ -31,7 +41,19 @@ export function getPaddleClient(env: PaddleEnv): Paddle {
 
 export async function gatewayFetch(env: PaddleEnv, path: string, init?: RequestInit): Promise<Response> {
   const connectionApiKey = getConnectionApiKey(env);
-  const lovableApiKey = getEnv("LOVABLE_API_KEY");
+  const lovableApiKey = process.env["LOVABLE_API_KEY"];
+
+  if (!lovableApiKey) {
+    return fetch(`${DIRECT_BASE_URL(env)}${path}`, {
+      ...init,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${connectionApiKey}`,
+        ...init?.headers,
+      },
+    });
+  }
+
   return fetch(`${GATEWAY_BASE_URL}${path}`, {
     ...init,
     headers: {

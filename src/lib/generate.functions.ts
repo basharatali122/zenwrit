@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { streamText } from "ai";
 import { z } from "zod";
 import {
-  createLovableAiGatewayProvider,
+  createAiProvider,
   getQuota,
   recordGeneration,
   resolveOptionalUserId,
@@ -46,7 +46,7 @@ export const generateContent = createServerFn({ method: "POST" })
       system_prompt: string;
     };
 
-    const apiKey = process.env["LOVABLE_API_KEY"];
+    const apiKey = process.env["OPENAI_API_KEY"];
     if (!apiKey) throw new Error("AI is not configured yet. Please try again later.");
 
     const userId = await resolveOptionalUserId();
@@ -72,12 +72,12 @@ export const generateContent = createServerFn({ method: "POST" })
       .filter(Boolean)
       .join("\n");
 
-    const gateway = createLovableAiGatewayProvider(apiKey);
+    const openai = createAiProvider(apiKey);
 
     let text: string;
     try {
       const result = streamText({
-        model: gateway("google/gemini-3.6-flash"),
+        model: openai("gpt-4o-mini"),
         system: tool.system_prompt,
         prompt: `${details}\n\nProduce the output now.`,
         maxOutputTokens: 1200,
