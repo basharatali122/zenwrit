@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ExternalLink, Loader2, LogOut, PartyPopper, Trash2 } from "lucide-react";
+import { Check, ExternalLink, Loader2, LogOut, PartyPopper, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -31,6 +32,8 @@ export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
 });
 
+const FREE_HISTORY_LIMIT = 3;
+
 type Generation = {
   id: string;
   tool_slug: string;
@@ -48,6 +51,9 @@ function Dashboard() {
   const [loadingData, setLoadingData] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
   const [switching, setSwitching] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [savedName, setSavedName] = useState("");
+  const [savingName, setSavingName] = useState(false);
   const { checkout } = Route.useSearch();
   const isYearly = subscription?.price_id === PRO_YEARLY_PRICE_ID;
 
@@ -63,14 +69,22 @@ function Dashboard() {
       const since = new Date();
       since.setUTCHours(0, 0, 0, 0);
 
-      const [gens, usage] = await Promise.all([
-        supabase.from("generations").select("id, tool_slug, output, created_at").order("created_at", { ascending: false }).limit(20),
+      const [gens, usage, profile] = await Promise.all([
+        supabase
+          .from("generations")
+          .select("id, tool_slug, output, created_at")
+          .order("created_at", { ascending: false })
+          .limit(isPro ? 50 : FREE_HISTORY_LIMIT),
         supabase.from("usage_logs").select("id", { count: "exact", head: true }).gte("created_at", since.toISOString()),
+        supabase.from("profiles").select("full_name").maybeSingle(),
       ]);
 
       if (!active) return;
       setHistory((gens.data as Generation[]) ?? []);
       setTodayCount(usage.count ?? 0);
+      const name = (profile.data?.full_name as string | undefined) ?? "";
+      setFullName(name);
+      setSavedName(name);
       setLoadingData(false);
     }
 
@@ -78,7 +92,22 @@ function Dashboard() {
     return () => {
       active = false;
     };
-  }, [user]);
+  }, [user, isPro]);
+
+  async function saveName() {
+    if (!user) return;
+    setSavingName(true);
+    const { error } = await supabase
+      .from("profiles")
+      .upsert({ id: user.id, email: user.email ?? null, full_name: fullName.trim() });
+    setSavingName(false);
+    if (error) {
+      toast.error("Couldn't save your name.");
+      return;
+    }
+    setSavedName(fullName.trim());
+    toast.success("Name updated");
+  }
 
   async function upgrade() {
     if (!user) return;
@@ -223,17 +252,48 @@ function Dashboard() {
         <div className="surface-panel p-5">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Account</h2>
           <p className="mt-2 truncate text-sm font-medium">{user.email}</p>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1 text-xs text-muted-foreground">
             Joined {new Date(user.created_at).toLocaleDateString()}
           </p>
-          <Button asChild size="sm" variant="outline" className="mt-4">
+          <label htmlFor="full-name" className="mt-4 block text-xs font-medium text-muted-foreground">
+            Display name
+          </label>
+          <div className="mt-1 flex gap-2">
+            <Input
+              id="full-name"
+              value={fullName}
+              onChange={(event) => setFullName(event.target.value)}
+              placeholder="Your name"
+              className="h-9"
+            />
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={saveName}
+              disabled={savingName || fullName.trim() === savedName}
+              aria-label="Save name"
+            >
+              {savingName ? <Loader2 className="animate-spin" /> : <Check />}
+            </Button>
+          </div>
+          <Button asChild size="sm" variant="ghost" className="mt-3 px-0">
             <Link to="/contact">Contact support</Link>
           </Button>
         </div>
       </div>
 
       <section className="mt-10" aria-labelledby="history">
-        <h2 id="history" className="text-xl font-bold">Generation history</h2>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 id="history" className="text-xl font-bold">Generation history</h2>
+          {!isPro ? (
+            <p className="text-sm text-muted-foreground">
+              Free plan keeps your last {FREE_HISTORY_LIMIT} —{" "}
+              <button type="button" onClick={upgrade} className="text-primary hover:underline">
+                upgrade for full history
+              </button>
+            </p>
+          ) : null}
+        </div>
         {loadingData ? (
           <p className="mt-3 text-sm text-muted-foreground">Loading…</p>
         ) : history.length === 0 ? (
