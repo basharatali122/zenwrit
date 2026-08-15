@@ -284,6 +284,31 @@ function Dashboard() {
               {isYearly ? "Switch to monthly" : "Switch to yearly · save 2 months"}
             </Button>
           ) : null}
+          {isPro && !subscription?.cancel_at_period_end && subscription?.status !== "canceled" ? (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button size="sm" variant="ghost" className="mt-1 text-muted-foreground" disabled={canceling}>
+                  {canceling ? <Loader2 className="animate-spin" /> : null} Cancel plan
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Cancel your Pro plan?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    You'll keep unlimited generations and an ad-free experience until
+                    {subscription?.current_period_end
+                      ? ` ${new Date(subscription.current_period_end).toLocaleDateString()}`
+                      : " the end of your billing period"}
+                    . After that your account moves back to the Free plan (3 generations a day).
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Keep Pro</AlertDialogCancel>
+                  <AlertDialogAction onClick={cancelPlan}>Cancel plan</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          ) : null}
         </div>
 
 
