@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import { verifyWebhook, EventName, type PaddleEnv } from "@/lib/paddle.server";
-import { sendWelcomeEmail } from "@/lib/email.server";
+import { sendTemplateEmail } from "@/lib/email-templates/send-email";
 
 let _supabase: ReturnType<typeof createClient<Database>> | null = null;
 function getSupabase() {
