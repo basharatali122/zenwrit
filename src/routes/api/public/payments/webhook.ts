@@ -167,6 +167,35 @@ async function handleSubscriptionActivated(data: any, env: PaddleEnv) {
   }
 }
 
+/** Emails the subscriber when Paddle could not take a renewal payment. */
+async function notifyPaymentFailed(subscriptionId: string, env: PaddleEnv, transactionId?: string) {
+  try {
+    const supabase = getSupabase();
+    const { data: sub } = await supabase
+      .from("subscriptions")
+      .select("user_id")
+      .eq("paddle_subscription_id", subscriptionId)
+      .eq("environment", env)
+      .maybeSingle();
+    if (!sub?.user_id) return;
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("email")
+      .eq("id", sub.user_id as string)
+      .maybeSingle();
+    const email = profile?.email as string | undefined;
+    if (!email) return;
+
+    await sendTemplateEmail("payment-failed", email, {
+      templateData: { siteUrl: SITE_URL },
+      idempotencyKey: `payment-failed-${transactionId ?? subscriptionId}`,
+    });
+  } catch (error) {
+    console.error("[webhook] payment failed email error", error);
+  }
+}
+
 async function handleSubscriptionCanceled(data: any, env: PaddleEnv) {
   const { error } = await getSupabase()
     .from("subscriptions")
@@ -190,6 +219,7 @@ async function handleTransaction(data: any, env: PaddleEnv, failed: boolean) {
   // Paddle's dunning flow in charge of the status.
   if (failed) {
     console.log("[webhook] payment failed for subscription", subscriptionId);
+    await notifyPaymentFailed(subscriptionId, env, data?.id);
     return;
   }
 

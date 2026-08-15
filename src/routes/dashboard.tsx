@@ -9,7 +9,23 @@ import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 import { getPaddleEnvironment, PRO_MONTHLY_PRICE_ID, PRO_YEARLY_PRICE_ID } from "@/lib/paddle";
-import { changeSubscriptionPlan, createPortalSession } from "@/utils/payments.functions";
+import {
+  cancelSubscription,
+  changeSubscriptionPlan,
+  createPortalSession,
+} from "@/utils/payments.functions";
+import { deleteAccount } from "@/utils/account.functions";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/dashboard")({
@@ -51,6 +67,8 @@ function Dashboard() {
   const [loadingData, setLoadingData] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
   const [switching, setSwitching] = useState(false);
+  const [canceling, setCanceling] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [fullName, setFullName] = useState("");
   const [savedName, setSavedName] = useState("");
   const [savingName, setSavingName] = useState(false);
@@ -159,6 +177,32 @@ function Dashboard() {
     }
   }
 
+  async function cancelPlan() {
+    setCanceling(true);
+    try {
+      await cancelSubscription({ data: { environment: getPaddleEnvironment() } });
+      toast.success("Your plan is cancelled — Pro stays active until the end of this period.");
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't cancel your plan. Try the billing portal instead.");
+    } finally {
+      setCanceling(false);
+    }
+  }
+
+  async function removeAccount() {
+    setDeleting(true);
+    try {
+      await deleteAccount({ data: { environment: getPaddleEnvironment() } });
+      await signOut();
+      toast.success("Your account has been deleted.");
+      navigate({ to: "/" });
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't delete your account. Please contact support.");
+      setDeleting(false);
+    }
+  }
 
   async function remove(id: string) {
     const { error } = await supabase.from("generations").delete().eq("id", id);
@@ -240,6 +284,31 @@ function Dashboard() {
               {isYearly ? "Switch to monthly" : "Switch to yearly · save 2 months"}
             </Button>
           ) : null}
+          {isPro && !subscription?.cancel_at_period_end && subscription?.status !== "canceled" ? (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button size="sm" variant="ghost" className="mt-1 text-muted-foreground" disabled={canceling}>
+                  {canceling ? <Loader2 className="animate-spin" /> : null} Cancel plan
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Cancel your Pro plan?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    You'll keep unlimited generations and an ad-free experience until
+                    {subscription?.current_period_end
+                      ? ` ${new Date(subscription.current_period_end).toLocaleDateString()}`
+                      : " the end of your billing period"}
+                    . After that your account moves back to the Free plan (3 generations a day).
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Keep Pro</AlertDialogCancel>
+                  <AlertDialogAction onClick={cancelPlan}>Cancel plan</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          ) : null}
         </div>
 
 
@@ -276,9 +345,36 @@ function Dashboard() {
               {savingName ? <Loader2 className="animate-spin" /> : <Check />}
             </Button>
           </div>
-          <Button asChild size="sm" variant="ghost" className="mt-3 px-0">
-            <Link to="/contact">Contact support</Link>
-          </Button>
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <Button asChild size="sm" variant="ghost" className="px-0">
+              <Link to="/contact">Contact support</Link>
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button size="sm" variant="ghost" className="px-0 text-destructive hover:text-destructive" disabled={deleting}>
+                  {deleting ? <Loader2 className="animate-spin" /> : null} Delete account
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete your account permanently?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This removes your profile, saved generations and usage history, and immediately
+                    ends any active subscription. This can't be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Keep my account</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={removeAccount}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Delete account
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
       </div>
 
