@@ -177,6 +177,32 @@ function Dashboard() {
     }
   }
 
+  async function cancelPlan() {
+    setCanceling(true);
+    try {
+      await cancelSubscription({ data: { environment: getPaddleEnvironment() } });
+      toast.success("Your plan is cancelled — Pro stays active until the end of this period.");
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't cancel your plan. Try the billing portal instead.");
+    } finally {
+      setCanceling(false);
+    }
+  }
+
+  async function removeAccount() {
+    setDeleting(true);
+    try {
+      await deleteAccount({ data: { environment: getPaddleEnvironment() } });
+      await signOut();
+      toast.success("Your account has been deleted.");
+      navigate({ to: "/" });
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't delete your account. Please contact support.");
+      setDeleting(false);
+    }
+  }
 
   async function remove(id: string) {
     const { error } = await supabase.from("generations").delete().eq("id", id);
