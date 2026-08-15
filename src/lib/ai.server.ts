@@ -3,11 +3,12 @@ import { getRequest } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 import { FREE_DAILY_LIMIT } from "./content";
 
-export function createLovableAiGatewayProvider(apiKey: string) {
+/** OpenAI provider — used in both preview and production (Vercel). */
+export function createAiProvider(apiKey: string) {
   return createOpenAICompatible({
-    name: "lovable-ai-gateway",
-    baseURL: "https://ai.gateway.lovable.dev/v1",
-    headers: { "Lovable-API-Key": apiKey },
+    name: "openai",
+    baseURL: "https://api.openai.com/v1",
+    headers: { Authorization: `Bearer ${apiKey}` },
   });
 }
 
