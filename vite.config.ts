@@ -16,6 +16,15 @@ Object.assign(process.env, loadEnv(process.env["NODE_ENV"] ?? "development", pro
 const isVercel = Boolean(process.env["VERCEL"]);
 
 export default defineConfig({
+  vite: {
+    resolve: {
+      alias: {
+        "entities/lib/decode.js": path.resolve(process.cwd(), "node_modules/entities/lib/decode.js"),
+        "entities/lib/encode.js": path.resolve(process.cwd(), "node_modules/entities/lib/encode.js"),
+        entities: path.resolve(process.cwd(), "node_modules/entities"),
+      },
+    },
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
