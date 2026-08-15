@@ -48,7 +48,7 @@ export const Route = createFileRoute("/privacy")({
         },
         {
           heading: "Contact",
-          paragraphs: ["Questions about this policy can be sent to support@saascript.app."],
+          paragraphs: ["Questions about this policy can be sent to support@zenwrit.app."],
         },
       ]}
     />

@@ -32,8 +32,8 @@ function Contact() {
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
         Billing questions, bug reports and tool requests all land in the same inbox. We usually reply
         within two business days. You can also email{" "}
-        <a href="mailto:support@saascript.app" className="text-primary hover:underline">
-          support@saascript.app
+        <a href="mailto:support@zenwrit.app" className="text-primary hover:underline">
+          support@zenwrit.app
         </a>
         .
       </p>

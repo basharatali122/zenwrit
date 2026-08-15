@@ -23,7 +23,7 @@ export const Route = createFileRoute("/refund-policy")({
         {
           heading: "7-day money-back guarantee",
           paragraphs: [
-            "If ZenWrit Pro is not right for you, email support@saascript.app within seven days of your first payment and we will refund it in full, no questions asked.",
+            "If ZenWrit Pro is not right for you, email support@zenwrit.app within seven days of your first payment and we will refund it in full, no questions asked.",
           ],
         },
         {
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/refund-policy")({
         {
           heading: "How to request a refund",
           paragraphs: [
-            "Email support@saascript.app from the address on your account with the date of the charge. Approved refunds are returned to the original payment method, usually within five to ten business days.",
+            "Email support@zenwrit.app from the address on your account with the date of the charge. Approved refunds are returned to the original payment method, usually within five to ten business days.",
           ],
         },
       ]}
