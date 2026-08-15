@@ -68,26 +68,22 @@ function Contact() {
 
       <form
         className="mt-8 max-w-lg space-y-4 surface-panel p-6"
-        onSubmit={(e) => {
-          e.preventDefault();
-          setSent(true);
-          toast.success("Thanks — we'll get back to you shortly.");
-        }}
+        onSubmit={onSubmit}
       >
         <div className="space-y-1.5">
           <Label htmlFor="name">Your name</Label>
-          <Input id="name" required />
+          <Input id="name" name="name" required />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" required />
+          <Input id="email" name="email" type="email" required />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="message">Message</Label>
-          <Textarea id="message" rows={5} required />
+          <Textarea id="message" name="message" rows={5} minLength={5} required />
         </div>
-        <Button type="submit" disabled={sent}>
-          {sent ? "Message sent" : "Send message"}
+        <Button type="submit" disabled={busy}>
+          {busy ? "Sending…" : sent ? "Message sent" : "Send message"}
         </Button>
       </form>
     </div>
