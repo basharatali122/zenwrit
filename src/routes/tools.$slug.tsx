@@ -14,10 +14,10 @@ export const Route = createFileRoute("/tools/$slug")({
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
-      return { meta: [{ title: "Tool not found | SaaScript" }, { name: "robots", content: "noindex" }] };
+      return { meta: [{ title: "Tool not found | ZenWrit" }, { name: "robots", content: "noindex" }] };
     }
     const { tool } = loaderData;
-    const title = tool.meta_title || `${tool.name} | SaaScript`;
+    const title = tool.meta_title || `${tool.name} | ZenWrit`;
     const description = tool.meta_description || tool.short_description;
     return {
       meta: [

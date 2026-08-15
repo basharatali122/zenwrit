@@ -9,12 +9,12 @@ import { Textarea } from "@/components/ui/textarea";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact SaaScript — Support & Feedback" },
+      { title: "Contact ZenWrit — Support & Feedback" },
       {
         name: "description",
-        content: "Questions about billing, a bug to report or a tool you'd like us to build? Get in touch with the SaaScript team.",
+        content: "Questions about billing, a bug to report or a tool you'd like us to build? Get in touch with the ZenWrit team.",
       },
-      { property: "og:title", content: "Contact SaaScript" },
+      { property: "og:title", content: "Contact ZenWrit" },
       { property: "og:description", content: "Support, billing questions and tool requests." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

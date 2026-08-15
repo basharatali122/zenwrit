@@ -4,13 +4,13 @@ import { LegalPage } from "@/components/site/LegalPage";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Policy | SaaScript" },
+      { title: "Privacy Policy | ZenWrit" },
       {
         name: "description",
-        content: "How SaaScript collects, uses and stores your data, including generation history, usage tracking and cookies.",
+        content: "How ZenWrit collects, uses and stores your data, including generation history, usage tracking and cookies.",
       },
-      { property: "og:title", content: "Privacy Policy | SaaScript" },
-      { property: "og:description", content: "What data SaaScript collects and how it is used." },
+      { property: "og:title", content: "Privacy Policy | ZenWrit" },
+      { property: "og:description", content: "What data ZenWrit collects and how it is used." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/privacy")({
         {
           heading: "What we collect",
           paragraphs: [
-            "If you use SaaScript without an account, we store an anonymous visitor identifier in your browser so we can count your three free daily generations. It is not linked to your identity and contains no personal data.",
+            "If you use ZenWrit without an account, we store an anonymous visitor identifier in your browser so we can count your three free daily generations. It is not linked to your identity and contains no personal data.",
             "If you create an account, we store your email address, the text you submit to our tools and the output generated for you, so that your history is available in your dashboard.",
           ],
         },

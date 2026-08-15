@@ -13,13 +13,13 @@ import { PRO_PRICES, type BillingCycle } from "@/lib/paddle";
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Pricing — Free vs Pro ($5/month) | SaaScript" },
+      { title: "Pricing — Free vs Pro ($5/month) | ZenWrit" },
       {
         name: "description",
         content:
-          "Compare SaaScript Free (3 AI generations per day, with ads) and Pro ($5/month, unlimited generations, no ads, priority speed). Cancel anytime.",
+          "Compare ZenWrit Free (3 AI generations per day, with ads) and Pro ($5/month, unlimited generations, no ads, priority speed). Cancel anytime.",
       },
-      { property: "og:title", content: "SaaScript Pricing — Free vs Pro" },
+      { property: "og:title", content: "ZenWrit Pricing — Free vs Pro" },
       {
         property: "og:description",
         content: "3 free AI generations a day, or go unlimited and ad-free for $5/month.",

@@ -9,13 +9,13 @@ export const Route = createFileRoute("/tools/")({
   loader: async () => ({ tools: await listPublishedTools() }),
   head: () => ({
     meta: [
-      { title: "All AI Tools — Resumes, LinkedIn, YouTube & More | SaaScript" },
+      { title: "All AI Tools — Resumes, LinkedIn, YouTube & More | ZenWrit" },
       {
         name: "description",
         content:
-          "Browse every free SaaScript AI tool: resume bullet points, cover letters, LinkedIn posts, YouTube titles and product descriptions.",
+          "Browse every free ZenWrit AI tool: resume bullet points, cover letters, LinkedIn posts, YouTube titles and product descriptions.",
       },
-      { property: "og:title", content: "All AI Tools | SaaScript" },
+      { property: "og:title", content: "All AI Tools | ZenWrit" },
       {
         property: "og:description",
         content: "Focused AI writing tools for job seekers and creators. Free to try, no signup.",

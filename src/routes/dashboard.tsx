@@ -16,12 +16,12 @@ export const Route = createFileRoute("/dashboard")({
     search["checkout"] === "success" ? { checkout: "success" } : {},
   head: () => ({
     meta: [
-      { title: "Your Dashboard | SaaScript" },
+      { title: "Your Dashboard | ZenWrit" },
       {
         name: "description",
-        content: "Manage your SaaScript subscription, review your generation history and update account settings.",
+        content: "Manage your ZenWrit subscription, review your generation history and update account settings.",
       },
-      { property: "og:title", content: "Your Dashboard | SaaScript" },
+      { property: "og:title", content: "Your Dashboard | ZenWrit" },
       { property: "og:description", content: "Subscription status, generation history and account settings." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

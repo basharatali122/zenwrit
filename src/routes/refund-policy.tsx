@@ -4,13 +4,13 @@ import { LegalPage } from "@/components/site/LegalPage";
 export const Route = createFileRoute("/refund-policy")({
   head: () => ({
     meta: [
-      { title: "Refund Policy | SaaScript" },
+      { title: "Refund Policy | ZenWrit" },
       {
         name: "description",
-        content: "SaaScript's refund policy for the $5/month Pro subscription, including our 7-day money-back window.",
+        content: "ZenWrit's refund policy for the $5/month Pro subscription, including our 7-day money-back window.",
       },
-      { property: "og:title", content: "Refund Policy | SaaScript" },
-      { property: "og:description", content: "How refunds work for the SaaScript Pro subscription." },
+      { property: "og:title", content: "Refund Policy | ZenWrit" },
+      { property: "og:description", content: "How refunds work for the ZenWrit Pro subscription." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/refund-policy")({
         {
           heading: "7-day money-back guarantee",
           paragraphs: [
-            "If SaaScript Pro is not right for you, email support@saascript.app within seven days of your first payment and we will refund it in full, no questions asked.",
+            "If ZenWrit Pro is not right for you, email support@saascript.app within seven days of your first payment and we will refund it in full, no questions asked.",
           ],
         },
         {

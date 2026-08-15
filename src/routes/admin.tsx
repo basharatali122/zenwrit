@@ -8,8 +8,8 @@ export const Route = createFileRoute("/admin")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Admin — SaaScript" },
-      { name: "description", content: "Manage SaaScript tools and blog posts." },
+      { title: "Admin — ZenWrit" },
+      { name: "description", content: "Manage ZenWrit tools and blog posts." },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

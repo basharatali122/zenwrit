@@ -15,14 +15,14 @@ export function Footer({ tools }: { tools: ToolRecord[] }) {
             <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <Sparkles className="size-3.5" />
             </span>
-            SaaScript
+            ZenWrit
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
             Free AI micro-tools for creators and professionals. Go Pro for $5/month for unlimited,
             ad-free generations.
           </p>
           <p className="mt-4 max-w-xs text-xs leading-relaxed text-muted-foreground">
-            SaaScript is committed to accurate, helpful content. Ads on this site help keep our
+            ZenWrit is committed to accurate, helpful content. Ads on this site help keep our
             tools free.
           </p>
         </div>
@@ -68,7 +68,7 @@ export function Footer({ tools }: { tools: ToolRecord[] }) {
 
       <div className="border-t border-border">
         <div className="container-page flex flex-col gap-2 py-5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} SaaScript. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} ZenWrit. All rights reserved.</p>
           <p>Built for creators and job seekers.</p>
         </div>
       </div>
