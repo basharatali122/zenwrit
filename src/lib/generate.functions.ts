@@ -3,8 +3,11 @@ import { streamText } from "ai";
 import { z } from "zod";
 import {
   createAiProvider,
+  FREE_MODEL,
   getQuota,
+  PRO_MODEL,
   recordGeneration,
+  resolveIpHash,
   resolveOptionalUserId,
 } from "./ai.server";
 
@@ -20,7 +23,7 @@ export const getUsageQuota = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => QuotaInput.parse(input))
   .handler(async ({ data }) => {
     const userId = await resolveOptionalUserId();
-    const quota = await getQuota(userId, data.visitorKey);
+    const quota = await getQuota(userId, data.visitorKey, resolveIpHash());
     return {
       isPro: quota.isPro,
       used: quota.used,
@@ -50,7 +53,8 @@ export const generateContent = createServerFn({ method: "POST" })
     if (!apiKey) throw new Error("AI is not configured yet. Please try again later.");
 
     const userId = await resolveOptionalUserId();
-    const quota = await getQuota(userId, data.visitorKey);
+    const ipHash = resolveIpHash();
+    const quota = await getQuota(userId, data.visitorKey, ipHash);
 
     if (!quota.isPro && quota.remaining <= 0) {
       return {
@@ -77,7 +81,7 @@ export const generateContent = createServerFn({ method: "POST" })
     let text: string;
     try {
       const result = streamText({
-        model: openai("gpt-4o-mini"),
+        model: openai(quota.isPro ? PRO_MODEL : FREE_MODEL),
         system: tool.system_prompt,
         prompt: `${details}\n\nProduce the output now.`,
         maxOutputTokens: 1800,
@@ -93,6 +97,7 @@ export const generateContent = createServerFn({ method: "POST" })
     await recordGeneration({
       userId,
       visitorKey: data.visitorKey,
+      ipHash,
       toolSlug: data.slug,
       input: data.values,
       output: text,
