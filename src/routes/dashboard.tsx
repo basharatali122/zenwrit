@@ -67,6 +67,8 @@ function Dashboard() {
   const [loadingData, setLoadingData] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);
   const [switching, setSwitching] = useState(false);
+  const [canceling, setCanceling] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [fullName, setFullName] = useState("");
   const [savedName, setSavedName] = useState("");
   const [savingName, setSavingName] = useState(false);
