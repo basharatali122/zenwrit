@@ -190,6 +190,7 @@ async function handleTransaction(data: any, env: PaddleEnv, failed: boolean) {
   // Paddle's dunning flow in charge of the status.
   if (failed) {
     console.log("[webhook] payment failed for subscription", subscriptionId);
+    await notifyPaymentFailed(subscriptionId, env, data?.id);
     return;
   }
 
