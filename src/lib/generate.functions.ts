@@ -80,7 +80,7 @@ export const generateContent = createServerFn({ method: "POST" })
         model: openai("gpt-4o-mini"),
         system: tool.system_prompt,
         prompt: `${details}\n\nProduce the output now.`,
-        maxOutputTokens: 1200,
+        maxOutputTokens: 1800,
       });
       text = (await result.text).trim();
     } catch (error) {
