@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+const BASE_URL = "https://zenwrit.com";
+
 const STATIC_PATHS = [
   "/",
   "/tools",
