@@ -157,10 +157,9 @@ async function handleSubscriptionActivated(data: any, env: PaddleEnv) {
       .maybeSingle();
     const email = profile?.email as string | undefined;
     if (email) {
-      await sendWelcomeEmail({
-        to: email,
-        yearly: result.priceId.includes("yearly"),
-        siteUrl: SITE_URL,
+      await sendTemplateEmail("pro-welcome", email, {
+        templateData: { yearly: result.priceId.includes("yearly"), siteUrl: SITE_URL },
+        idempotencyKey: `pro-welcome-${data?.id ?? result.userId}`,
       });
     }
   } catch (error) {
