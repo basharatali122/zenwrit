@@ -35,7 +35,7 @@ const ROWS = [
   { feature: "All 5 AI tools", free: true, pro: true },
   { feature: "Generations per day", free: "3", pro: "Unlimited" },
   { feature: "Ads", free: "Shown", pro: "None" },
-  { feature: "Priority generation speed", free: false, pro: true },
+  { feature: "Advanced AI model (higher quality)", free: false, pro: true },
   { feature: "Generation history", free: "Last 3", pro: "Full history" },
   { feature: "Early access to new tools", free: false, pro: true },
   { feature: "Email support", free: false, pro: true },
