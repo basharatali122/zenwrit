@@ -4,13 +4,13 @@ import { LegalPage } from "@/components/site/LegalPage";
 export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
-      { title: "Terms of Service | SaaScript" },
+      { title: "Terms of Service | ZenWrit" },
       {
         name: "description",
-        content: "The terms governing your use of SaaScript's free and Pro AI writing tools, including acceptable use and billing.",
+        content: "The terms governing your use of ZenWrit's free and Pro AI writing tools, including acceptable use and billing.",
       },
-      { property: "og:title", content: "Terms of Service | SaaScript" },
-      { property: "og:description", content: "Acceptable use, subscriptions and liability terms for SaaScript." },
+      { property: "og:title", content: "Terms of Service | ZenWrit" },
+      { property: "og:description", content: "Acceptable use, subscriptions and liability terms for ZenWrit." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -21,15 +21,15 @@ export const Route = createFileRoute("/terms")({
       updated="1 March 2026"
       sections={[
         {
-          heading: "Using SaaScript",
+          heading: "Using ZenWrit",
           paragraphs: [
-            "By using SaaScript you agree to these terms. Free accounts may generate up to three outputs per day; Pro subscribers have unlimited generations subject to fair use to prevent automated abuse.",
+            "By using ZenWrit you agree to these terms. Free accounts may generate up to three outputs per day; Pro subscribers have unlimited generations subject to fair use to prevent automated abuse.",
           ],
         },
         {
           heading: "Acceptable use",
           paragraphs: [
-            "You may not use SaaScript to produce unlawful, harassing, defamatory or deliberately misleading content, to impersonate another person, or to attempt to reverse-engineer, scrape or overload the service.",
+            "You may not use ZenWrit to produce unlawful, harassing, defamatory or deliberately misleading content, to impersonate another person, or to attempt to reverse-engineer, scrape or overload the service.",
             "You are responsible for reviewing every output before you publish or submit it. AI-generated text can contain errors.",
           ],
         },

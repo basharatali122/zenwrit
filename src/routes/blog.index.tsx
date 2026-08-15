@@ -7,13 +7,13 @@ export const Route = createFileRoute("/blog/")({
   loader: async () => ({ posts: await listPublishedPosts() }),
   head: () => ({
     meta: [
-      { title: "Blog — Career & Creator Writing Guides | SaaScript" },
+      { title: "Blog — Career & Creator Writing Guides | ZenWrit" },
       {
         name: "description",
         content:
-          "Practical guides on job searching with AI, LinkedIn writing cadence and ecommerce SEO — from the team behind SaaScript's free AI tools.",
+          "Practical guides on job searching with AI, LinkedIn writing cadence and ecommerce SEO — from the team behind ZenWrit's free AI tools.",
       },
-      { property: "og:title", content: "SaaScript Blog" },
+      { property: "og:title", content: "ZenWrit Blog" },
       { property: "og:description", content: "Guides on AI job searching, LinkedIn writing and ecommerce SEO." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

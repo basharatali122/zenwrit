@@ -84,14 +84,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "SaaScript — Free AI Tools for Creators & Professionals" },
+      { title: "ZenWrit — Free AI Tools for Creators & Professionals" },
       {
         name: "description",
         content:
           "Free AI micro-tools for resumes, cover letters, LinkedIn posts, YouTube titles and product copy.",
       },
-      { name: "author", content: "SaaScript" },
-      { property: "og:site_name", content: "SaaScript" },
+      { name: "author", content: "ZenWrit" },
+      { property: "og:site_name", content: "ZenWrit" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

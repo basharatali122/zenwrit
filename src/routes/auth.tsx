@@ -13,14 +13,14 @@ export const Route = createFileRoute("/auth")({
   validateSearch: z.object({ mode: z.enum(["login", "signup"]).optional() }),
   head: () => ({
     meta: [
-      { title: "Log in or Sign up | SaaScript" },
+      { title: "Log in or Sign up | ZenWrit" },
       {
         name: "description",
         content:
-          "Create a free SaaScript account to save your generation history, track daily usage and manage your Pro subscription.",
+          "Create a free ZenWrit account to save your generation history, track daily usage and manage your Pro subscription.",
       },
-      { property: "og:title", content: "Log in or Sign up | SaaScript" },
-      { property: "og:description", content: "Save your AI generations and manage your SaaScript plan." },
+      { property: "og:title", content: "Log in or Sign up | ZenWrit" },
+      { property: "og:description", content: "Save your AI generations and manage your ZenWrit plan." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
@@ -125,7 +125,7 @@ function AuthPage() {
         </form>
 
         <p className="mt-5 text-center text-sm text-muted-foreground">
-          {mode === "signup" ? "Already have an account?" : "New to SaaScript?"}{" "}
+          {mode === "signup" ? "Already have an account?" : "New to ZenWrit?"}{" "}
           <button
             type="button"
             className="font-medium text-primary hover:underline"

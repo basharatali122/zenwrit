@@ -31,7 +31,7 @@ export function Header() {
           <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Sparkles className="size-4" />
           </span>
-          SaaScript
+          ZenWrit
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Main">

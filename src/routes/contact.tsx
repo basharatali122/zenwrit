@@ -9,12 +9,12 @@ import { Textarea } from "@/components/ui/textarea";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact SaaScript — Support & Feedback" },
+      { title: "Contact ZenWrit — Support & Feedback" },
       {
         name: "description",
-        content: "Questions about billing, a bug to report or a tool you'd like us to build? Get in touch with the SaaScript team.",
+        content: "Questions about billing, a bug to report or a tool you'd like us to build? Get in touch with the ZenWrit team.",
       },
-      { property: "og:title", content: "Contact SaaScript" },
+      { property: "og:title", content: "Contact ZenWrit" },
       { property: "og:description", content: "Support, billing questions and tool requests." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -32,8 +32,8 @@ function Contact() {
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
         Billing questions, bug reports and tool requests all land in the same inbox. We usually reply
         within two business days. You can also email{" "}
-        <a href="mailto:support@saascript.app" className="text-primary hover:underline">
-          support@saascript.app
+        <a href="mailto:support@zenwrit.app" className="text-primary hover:underline">
+          support@zenwrit.app
         </a>
         .
       </p>

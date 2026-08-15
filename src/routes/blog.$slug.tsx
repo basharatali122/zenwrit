@@ -12,10 +12,10 @@ export const Route = createFileRoute("/blog/$slug")({
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
-      return { meta: [{ title: "Article not found | SaaScript" }, { name: "robots", content: "noindex" }] };
+      return { meta: [{ title: "Article not found | ZenWrit" }, { name: "robots", content: "noindex" }] };
     }
     const { post } = loaderData;
-    const title = post.meta_title || `${post.title} | SaaScript`;
+    const title = post.meta_title || `${post.title} | ZenWrit`;
     const description = post.meta_description || post.excerpt;
     return {
       meta: [
@@ -35,7 +35,7 @@ export const Route = createFileRoute("/blog/$slug")({
             headline: post.title,
             description,
             datePublished: post.published_at,
-            author: { "@type": "Organization", name: "SaaScript" },
+            author: { "@type": "Organization", name: "ZenWrit" },
           }),
         },
       ],

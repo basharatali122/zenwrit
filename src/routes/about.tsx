@@ -4,13 +4,13 @@ import { AdSlot } from "@/components/site/AdSlot";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About SaaScript — Small AI Tools, Fairly Priced" },
+      { title: "About ZenWrit — Small AI Tools, Fairly Priced" },
       {
         name: "description",
         content:
-          "SaaScript builds fast, single-purpose AI writing tools for creators and job seekers. Free to try, $5/month for unlimited use.",
+          "ZenWrit builds fast, single-purpose AI writing tools for creators and job seekers. Free to try, $5/month for unlimited use.",
       },
-      { property: "og:title", content: "About SaaScript" },
+      { property: "og:title", content: "About ZenWrit" },
       { property: "og:description", content: "Why we build small, focused AI tools instead of one bloated assistant." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -22,10 +22,10 @@ export const Route = createFileRoute("/about")({
 function About() {
   return (
     <div className="container-page py-12">
-      <h1 className="text-3xl font-bold sm:text-4xl">About SaaScript</h1>
+      <h1 className="text-3xl font-bold sm:text-4xl">About ZenWrit</h1>
       <div className="prose-article mt-6 max-w-2xl">
         <p>
-          SaaScript is a small collection of AI micro-tools built around a simple belief: most people
+          ZenWrit is a small collection of AI micro-tools built around a simple belief: most people
           do not want a general assistant, they want one specific piece of writing finished well and
           quickly. A resume bullet. A cover letter. Ten title options before a Sunday upload.
         </p>

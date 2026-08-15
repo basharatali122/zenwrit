@@ -24,13 +24,13 @@ export const Route = createFileRoute("/")({
   loader: async () => ({ tools: await listPublishedTools() }),
   head: () => ({
     meta: [
-      { title: "SaaScript — Free AI Tools for Creators & Professionals" },
+      { title: "ZenWrit — Free AI Tools for Creators & Professionals" },
       {
         name: "description",
         content:
           "Free AI micro-tools for resumes, cover letters, LinkedIn posts, YouTube titles and product copy. Try free, no signup needed. Pro is $5/month.",
       },
-      { property: "og:title", content: "SaaScript — Free AI Tools for Creators & Professionals" },
+      { property: "og:title", content: "ZenWrit — Free AI Tools for Creators & Professionals" },
       {
         property: "og:description",
         content:
@@ -118,7 +118,7 @@ function Home() {
         </div>
       </section>
 
-      <section aria-label="Why people trust SaaScript" className="border-b border-border bg-surface">
+      <section aria-label="Why people trust ZenWrit" className="border-b border-border bg-surface">
         <ul className="container-page grid gap-4 py-6 sm:grid-cols-2 lg:grid-cols-4">
           {TRUST.map((item) => (
             <li key={item.label} className="flex items-center gap-2.5 text-sm font-medium">
