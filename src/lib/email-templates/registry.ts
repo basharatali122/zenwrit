@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react'
+import { template as proWelcomeTemplate } from './pro-welcome'
 
 export interface TemplateEntry {
   component: ComponentType<any>
