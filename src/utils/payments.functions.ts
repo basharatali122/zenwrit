@@ -80,3 +80,32 @@ export const changeSubscriptionPlan = createServerFn({ method: "POST" })
 
     return { changed: true };
   });
+
+/**
+ * Cancels the user's subscription at the end of the paid period.
+ * Access is retained until `current_period_end`; the webhook syncs the row.
+ */
+export const cancelSubscription = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { environment: PaddleEnv }) => data)
+  .handler(async ({ data, context }) => {
+    const { data: sub } = await context.supabase
+      .from("subscriptions")
+      .select("paddle_subscription_id, status")
+      .eq("user_id", context.userId)
+      .eq("environment", data.environment)
+      .not("paddle_subscription_id", "is", null)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (!sub?.paddle_subscription_id) throw new Error("No active subscription found");
+    if (sub.status === "canceled") return { canceled: true };
+
+    const { getPaddleClient } = await import("@/lib/paddle.server");
+    await getPaddleClient(data.environment).subscriptions.cancel(sub.paddle_subscription_id, {
+      effectiveFrom: "next_billing_period",
+    });
+
+    return { canceled: true };
+  });
