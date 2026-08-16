@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AdSlot } from "@/components/site/AdSlot";
+import { BlogCover } from "@/components/site/BlogCover";
 import { listPublishedPosts } from "@/lib/content.functions";
 import type { BlogPostRecord } from "@/lib/content";
 
@@ -40,26 +41,22 @@ function BlogIndex() {
             <Link
               to="/blog/$slug"
               params={{ slug: post.slug }}
-              className="flex h-full flex-col surface-panel p-5 transition-colors hover:border-primary/50"
+              className="flex h-full flex-col overflow-hidden surface-panel p-0 transition-colors hover:border-primary/50"
             >
-              {post.cover_image_url ? (
-                <img
-                  src={post.cover_image_url}
-                  alt={post.title}
-                  className="mb-4 aspect-[16/9] w-full rounded-lg border border-border object-cover"
-                  loading="lazy"
-                />
-              ) : null}
-              <p className="text-xs font-medium uppercase tracking-wide text-primary">{post.category}</p>
-              <h2 className="mt-2 text-lg font-semibold">{post.title}</h2>
-              <p className="mt-2 flex-1 text-sm text-muted-foreground">{post.excerpt}</p>
-              <p className="mt-4 text-xs text-muted-foreground">
-                {post.published_at ? `${new Date(post.published_at).toLocaleDateString()} · ` : ""}
-                {post.reading_time}
-              </p>
+              <BlogCover src={post.cover_image_url} title={post.title} category={post.category} />
+              <div className="flex flex-1 flex-col p-5">
+                <p className="text-xs font-medium uppercase tracking-wide text-primary">{post.category}</p>
+                <h2 className="mt-2 text-lg font-semibold">{post.title}</h2>
+                <p className="mt-2 flex-1 text-sm text-muted-foreground">{post.excerpt}</p>
+                <p className="mt-4 text-xs text-muted-foreground">
+                  {post.published_at ? `${new Date(post.published_at).toLocaleDateString()} · ` : ""}
+                  {post.reading_time}
+                </p>
+              </div>
             </Link>
           </li>
         ))}
+
       </ul>
     </div>
   );

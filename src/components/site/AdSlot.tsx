@@ -21,7 +21,9 @@ export function AdSlot({
   /** AdSense data-ad-slot id, used only when ADSENSE_ENABLED is true. */
   slot?: string;
 }) {
+  // Disabled: render nothing at all so no height, margin or padding is reserved.
   if (!ADSENSE_ENABLED) return null;
+
 
   const heights = {
     banner: "min-h-[90px]",
