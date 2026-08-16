@@ -45,9 +45,14 @@ function AdminLayout() {
     <div className="container-page py-10">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold sm:text-3xl">Content admin</h1>
-        <Link to="/admin" className="text-sm text-muted-foreground hover:text-foreground">
-          Dashboard
-        </Link>
+        <nav className="flex items-center gap-4">
+          <Link to="/admin" className="text-sm text-muted-foreground hover:text-foreground">
+            Content
+          </Link>
+          <Link to="/admin/messages" className="text-sm text-muted-foreground hover:text-foreground">
+            Messages
+          </Link>
+        </nav>
       </div>
       <div className="mt-8">
         <Outlet />
