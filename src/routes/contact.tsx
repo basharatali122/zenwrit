@@ -83,8 +83,13 @@ function Contact() {
           <Textarea id="message" name="message" rows={5} minLength={5} required />
         </div>
         <Button type="submit" disabled={busy}>
-          {busy ? "Sending…" : sent ? "Message sent" : "Send message"}
+          {busy ? "Sending…" : "Send message"}
         </Button>
+        {sent ? (
+          <p role="status" className="text-sm text-success">
+            Thanks — we'll get back to you within 2 business days
+          </p>
+        ) : null}
       </form>
     </div>
   );
