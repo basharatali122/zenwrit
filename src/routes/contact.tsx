@@ -45,7 +45,7 @@ function Contact() {
       });
       setSent(true);
       form.reset();
-      toast.success("Thanks — we'll get back to you shortly.");
+      toast.success("Thanks — we'll get back to you within 2 business days");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not send your message.");
     } finally {
