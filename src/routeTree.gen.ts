@@ -22,6 +22,7 @@ import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
@@ -97,6 +98,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminMessagesRoute = AdminMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AdminRoute,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/admin/messages': typeof AdminMessagesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -181,6 +188,7 @@ export interface FileRoutesByTo {
   '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/admin/messages': typeof AdminMessagesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -206,6 +214,7 @@ export interface FileRoutesById {
   '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/admin/messages': typeof AdminMessagesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -232,6 +241,7 @@ export interface FileRouteTypes {
     | '/refund-policy'
     | '/sitemap.xml'
     | '/terms'
+    | '/admin/messages'
     | '/blog/$slug'
     | '/tools/$slug'
     | '/admin/'
@@ -255,6 +265,7 @@ export interface FileRouteTypes {
     | '/refund-policy'
     | '/sitemap.xml'
     | '/terms'
+    | '/admin/messages'
     | '/blog/$slug'
     | '/tools/$slug'
     | '/admin'
@@ -279,6 +290,7 @@ export interface FileRouteTypes {
     | '/refund-policy'
     | '/sitemap.xml'
     | '/terms'
+    | '/admin/messages'
     | '/blog/$slug'
     | '/tools/$slug'
     | '/admin/'
@@ -406,6 +418,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/messages': {
+      id: '/admin/messages'
+      path: '/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AdminMessagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -473,12 +492,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminMessagesRoute: typeof AdminMessagesRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminBlogIdRoute: typeof AdminBlogIdRoute
   AdminToolsIdRoute: typeof AdminToolsIdRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminMessagesRoute: AdminMessagesRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminBlogIdRoute: AdminBlogIdRoute,
   AdminToolsIdRoute: AdminToolsIdRoute,
