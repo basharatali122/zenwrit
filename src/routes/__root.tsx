@@ -126,6 +126,7 @@ function RootShell({ children }: { children: ReactNode }) {
       </head>
       <body>
         <ScriptOnce>{themeInitScript}</ScriptOnce>
+        <ScriptOnce>{analyticsExclusionScript}</ScriptOnce>
         {children}
         <Scripts />
       </body>
