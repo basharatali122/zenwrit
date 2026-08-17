@@ -254,6 +254,9 @@ export function AtsChecker() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [file, setFile] = useState<File | null>(null);
+  const [resumeText, setResumeText] = useState("");
+  const ringMounted = useMounted(120);
+
   const [jobDescription, setJobDescription] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
