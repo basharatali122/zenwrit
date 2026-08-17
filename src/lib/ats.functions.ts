@@ -10,20 +10,15 @@ import {
   resolveIpHash,
   resolveOptionalUserId,
 } from "./ai.server";
+import type { AtsReport } from "./ats.server";
+
+export type { AtsReport, AtsCategory, AtsCheck } from "./ats.server";
 
 const AtsInput = z.object({
   visitorKey: z.string().min(6).max(64),
   resumeText: z.string().min(100).max(30000),
+  jobDescription: z.string().max(12000).optional(),
 });
-
-export type AtsReport = {
-  score: number;
-  score_label: string;
-  summary: string;
-  keywords: { found: string[]; missing: string[] };
-  issues: { category: string; severity: string; issue: string; fix: string }[];
-  quick_wins: string[];
-};
 
 export const getAtsQuota = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => z.object({ visitorKey: z.string().min(6).max(64) }).parse(input))
@@ -36,6 +31,36 @@ export const getAtsQuota = createServerFn({ method: "POST" })
       limit: quota.isPro ? null : quota.limit,
       remaining: quota.isPro ? null : quota.remaining,
     };
+  });
+
+export const getSharedAtsReport = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => z.object({ shareId: z.string().min(4).max(64) }).parse(input))
+  .handler(async ({ data }) => {
+    const { loadSharedReport } = await import("./ats.server");
+    return { report: await loadSharedReport(data.shareId) };
+  });
+
+export const emailAtsReport = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        email: z.string().email().max(200),
+        shareId: z.string().min(4).max(64).nullable().optional(),
+        marketingConsent: z.boolean().optional(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const { loadSharedReport, storeReportEmail } = await import("./ats.server");
+    const report = data.shareId ? await loadSharedReport(data.shareId) : null;
+    if (!report) return { ok: false as const, message: "Report expired — run the check again." };
+    await storeReportEmail({
+      email: data.email,
+      shareId: data.shareId ?? null,
+      marketingConsent: Boolean(data.marketingConsent),
+      report,
+    });
+    return { ok: true as const, message: "Report sent — check your inbox." };
   });
 
 export const analyzeResume = createServerFn({ method: "POST" })
@@ -52,6 +77,7 @@ export const analyzeResume = createServerFn({ method: "POST" })
       return {
         ok: false as const,
         report: null,
+        shareId: null,
         used: quota.used,
         limit: quota.limit,
         remaining: 0,
@@ -59,15 +85,18 @@ export const analyzeResume = createServerFn({ method: "POST" })
       };
     }
 
-    const { ATS_SYSTEM_PROMPT } = await import("./ats.server");
+    const { ATS_SYSTEM_PROMPT, normalizeReport, parseReportJson, saveSharedReport } = await import("./ats.server");
+    const jobDescription = data.jobDescription?.trim() ?? "";
     const openai = createAiProvider(apiKey);
     let raw: string;
     try {
       const result = await generateText({
         model: openai(quota.isPro ? PRO_MODEL : FREE_MODEL),
         system: ATS_SYSTEM_PROMPT,
-        prompt: `Resume text:\n\n${data.resumeText}\n\nReturn the JSON report now.`,
-        maxOutputTokens: 2200,
+        prompt: jobDescription
+          ? `Resume text:\n\n${data.resumeText}\n\nJob description:\n\n${jobDescription.slice(0, 12000)}\n\nReturn the JSON report now.`
+          : `Resume text:\n\n${data.resumeText}\n\nNo job description was provided.\n\nReturn the JSON report now.`,
+        maxOutputTokens: 5000,
       });
       raw = result.text.trim();
     } catch (error) {
@@ -76,31 +105,17 @@ export const analyzeResume = createServerFn({ method: "POST" })
       throw new Error("Analysis failed. Please try again.");
     }
 
-    const jsonText = raw.replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
-    let report: AtsReport;
-    try {
-      report = JSON.parse(jsonText) as AtsReport;
-    } catch {
-      const start = jsonText.indexOf("{");
-      const end = jsonText.lastIndexOf("}");
-      if (start === -1 || end === -1) throw new Error("Analysis failed. Please try again.");
-      report = JSON.parse(jsonText.slice(start, end + 1)) as AtsReport;
-    }
+    const report: AtsReport = normalizeReport(parseReportJson(raw));
+    if (!jobDescription) report.job_match_percent = null;
 
-    report.score = Math.max(0, Math.min(100, Number(report.score) || 0));
-    report.keywords = {
-      found: report.keywords?.found ?? [],
-      missing: report.keywords?.missing ?? [],
-    };
-    report.issues = report.issues ?? [];
-    report.quick_wins = report.quick_wins ?? [];
+    const shareId = await saveSharedReport(report, Boolean(jobDescription));
 
     await recordGeneration({
       userId,
       visitorKey: data.visitorKey,
       ipHash,
       toolSlug: "ats-resume-checker",
-      input: { resume: `${data.resumeText.slice(0, 500)}…` },
+      input: { resume: `${data.resumeText.slice(0, 500)}…`, job: jobDescription.slice(0, 300) },
       output: JSON.stringify(report),
     });
 
@@ -108,6 +123,7 @@ export const analyzeResume = createServerFn({ method: "POST" })
     return {
       ok: true as const,
       report,
+      shareId,
       used,
       limit: quota.isPro ? Number.POSITIVE_INFINITY : quota.limit,
       remaining: quota.isPro ? Number.POSITIVE_INFINITY : Math.max(0, quota.limit - used),
