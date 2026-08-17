@@ -1,0 +1,34 @@
+INSERT INTO public.tools (slug, name, short_description, icon, category, form_fields, system_prompt, output_label, faqs, article_title, article_content, meta_title, meta_description, is_published, sort_order)
+VALUES (
+'ats-resume-checker',
+'ATS Resume Checker',
+'Upload your resume and get an ATS compatibility score with specific fixes in seconds.',
+'gauge',
+'Job seekers',
+'[]'::jsonb,
+'ATS analysis prompt is defined server-side.',
+'Your ATS report',
+'[
+  {"q":"What is an ATS score?","a":"An ATS score estimates how easily an Applicant Tracking System can parse and rank your resume. It looks at formatting, section naming, keyword coverage, action verbs and quantified results. A score above 80 means your resume is well optimized for automated screening."},
+  {"q":"Is the ATS Resume Checker free?","a":"Yes. Free users get 3 checks per day with no signup required. Pro members ($5/month) get unlimited checks, no ads and a stronger AI model for deeper analysis."},
+  {"q":"Do you store my resume?","a":"No. Your file is parsed in your browser and only the extracted text is sent for analysis. The file itself is never uploaded or stored, and we discard it as soon as the report is generated."},
+  {"q":"Why did my PDF fail to read?","a":"Scanned or image-only PDFs contain no selectable text, so nothing can be extracted. Export a fresh PDF from Word, Google Docs or your resume builder, or upload the DOCX version instead."}
+]'::jsonb,
+'What is ATS and How to Beat It in 2026',
+E'## What an ATS actually does\n\nAn Applicant Tracking System (ATS) is the software almost every mid-size and large employer uses to receive, store and filter job applications. When you press *Apply*, your resume rarely lands in a human inbox first. It is parsed into structured fields — name, contact details, work history, education, skills — and stored in a searchable database. Recruiters then search that database the same way you search Google: by keywords, job titles, tools and years of experience.\n\nThat single fact explains most resume rejections. Your resume is not being judged on beauty. It is being judged on whether a machine can read it, and whether the words a recruiter searches for actually appear in it.\n\n## The three ways resumes fail in 2026\n\n**1. Parsing failures.** Multi-column layouts, text inside tables, headers and footers, text boxes, icons instead of labels, and graphics-heavy templates all confuse parsers. A beautiful two-column Canva template can arrive in the recruiter''s system as scrambled fragments, with your job titles missing entirely. Single-column, plain-text-friendly layouts win every time.\n\n**2. Keyword gaps.** Modern systems rank candidates by relevance to the job description. If the posting says "React", "TypeScript" and "CI/CD" and your resume only says "front-end development", you will rank below people who are less qualified but better matched. The fix is not keyword stuffing — it is using the employer''s own vocabulary in the context of real achievements.\n\n**3. Weak evidence.** Once a human does read your resume, they spend six to eight seconds on it. Bullets that begin "Responsible for..." give them nothing. Bullets that begin with a strong action verb and end with a number give them a reason to keep reading.\n\n## A checklist that works\n\n- **Use a single-column layout** with standard section headings: Summary, Experience, Education, Skills. Creative headings like "Where I''ve Made Magic" break parsing and searches.\n- **Save as PDF exported from a text editor**, never as a scan or an image. If a job portal requests DOCX, send DOCX.\n- **Use standard fonts** at 10–12pt. Avoid text in headers, footers, tables and text boxes.\n- **Mirror the job description.** Pull the 8–12 most repeated skills and tools from the posting and place them naturally in your bullets and skills section.\n- **Spell out and abbreviate.** Write "Search Engine Optimization (SEO)" the first time so both search terms match.\n- **Quantify.** Numbers, percentages, timeframes, team sizes, budgets and volumes. "Cut deployment time 40% (45 min to 27 min)" beats "improved deployments".\n- **Start each bullet with an action verb.** Led, launched, rebuilt, negotiated, automated, reduced.\n- **Keep it to one page** under ten years of experience, two pages beyond that.\n- **Include a skills section** with hard skills and tools, not soft-skill adjectives.\n- **Name the file properly**: `Firstname-Lastname-Resume.pdf`.\n\n## How to use this checker\n\nUpload your current resume above. The analyzer extracts the text in your browser, sends only that text for analysis, and returns a 0–100 ATS score, the keywords it found, the ones it expected but could not find, a prioritized list of issues with concrete fixes, and three quick wins you can apply in ten minutes.\n\nTreat the score as a diagnostic, not a grade. A resume scoring 62 with the right three fixes usually lands in the mid-80s. Fix High severity issues first — those are the ones that cause parsing failures or keyword misses that keep you out of search results entirely.\n\n## Then rewrite, do not just tweak\n\nMost scores are dragged down by weak bullet points rather than exotic formatting problems. Once you know what is missing, rewrite the content itself. Use the [Resume Bullet Point Generator](/tools/resume-bullet-point-generator) to turn flat duty statements into quantified, action-led achievements that carry the keywords you are missing. Then use the [Cover Letter Generator](/tools/cover-letter-generator) to build a tailored letter that reinforces the same keywords for the human reader.\n\n## Tailor per application\n\nOne master resume plus a ten-minute tailoring pass per application beats a single generic resume blasted at fifty postings. Swap the summary line, reorder the skills section to lead with what the posting emphasizes, and adjust two or three bullets so they echo the exact tools named in the ad. Re-run the checker after tailoring — if your score holds above 80 and the missing-keyword list is short, you are in the shortlist range.\n\nATS software is not your enemy. It is a search engine, and this checker tells you exactly which search terms you are currently invisible for.',
+'Free ATS Resume Checker — Instant ATS Score | ZenWrit',
+'Upload your resume and get your ATS compatibility score instantly. See missing keywords, format issues, and exact fixes. Free, no signup needed.',
+true,
+2
+)
+ON CONFLICT (slug) DO UPDATE SET
+  name = EXCLUDED.name,
+  short_description = EXCLUDED.short_description,
+  icon = EXCLUDED.icon,
+  category = EXCLUDED.category,
+  faqs = EXCLUDED.faqs,
+  article_title = EXCLUDED.article_title,
+  article_content = EXCLUDED.article_content,
+  meta_title = EXCLUDED.meta_title,
+  meta_description = EXCLUDED.meta_description,
+  is_published = true;
