@@ -639,7 +639,9 @@ export function AtsChecker() {
             <RotateCcw /> Check Another Resume
           </Button>
         </div>
+        </div>
       </div>
+
     );
   }
 
