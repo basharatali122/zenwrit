@@ -402,6 +402,8 @@ export function AtsChecker() {
 
   function reset() {
     setFile(null);
+    setResumeText("");
+
     setReport(null);
     setShareId(null);
     setError(null);
