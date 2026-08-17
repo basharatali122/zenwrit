@@ -416,8 +416,12 @@ export function AtsChecker() {
       (a, b) => (SEVERITY_ORDER[a.severity] ?? 3) - (SEVERITY_ORDER[b.severity] ?? 3),
     );
 
+    const totalChecks = report.categories.reduce((sum, category) => sum + category.checks.length, 0);
+
     return (
-      <div className="space-y-8">
+      <div className={file ? "grid gap-8 md:grid-cols-[35%_minmax(0,1fr)]" : ""}>
+        <ResumePreview file={file} text={resumeText} />
+        <div className="space-y-8">
         <div className="surface-panel p-6 text-center sm:p-8">
           <svg
             viewBox="0 0 120 120"
@@ -435,8 +439,9 @@ export function AtsChecker() {
               strokeLinecap="round"
               stroke={scoreColor(report.overall_score)}
               strokeDasharray={circumference}
-              strokeDashoffset={offset}
+              strokeDashoffset={ringMounted ? offset : circumference}
               transform="rotate(-90 60 60)"
+              style={{ transition: "stroke-dashoffset 1s ease-out" }}
             />
             <text x="60" y="58" textAnchor="middle" className="fill-foreground text-[26px] font-bold">
               {report.overall_score}
@@ -445,6 +450,7 @@ export function AtsChecker() {
               / 100
             </text>
           </svg>
+          <p className="mt-1 text-xs text-muted-foreground">{totalChecks} checks analyzed</p>
           <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
             <p className="text-lg font-semibold" style={{ color: scoreColor(report.overall_score) }}>
               {report.score_label}
@@ -456,10 +462,25 @@ export function AtsChecker() {
               Parse Rate: {report.parsed_rate}%
             </span>
           </div>
+          <ul className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            {[
+              `${totalChecks} checks`,
+              `${report.categories.length} categories`,
+              "~30 sec",
+            ].map((pill) => (
+              <li
+                key={pill}
+                className="rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-muted-foreground"
+              >
+                {pill}
+              </li>
+            ))}
+          </ul>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             {report.summary}
           </p>
         </div>
+
 
         {report.categories.length ? (
           <div className="flex flex-wrap gap-2">
