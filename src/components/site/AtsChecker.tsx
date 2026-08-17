@@ -1,0 +1,370 @@
+import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { ArrowRight, CheckCircle2, FileUp, Loader2, RotateCcw, XCircle } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { getVisitorKey } from "@/hooks/useAuth";
+import { analyzeResume, getAtsQuota, type AtsReport } from "@/lib/ats.functions";
+
+const MAX_BYTES = 5 * 1024 * 1024;
+
+type Quota = { isPro: boolean; used: number; limit: number | null; remaining: number | null };
+
+function formatSize(bytes: number) {
+  return bytes < 1024 * 1024 ? `${Math.round(bytes / 1024)} KB` : `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+}
+
+async function extractText(file: File): Promise<string> {
+  const name = file.name.toLowerCase();
+  if (name.endsWith(".docx")) {
+    const mammoth = await import("mammoth");
+    const buffer = await file.arrayBuffer();
+    const result = await (mammoth as any).extractRawText({ arrayBuffer: buffer });
+    return String(result?.value ?? "");
+  }
+  const pdfjs: any = await import("pdfjs-dist");
+  pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+    "pdfjs-dist/build/pdf.worker.min.mjs",
+    import.meta.url,
+  ).toString();
+  const doc = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+  let text = "";
+  for (let page = 1; page <= doc.numPages; page += 1) {
+    const content = await (await doc.getPage(page)).getTextContent();
+    text += content.items.map((item: any) => item.str ?? "").join(" ") + "\n";
+  }
+  return text;
+}
+
+function ringColor(score: number) {
+  if (score <= 40) return "hsl(0 72% 51%)";
+  if (score <= 65) return "hsl(25 95% 53%)";
+  if (score <= 80) return "hsl(217 91% 60%)";
+  return "hsl(142 71% 45%)";
+}
+
+const SEVERITY_ORDER: Record<string, number> = { High: 0, Medium: 1, Low: 2 };
+
+function severityClass(severity: string) {
+  if (severity === "High") return "bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/30";
+  if (severity === "Medium") return "bg-orange-500/15 text-orange-600 dark:text-orange-400 border-orange-500/30";
+  return "bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 border-yellow-500/30";
+}
+
+export function AtsChecker() {
+  const analyze = useServerFn(analyzeResume);
+  const fetchQuota = useServerFn(getAtsQuota);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const [file, setFile] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const [report, setReport] = useState<AtsReport | null>(null);
+  const [quota, setQuota] = useState<Quota | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetchQuota({ data: { visitorKey: getVisitorKey() } })
+      .then((result) => {
+        if (active) setQuota(result);
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [fetchQuota]);
+
+  const limitReached = quota != null && !quota.isPro && (quota.remaining ?? 0) <= 0;
+
+  function acceptFile(next: File | undefined | null) {
+    if (!next) return;
+    const name = next.name.toLowerCase();
+    if (!name.endsWith(".pdf") && !name.endsWith(".docx")) {
+      setFile(null);
+      setError("Please upload a PDF or DOCX file only");
+      return;
+    }
+    if (next.size > MAX_BYTES) {
+      setFile(null);
+      setError("File too large. Please upload a file under 5MB");
+      return;
+    }
+    setError(null);
+    setReport(null);
+    setFile(next);
+  }
+
+  async function onCheck() {
+    if (!file) return;
+    setBusy(true);
+    setError(null);
+    try {
+      let text = "";
+      try {
+        text = (await extractText(file)).replace(/\s+/g, " ").trim();
+      } catch {
+        text = "";
+      }
+      if (text.length < 100) {
+        setError(
+          "We couldn't read your resume. Please make sure it contains selectable text (not a scanned image)",
+        );
+        return;
+      }
+
+      const result = await analyze({
+        data: { visitorKey: getVisitorKey(), resumeText: text.slice(0, 30000) },
+      });
+      setQuota({
+        isPro: result.isPro,
+        used: result.used,
+        limit: result.isPro ? null : result.limit,
+        remaining: result.isPro ? null : result.remaining,
+      });
+      if (!result.ok || !result.report) {
+        toast.error("You've used all 3 free checks today. Go Pro for unlimited.");
+        return;
+      }
+      setReport(result.report);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function reset() {
+    setFile(null);
+    setReport(null);
+    setError(null);
+    if (inputRef.current) inputRef.current.value = "";
+  }
+
+  if (report) {
+    const circumference = 2 * Math.PI * 52;
+    const offset = circumference * (1 - report.score / 100);
+    const issues = [...report.issues].sort(
+      (a, b) => (SEVERITY_ORDER[a.severity] ?? 3) - (SEVERITY_ORDER[b.severity] ?? 3),
+    );
+
+    return (
+      <div className="space-y-8">
+        <div className="surface-panel p-6 text-center sm:p-8">
+          <svg viewBox="0 0 120 120" className="mx-auto size-36" role="img" aria-label={`ATS score ${report.score} out of 100`}>
+            <circle cx="60" cy="60" r="52" fill="none" strokeWidth="10" className="stroke-border" />
+            <circle
+              cx="60"
+              cy="60"
+              r="52"
+              fill="none"
+              strokeWidth="10"
+              strokeLinecap="round"
+              stroke={ringColor(report.score)}
+              strokeDasharray={circumference}
+              strokeDashoffset={offset}
+              transform="rotate(-90 60 60)"
+            />
+            <text x="60" y="58" textAnchor="middle" className="fill-foreground text-[26px] font-bold">
+              {report.score}
+            </text>
+            <text x="60" y="76" textAnchor="middle" className="fill-muted-foreground text-[11px]">
+              / 100
+            </text>
+          </svg>
+          <p className="mt-3 text-lg font-semibold" style={{ color: ringColor(report.score) }}>
+            {report.score_label}
+          </p>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            {report.summary}
+          </p>
+        </div>
+
+        <section className="surface-panel p-6">
+          <h2 className="text-lg font-semibold">Keyword Analysis</h2>
+          <div className="mt-4 grid gap-6 sm:grid-cols-2">
+            <div>
+              <h3 className="flex items-center gap-1.5 text-sm font-semibold"><CheckCircle2 className="size-4 text-green-600 dark:text-green-400" /> Keywords Found</h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {report.keywords.found.length ? (
+                  report.keywords.found.map((word) => (
+                    <span
+                      key={word}
+                      className="rounded-full border border-green-500/30 bg-green-500/15 px-2.5 py-1 text-xs font-medium text-green-700 dark:text-green-400"
+                    >
+                      {word}
+                    </span>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground">No strong keywords detected.</p>
+                )}
+              </div>
+            </div>
+            <div>
+              <h3 className="flex items-center gap-1.5 text-sm font-semibold"><XCircle className="size-4 text-red-600 dark:text-red-400" /> Keywords to Add</h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {report.keywords.missing.length ? (
+                  report.keywords.missing.map((word) => (
+                    <span
+                      key={word}
+                      className="rounded-full border border-red-500/30 bg-red-500/15 px-2.5 py-1 text-xs font-medium text-red-600 dark:text-red-400"
+                    >
+                      {word}
+                    </span>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground">Nothing critical missing.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {issues.length ? (
+          <section>
+            <h2 className="text-lg font-semibold">Issues Found</h2>
+            <ul className="mt-4 space-y-4">
+              {issues.map((issue, index) => (
+                <li key={index} className="surface-panel p-5">
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="font-semibold">{issue.category}</p>
+                    <span className={`shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-medium ${severityClass(issue.severity)}`}>
+                      {issue.severity}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{issue.issue}</p>
+                  <div className="mt-3 rounded-lg border border-primary/30 bg-accent p-3 text-sm text-accent-foreground">
+                    <span className="font-semibold">→ How to fix: </span>
+                    {issue.fix}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        {report.quick_wins.length ? (
+          <section>
+            <h2 className="text-lg font-semibold">Your Top 3 Quick Wins</h2>
+            <ol className="mt-4 space-y-3">
+              {report.quick_wins.slice(0, 3).map((win, index) => (
+                <li
+                  key={index}
+                  className="flex items-start gap-3 rounded-xl border border-green-500/30 bg-green-500/10 p-4 text-sm"
+                >
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-green-600 text-xs font-bold text-white">
+                    {index + 1}
+                  </span>
+                  <span className="leading-relaxed">
+                    <ArrowRight className="mr-1 inline size-4 text-green-600 dark:text-green-400" />
+                    {win}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ) : null}
+
+        <section className="surface-panel p-6">
+          <h2 className="text-base font-semibold">Now fix your resume with our tools:</h2>
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+            <Button asChild>
+              <Link to="/tools/$slug" params={{ slug: "resume-bullet-point-generator" }}>
+                Improve Resume Bullets <ArrowRight />
+              </Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/tools/$slug" params={{ slug: "cover-letter-generator" }}>
+                Write Cover Letter <ArrowRight />
+              </Link>
+            </Button>
+          </div>
+        </section>
+
+        <div className="flex justify-center">
+          <Button variant="outline" onClick={reset}>
+            <RotateCcw /> Check Another Resume
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="surface-panel p-5 sm:p-6">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => inputRef.current?.click()}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragging(true);
+        }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragging(false);
+          acceptFile(e.dataTransfer.files?.[0]);
+        }}
+        className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-10 text-center transition-colors ${
+          dragging ? "border-primary bg-accent" : "border-border hover:border-primary/60 hover:bg-surface"
+        }`}
+      >
+        <FileUp className="size-8 text-muted-foreground" />
+        <p className="mt-4 text-sm font-medium">Drop your resume here or click to browse</p>
+        <p className="mt-1 text-xs text-muted-foreground">Supports PDF and DOCX files up to 5MB</p>
+        <input
+          ref={inputRef}
+          type="file"
+          accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          className="hidden"
+          onChange={(e) => acceptFile(e.target.files?.[0])}
+        />
+      </div>
+
+      {file ? (
+        <div className="mt-4 flex items-center gap-2 rounded-lg border border-green-500/30 bg-green-500/10 p-3 text-sm">
+          <CheckCircle2 className="size-4 text-green-600 dark:text-green-400" />
+          <span className="font-medium">{file.name}</span>
+          <span className="text-muted-foreground">({formatSize(file.size)})</span>
+        </div>
+      ) : null}
+
+      {error ? (
+        <p className="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive" role="alert">
+          {error}
+        </p>
+      ) : null}
+
+      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <Button size="lg" disabled={!file || busy || limitReached} onClick={onCheck}>
+          {busy ? <Loader2 className="animate-spin" /> : null}
+          {busy ? "Analyzing your resume…" : "Check ATS Score"}
+        </Button>
+        <p className="text-xs text-muted-foreground" aria-live="polite">
+          {quota == null
+            ? "Checking your free usage…"
+            : quota.isPro
+              ? "Pro plan · unlimited checks"
+              : `${quota.used}/${quota.limit} free checks used today`}
+        </p>
+      </div>
+
+      {limitReached ? (
+        <div className="mt-5 rounded-lg border border-primary/40 bg-accent p-4 text-sm text-accent-foreground">
+          <p className="font-medium">Daily free limit reached.</p>
+          <p className="mt-1 text-muted-foreground">
+            Your free checks reset at midnight UTC — or go unlimited for $5/month.
+          </p>
+          <Button asChild size="sm" className="mt-3">
+            <Link to="/pricing">Upgrade to Pro</Link>
+          </Button>
+        </div>
+      ) : null}
+    </div>
+  );
+}
