@@ -107,58 +107,136 @@ const TRUST_BADGES = [
   { icon: Lock, label: "Your resume is never stored" },
 ];
 
+function useMounted(delay = 80) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const id = window.setTimeout(() => setMounted(true), delay);
+    return () => window.clearTimeout(id);
+  }, [delay]);
+  return mounted;
+}
+
+function ResumePreview({ file, text }: { file: File | null; text: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isPdf = !!file && file.name.toLowerCase().endsWith(".pdf");
+
+  useEffect(() => {
+    if (!file || !isPdf) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const pdfjs: any = await import("pdfjs-dist");
+        pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+          "pdfjs-dist/build/pdf.worker.min.mjs",
+          import.meta.url,
+        ).toString();
+        const doc = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+        const page = await doc.getPage(1);
+        const canvas = canvasRef.current;
+        if (cancelled || !canvas) return;
+        const base = page.getViewport({ scale: 1 });
+        const scale = Math.min(2, 620 / base.width);
+        const viewport = page.getViewport({ scale });
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        const context = canvas.getContext("2d");
+        if (!context) return;
+        await page.render({ canvasContext: context, viewport, canvas }).promise;
+      } catch {
+        /* preview is best-effort */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [file, isPdf]);
+
+  if (!file) return null;
+
+  return (
+    <aside className="hidden md:block">
+      <div className="sticky top-24">
+        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold">
+          <FileText className="size-4 text-primary" /> Your Resume
+        </h2>
+        <div className="max-h-[70vh] overflow-auto rounded-xl border border-border bg-surface p-3 shadow-sm">
+          {isPdf ? (
+            <canvas ref={canvasRef} className="w-full rounded-md bg-background shadow-sm" />
+          ) : (
+            <div className="rounded-md bg-background p-5 text-[11px] leading-relaxed whitespace-pre-wrap text-muted-foreground shadow-sm">
+              {text || "Preview unavailable."}
+            </div>
+          )}
+        </div>
+        <p className="mt-2 truncate text-xs text-muted-foreground">{file.name}</p>
+      </div>
+    </aside>
+  );
+}
+
 function CheckRow({ check }: { check: { name: string; status: string; message: string } }) {
   const [open, setOpen] = useState(false);
   const icon =
     check.status === "pass" ? (
-      <CheckCircle2 className="size-4 shrink-0 text-green-600 dark:text-green-400" />
+      <CheckCircle2 className="size-5 shrink-0 text-green-600 dark:text-green-400" />
     ) : check.status === "fail" ? (
-      <XCircle className="size-4 shrink-0 text-red-600 dark:text-red-400" />
+      <XCircle className="size-5 shrink-0 text-red-600 dark:text-red-400" />
     ) : check.status === "na" ? (
-      <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
+      <ChevronDown className="size-5 shrink-0 text-muted-foreground" />
     ) : (
-      <AlertTriangle className="size-4 shrink-0 text-orange-500" />
+      <AlertTriangle className="size-5 shrink-0 text-orange-500" />
     );
 
   return (
-    <li className="border-b border-border/60 last:border-0">
+    <li className="overflow-hidden rounded-lg border border-border/70 bg-surface/40 transition-colors hover:bg-accent/40">
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
-        className="flex w-full items-center gap-3 py-3 text-left"
+        className="flex w-full items-center gap-3 px-3 py-3 text-left"
       >
         {icon}
-        <span className="flex-1 text-sm font-medium">{check.name}</span>
-        <ChevronDown className={`size-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+        <span className="min-w-0 flex-1 truncate text-sm font-semibold">{check.name}</span>
+        <ChevronDown
+          className={`size-4 shrink-0 text-muted-foreground transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+        />
       </button>
-      {open ? (
-        <p className="pb-3 pl-7 text-sm leading-relaxed text-muted-foreground">{check.message}</p>
-      ) : null}
+      <div
+        className="grid transition-all duration-300 ease-out"
+        style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+      >
+        <div className="overflow-hidden">
+          <p className="px-3 pb-3 pl-11 text-sm leading-relaxed text-muted-foreground">{check.message}</p>
+        </div>
+      </div>
     </li>
   );
 }
 
 function CategoryBlock({ category }: { category: AtsCategory }) {
   const Icon = CATEGORY_ICONS[category.icon] ?? Shield;
+  const mounted = useMounted();
   return (
     <section id={categoryId(category.name)} className="surface-panel scroll-mt-24 p-5 sm:p-6">
-      <header className="flex items-center gap-3">
-        <span className="flex size-9 items-center justify-center rounded-lg bg-accent text-accent-foreground">
+      <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-foreground">
           <Icon className="size-4" />
         </span>
-        <h3 className="flex-1 text-base font-semibold">{category.name}</h3>
+        <h3 className="truncate text-base font-semibold">{category.name}</h3>
         <span className="text-sm font-bold" style={{ color: scoreColor(category.score) }}>
           {category.score}
         </span>
       </header>
-      <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-border">
+      <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-border">
         <div
-          className="h-full rounded-full"
-          style={{ width: `${category.score}%`, backgroundColor: scoreColor(category.score) }}
+          className="h-full rounded-full transition-[width] duration-1000 ease-out"
+          style={{
+            width: `${mounted ? category.score : 0}%`,
+            backgroundColor: scoreColor(category.score),
+          }}
         />
       </div>
-      <ul className="mt-2">
+      <ul className="mt-3 space-y-2">
         {category.checks.map((check) => (
           <CheckRow key={check.name} check={check} />
         ))}
@@ -166,6 +244,7 @@ function CategoryBlock({ category }: { category: AtsCategory }) {
     </section>
   );
 }
+
 
 export function AtsChecker() {
   const analyze = useServerFn(analyzeResume);
