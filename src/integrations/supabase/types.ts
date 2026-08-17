@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      ats_reports: {
+        Row: {
+          created_at: string
+          has_job_description: boolean
+          id: string
+          report: Json
+          share_id: string
+        }
+        Insert: {
+          created_at?: string
+          has_job_description?: boolean
+          id?: string
+          report: Json
+          share_id: string
+        }
+        Update: {
+          created_at?: string
+          has_job_description?: boolean
+          id?: string
+          report?: Json
+          share_id?: string
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           category: string
@@ -62,6 +86,33 @@ export type Database = {
           slug?: string
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      contact_emails: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          marketing_consent: boolean
+          report_share_id: string | null
+          source: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          marketing_consent?: boolean
+          report_share_id?: string | null
+          source?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          marketing_consent?: boolean
+          report_share_id?: string | null
+          source?: string
         }
         Relationships: []
       }
