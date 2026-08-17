@@ -8,7 +8,7 @@ import type { ToolRecord } from "@/lib/content";
 
 const TITLE = "Free ATS Resume Checker — Instant ATS Score | ZenWrit";
 const DESCRIPTION =
-  "Upload your resume and get your ATS compatibility score instantly. See missing keywords, format issues, and exact fixes. Free, no signup needed.";
+  "Use this free ATS resume checker to get your ATS compatibility score instantly, with missing keywords, format issues and exact fixes. No signup needed.";
 
 export const Route = createFileRoute("/tools/ats-resume-checker")({
   loader: async () => await getPublishedTool({ data: { slug: "ats-resume-checker" } }),
@@ -76,9 +76,10 @@ function AtsPage() {
           <Gauge className="size-6" />
         </span>
         <div>
-          <h1 className="text-3xl font-bold sm:text-4xl">ATS Resume Checker</h1>
+          <h1 className="text-3xl font-bold sm:text-4xl">Free ATS Resume Checker</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground sm:text-base">
-            Upload your resume and get an ATS compatibility score with specific fixes in seconds.
+            This free ATS resume checker scores your resume for ATS compatibility and gives you
+            specific fixes in seconds.
           </p>
         </div>
       </header>
