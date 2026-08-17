@@ -83,6 +83,7 @@ const TAGS: Record<string, string[]> = {
   linkedin: ["#linkedin", "#personalbrand"],
   youtube: ["#youtube", "#ctr"],
   product: ["#ecommerce", "#copywriting"],
+  gauge: ["#ats", "#resume", "#jobsearch"],
 };
 
 function Home() {

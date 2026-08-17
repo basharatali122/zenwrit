@@ -1,4 +1,4 @@
-import { FileText, Linkedin, PenLine, ShoppingBag, Sparkles, Youtube } from "lucide-react";
+import { FileText, Gauge, Linkedin, PenLine, ShoppingBag, Sparkles, Youtube } from "lucide-react";
 
 const ICONS: Record<string, typeof FileText> = {
   resume: FileText,
@@ -6,6 +6,7 @@ const ICONS: Record<string, typeof FileText> = {
   linkedin: Linkedin,
   youtube: Youtube,
   product: ShoppingBag,
+  gauge: Gauge,
 };
 
 export function ToolIcon({ icon, className }: { icon: string; className?: string }) {
