@@ -1,11 +1,11 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowRight, CheckCircle2, FileUp, Loader2, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { getVisitorKey } from "@/hooks/useAuth";
-import { analyzeResume, type AtsReport } from "@/lib/ats.functions";
+import { analyzeResume, getAtsQuota, type AtsReport } from "@/lib/ats.functions";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
@@ -52,8 +52,9 @@ function severityClass(severity: string) {
   return "bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 border-yellow-500/30";
 }
 
-export function AtsChecker({ quota: initialQuota }: { quota?: Quota | null }) {
+export function AtsChecker() {
   const analyze = useServerFn(analyzeResume);
+  const fetchQuota = useServerFn(getAtsQuota);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [file, setFile] = useState<File | null>(null);
@@ -61,7 +62,19 @@ export function AtsChecker({ quota: initialQuota }: { quota?: Quota | null }) {
   const [busy, setBusy] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [report, setReport] = useState<AtsReport | null>(null);
-  const [quota, setQuota] = useState<Quota | null>(initialQuota ?? null);
+  const [quota, setQuota] = useState<Quota | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetchQuota({ data: { visitorKey: getVisitorKey() } })
+      .then((result) => {
+        if (active) setQuota(result);
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [fetchQuota]);
 
   const limitReached = quota != null && !quota.isPro && (quota.remaining ?? 0) <= 0;
 
