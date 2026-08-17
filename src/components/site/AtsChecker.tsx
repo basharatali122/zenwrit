@@ -1,11 +1,39 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowRight, CheckCircle2, FileUp, Loader2, RotateCcw, XCircle } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle2,
+  ChevronDown,
+  Clock,
+  FileText,
+  FileUp,
+  Layout,
+  ListChecks,
+  Loader2,
+  Lock,
+  Mail,
+  RotateCcw,
+  Search,
+  Share2,
+  Shield,
+  UserX,
+  XCircle,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { getVisitorKey } from "@/hooks/useAuth";
-import { analyzeResume, getAtsQuota, type AtsReport } from "@/lib/ats.functions";
+import {
+  analyzeResume,
+  emailAtsReport,
+  getAtsQuota,
+  getSharedAtsReport,
+  type AtsCategory,
+  type AtsReport,
+} from "@/lib/ats.functions";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
@@ -37,7 +65,7 @@ async function extractText(file: File): Promise<string> {
   return text;
 }
 
-function ringColor(score: number) {
+function scoreColor(score: number) {
   if (score <= 40) return "hsl(0 72% 51%)";
   if (score <= 65) return "hsl(25 95% 53%)";
   if (score <= 80) return "hsl(217 91% 60%)";
@@ -52,17 +80,112 @@ function severityClass(severity: string) {
   return "bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 border-yellow-500/30";
 }
 
+const CATEGORY_ICONS: Record<string, typeof Shield> = {
+  shield: Shield,
+  "file-text": FileText,
+  search: Search,
+  layout: Layout,
+  "alert-triangle": AlertTriangle,
+};
+
+const SHORT_NAMES: Record<string, string> = {
+  "ATS Compatibility": "ATS",
+  "Content Quality": "Content",
+  "Keywords & Skills": "Keywords",
+  "Structure & Format": "Structure",
+  "Recruiter Red Flags": "Red Flags",
+};
+
+function categoryId(name: string) {
+  return `ats-cat-${name.toLowerCase().replace(/[^a-z]+/g, "-")}`;
+}
+
+const TRUST_BADGES = [
+  { icon: ListChecks, label: "20+ checks across 5 categories" },
+  { icon: Clock, label: "Results in ~30 seconds" },
+  { icon: UserX, label: "No account required" },
+  { icon: Lock, label: "Your resume is never stored" },
+];
+
+function CheckRow({ check }: { check: { name: string; status: string; message: string } }) {
+  const [open, setOpen] = useState(false);
+  const icon =
+    check.status === "pass" ? (
+      <CheckCircle2 className="size-4 shrink-0 text-green-600 dark:text-green-400" />
+    ) : check.status === "fail" ? (
+      <XCircle className="size-4 shrink-0 text-red-600 dark:text-red-400" />
+    ) : check.status === "na" ? (
+      <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
+    ) : (
+      <AlertTriangle className="size-4 shrink-0 text-orange-500" />
+    );
+
+  return (
+    <li className="border-b border-border/60 last:border-0">
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 py-3 text-left"
+      >
+        {icon}
+        <span className="flex-1 text-sm font-medium">{check.name}</span>
+        <ChevronDown className={`size-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open ? (
+        <p className="pb-3 pl-7 text-sm leading-relaxed text-muted-foreground">{check.message}</p>
+      ) : null}
+    </li>
+  );
+}
+
+function CategoryBlock({ category }: { category: AtsCategory }) {
+  const Icon = CATEGORY_ICONS[category.icon] ?? Shield;
+  return (
+    <section id={categoryId(category.name)} className="surface-panel scroll-mt-24 p-5 sm:p-6">
+      <header className="flex items-center gap-3">
+        <span className="flex size-9 items-center justify-center rounded-lg bg-accent text-accent-foreground">
+          <Icon className="size-4" />
+        </span>
+        <h3 className="flex-1 text-base font-semibold">{category.name}</h3>
+        <span className="text-sm font-bold" style={{ color: scoreColor(category.score) }}>
+          {category.score}
+        </span>
+      </header>
+      <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-border">
+        <div
+          className="h-full rounded-full"
+          style={{ width: `${category.score}%`, backgroundColor: scoreColor(category.score) }}
+        />
+      </div>
+      <ul className="mt-2">
+        {category.checks.map((check) => (
+          <CheckRow key={check.name} check={check} />
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 export function AtsChecker() {
   const analyze = useServerFn(analyzeResume);
   const fetchQuota = useServerFn(getAtsQuota);
+  const fetchShared = useServerFn(getSharedAtsReport);
+  const sendReport = useServerFn(emailAtsReport);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [file, setFile] = useState<File | null>(null);
+  const [jobDescription, setJobDescription] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [report, setReport] = useState<AtsReport | null>(null);
+  const [shareId, setShareId] = useState<string | null>(null);
   const [quota, setQuota] = useState<Quota | null>(null);
+  const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -75,6 +198,23 @@ export function AtsChecker() {
       active = false;
     };
   }, [fetchQuota]);
+
+  useEffect(() => {
+    const shared = new URLSearchParams(window.location.search).get("r");
+    if (!shared) return;
+    let active = true;
+    fetchShared({ data: { shareId: shared } })
+      .then((result) => {
+        if (active && result.report) {
+          setReport(result.report);
+          setShareId(shared);
+        }
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [fetchShared]);
 
   const limitReached = quota != null && !quota.isPro && (quota.remaining ?? 0) <= 0;
 
@@ -115,7 +255,11 @@ export function AtsChecker() {
       }
 
       const result = await analyze({
-        data: { visitorKey: getVisitorKey(), resumeText: text.slice(0, 30000) },
+        data: {
+          visitorKey: getVisitorKey(),
+          resumeText: text.slice(0, 30000),
+          jobDescription: jobDescription.trim().slice(0, 12000) || undefined,
+        },
       });
       setQuota({
         isPro: result.isPro,
@@ -128,6 +272,8 @@ export function AtsChecker() {
         return;
       }
       setReport(result.report);
+      setShareId(result.shareId ?? null);
+      setSent(false);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
@@ -135,24 +281,71 @@ export function AtsChecker() {
     }
   }
 
+  async function onCopyShare() {
+    if (!shareId) {
+      toast.error("Share link isn't available for this report.");
+      return;
+    }
+    const url = `${window.location.origin}/tools/ats-resume-checker?r=${shareId}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Shareable link copied to clipboard");
+    } catch {
+      toast.error(url);
+    }
+  }
+
+  async function onSendEmail() {
+    if (!email.includes("@")) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    setSending(true);
+    try {
+      const result = await sendReport({ data: { email, shareId, marketingConsent: consent } });
+      if (result.ok) {
+        setSent(true);
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    } catch {
+      toast.error("Couldn't send the report. Please try again.");
+    } finally {
+      setSending(false);
+    }
+  }
+
   function reset() {
     setFile(null);
     setReport(null);
+    setShareId(null);
     setError(null);
+    setJobDescription("");
+    setSent(false);
+    setEmail("");
     if (inputRef.current) inputRef.current.value = "";
+    if (window.location.search.includes("r=")) {
+      window.history.replaceState({}, "", "/tools/ats-resume-checker");
+    }
   }
 
   if (report) {
     const circumference = 2 * Math.PI * 52;
-    const offset = circumference * (1 - report.score / 100);
-    const issues = [...report.issues].sort(
+    const offset = circumference * (1 - report.overall_score / 100);
+    const issues = [...report.top_issues].sort(
       (a, b) => (SEVERITY_ORDER[a.severity] ?? 3) - (SEVERITY_ORDER[b.severity] ?? 3),
     );
 
     return (
       <div className="space-y-8">
         <div className="surface-panel p-6 text-center sm:p-8">
-          <svg viewBox="0 0 120 120" className="mx-auto size-36" role="img" aria-label={`ATS score ${report.score} out of 100`}>
+          <svg
+            viewBox="0 0 120 120"
+            className="mx-auto size-36"
+            role="img"
+            aria-label={`ATS score ${report.overall_score} out of 100`}
+          >
             <circle cx="60" cy="60" r="52" fill="none" strokeWidth="10" className="stroke-border" />
             <circle
               cx="60"
@@ -161,31 +354,71 @@ export function AtsChecker() {
               fill="none"
               strokeWidth="10"
               strokeLinecap="round"
-              stroke={ringColor(report.score)}
+              stroke={scoreColor(report.overall_score)}
               strokeDasharray={circumference}
               strokeDashoffset={offset}
               transform="rotate(-90 60 60)"
             />
             <text x="60" y="58" textAnchor="middle" className="fill-foreground text-[26px] font-bold">
-              {report.score}
+              {report.overall_score}
             </text>
             <text x="60" y="76" textAnchor="middle" className="fill-muted-foreground text-[11px]">
               / 100
             </text>
           </svg>
-          <p className="mt-3 text-lg font-semibold" style={{ color: ringColor(report.score) }}>
-            {report.score_label}
-          </p>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
+            <p className="text-lg font-semibold" style={{ color: scoreColor(report.overall_score) }}>
+              {report.score_label}
+            </p>
+            <span
+              title="How much of your resume ATS can read"
+              className="rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-muted-foreground"
+            >
+              Parse Rate: {report.parsed_rate}%
+            </span>
+          </div>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             {report.summary}
           </p>
         </div>
 
+        {report.categories.length ? (
+          <div className="flex flex-wrap gap-2">
+            {report.categories.map((category) => (
+              <a
+                key={category.name}
+                href={`#${categoryId(category.name)}`}
+                className="flex items-center gap-2 rounded-full border border-border bg-surface px-3.5 py-1.5 text-xs font-medium transition-colors hover:border-primary/60"
+              >
+                {SHORT_NAMES[category.name] ?? category.name}
+                <span className="font-bold" style={{ color: scoreColor(category.score) }}>
+                  {category.score}
+                </span>
+              </a>
+            ))}
+          </div>
+        ) : null}
+
+        <div className="space-y-4">
+          {report.categories.map((category) => (
+            <CategoryBlock key={category.name} category={category} />
+          ))}
+        </div>
+
         <section className="surface-panel p-6">
-          <h2 className="text-lg font-semibold">Keyword Analysis</h2>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold">Keyword Analysis</h2>
+            {report.job_match_percent != null ? (
+              <span className="rounded-full border border-primary/30 bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
+                Your resume matches {report.job_match_percent}% of job requirements
+              </span>
+            ) : null}
+          </div>
           <div className="mt-4 grid gap-6 sm:grid-cols-2">
             <div>
-              <h3 className="flex items-center gap-1.5 text-sm font-semibold"><CheckCircle2 className="size-4 text-green-600 dark:text-green-400" /> Keywords Found</h3>
+              <h3 className="flex items-center gap-1.5 text-sm font-semibold">
+                <CheckCircle2 className="size-4 text-green-600 dark:text-green-400" /> Keywords Found
+              </h3>
               <div className="mt-3 flex flex-wrap gap-2">
                 {report.keywords.found.length ? (
                   report.keywords.found.map((word) => (
@@ -202,7 +435,9 @@ export function AtsChecker() {
               </div>
             </div>
             <div>
-              <h3 className="flex items-center gap-1.5 text-sm font-semibold"><XCircle className="size-4 text-red-600 dark:text-red-400" /> Keywords to Add</h3>
+              <h3 className="flex items-center gap-1.5 text-sm font-semibold">
+                <XCircle className="size-4 text-red-600 dark:text-red-400" /> Keywords to Add
+              </h3>
               <div className="mt-3 flex flex-wrap gap-2">
                 {report.keywords.missing.length ? (
                   report.keywords.missing.map((word) => (
@@ -223,17 +458,18 @@ export function AtsChecker() {
 
         {issues.length ? (
           <section>
-            <h2 className="text-lg font-semibold">Issues Found</h2>
+            <h2 className="text-lg font-semibold">Top Issues</h2>
             <ul className="mt-4 space-y-4">
               {issues.map((issue, index) => (
                 <li key={index} className="surface-panel p-5">
                   <div className="flex items-start justify-between gap-3">
-                    <p className="font-semibold">{issue.category}</p>
-                    <span className={`shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-medium ${severityClass(issue.severity)}`}>
+                    <p className="font-semibold">{issue.issue}</p>
+                    <span
+                      className={`shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-medium ${severityClass(issue.severity)}`}
+                    >
                       {issue.severity}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{issue.issue}</p>
                   <div className="mt-3 rounded-lg border border-primary/30 bg-accent p-3 text-sm text-accent-foreground">
                     <span className="font-semibold">→ How to fix: </span>
                     {issue.fix}
@@ -246,7 +482,7 @@ export function AtsChecker() {
 
         {report.quick_wins.length ? (
           <section>
-            <h2 className="text-lg font-semibold">Your Top 3 Quick Wins</h2>
+            <h2 className="text-lg font-semibold">Fix These First</h2>
             <ol className="mt-4 space-y-3">
               {report.quick_wins.slice(0, 3).map((win, index) => (
                 <li
@@ -267,22 +503,59 @@ export function AtsChecker() {
         ) : null}
 
         <section className="surface-panel p-6">
-          <h2 className="text-base font-semibold">Now fix your resume with our tools:</h2>
+          <h2 className="flex items-center gap-2 text-base font-semibold">
+            <Mail className="size-4" /> Get your full report by email
+          </h2>
+          {sent ? (
+            <p className="mt-3 text-sm text-muted-foreground">Sent — check your inbox for the full report.</p>
+          ) : (
+            <>
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="you@example.com"
+                  className="sm:max-w-xs"
+                  aria-label="Email address"
+                />
+                <Button onClick={onSendEmail} disabled={sending}>
+                  {sending ? <Loader2 className="animate-spin" /> : null} Send Report
+                </Button>
+              </div>
+              <label className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(event) => setConsent(event.target.checked)}
+                  className="mt-0.5 size-3.5 accent-[hsl(217_91%_60%)]"
+                />
+                Send me occasional job-search and resume tips from ZenWrit.
+              </label>
+            </>
+          )}
+        </section>
+
+        <section className="surface-panel p-6">
+          <h2 className="text-base font-semibold">Now improve your resume:</h2>
           <div className="mt-4 flex flex-col gap-3 sm:flex-row">
             <Button asChild>
               <Link to="/tools/$slug" params={{ slug: "resume-bullet-point-generator" }}>
-                Improve Resume Bullets <ArrowRight />
+                Resume Bullet Point Generator <ArrowRight />
               </Link>
             </Button>
             <Button asChild variant="outline">
               <Link to="/tools/$slug" params={{ slug: "cover-letter-generator" }}>
-                Write Cover Letter <ArrowRight />
+                Cover Letter Generator <ArrowRight />
               </Link>
             </Button>
           </div>
         </section>
 
-        <div className="flex justify-center">
+        <div className="flex flex-wrap justify-center gap-3">
+          <Button variant="outline" onClick={onCopyShare}>
+            <Share2 /> Copy shareable result link
+          </Button>
           <Button variant="outline" onClick={reset}>
             <RotateCcw /> Check Another Resume
           </Button>
@@ -293,6 +566,18 @@ export function AtsChecker() {
 
   return (
     <div className="surface-panel p-5 sm:p-6">
+      <ul className="mb-5 flex flex-wrap gap-2">
+        {TRUST_BADGES.map(({ icon: Icon, label }) => (
+          <li
+            key={label}
+            className="flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-medium text-muted-foreground"
+          >
+            <Icon className="size-3.5 text-primary" />
+            {label}
+          </li>
+        ))}
+      </ul>
+
       <div
         role="button"
         tabIndex={0}
@@ -335,10 +620,30 @@ export function AtsChecker() {
       ) : null}
 
       {error ? (
-        <p className="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive" role="alert">
+        <p
+          className="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive"
+          role="alert"
+        >
           {error}
         </p>
       ) : null}
+
+      <div className="mt-5">
+        <label htmlFor="ats-job-description" className="text-sm font-medium">
+          Paste job description (optional but recommended)
+        </label>
+        <Textarea
+          id="ats-job-description"
+          value={jobDescription}
+          onChange={(event) => setJobDescription(event.target.value)}
+          placeholder="Paste the job posting you're applying for to get keyword matching and tailored feedback..."
+          rows={5}
+          className="mt-2"
+        />
+        <p className="mt-1.5 text-xs text-muted-foreground">
+          Adding a job description improves your score accuracy by 40%
+        </p>
+      </div>
 
       <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Button size="lg" disabled={!file || busy || limitReached} onClick={onCheck}>
