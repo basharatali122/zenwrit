@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowRight, CheckCircle2, FileUp, Loader2, RotateCcw } from "lucide-react";
+import { ArrowRight, CheckCircle2, FileUp, Loader2, RotateCcw, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { getVisitorKey } from "@/hooks/useAuth";
@@ -185,7 +185,7 @@ export function AtsChecker() {
           <h2 className="text-lg font-semibold">Keyword Analysis</h2>
           <div className="mt-4 grid gap-6 sm:grid-cols-2">
             <div>
-              <h3 className="text-sm font-semibold">✅ Keywords Found</h3>
+              <h3 className="flex items-center gap-1.5 text-sm font-semibold"><CheckCircle2 className="size-4 text-green-600 dark:text-green-400" /> Keywords Found</h3>
               <div className="mt-3 flex flex-wrap gap-2">
                 {report.keywords.found.length ? (
                   report.keywords.found.map((word) => (
@@ -202,7 +202,7 @@ export function AtsChecker() {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold">❌ Keywords to Add</h3>
+              <h3 className="flex items-center gap-1.5 text-sm font-semibold"><XCircle className="size-4 text-red-600 dark:text-red-400" /> Keywords to Add</h3>
               <div className="mt-3 flex flex-wrap gap-2">
                 {report.keywords.missing.length ? (
                   report.keywords.missing.map((word) => (
