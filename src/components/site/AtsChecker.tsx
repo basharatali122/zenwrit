@@ -329,6 +329,8 @@ export function AtsChecker() {
       } catch {
         text = "";
       }
+      setResumeText(text.slice(0, 20000));
+
       if (text.length < 100) {
         setError(
           "We couldn't read your resume. Please make sure it contains selectable text (not a scanned image)",
