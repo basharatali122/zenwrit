@@ -157,7 +157,7 @@ function BlogEditor() {
           <Input id="category" value={form.category} onChange={(e) => set("category", e.target.value)} />
         </div>
         <div>
-          <Label htmlFor="cover">Cover image</Label>
+          <Label htmlFor="cover">Cover image (upload)</Label>
           <Input
             id="cover"
             type="file"
@@ -167,6 +167,19 @@ function BlogEditor() {
               if (file) upload.mutate(file);
             }}
           />
+        </div>
+        <div>
+          <Label htmlFor="thumbnail_url">Thumbnail image URL</Label>
+          <Input
+            id="thumbnail_url"
+            type="url"
+            placeholder="https://res.cloudinary.com/.../image.jpg"
+            value={form.cover_image_url ?? ""}
+            onChange={(e) => set("cover_image_url", e.target.value.trim() || null)}
+          />
+          <p className="mt-1 text-xs text-muted-foreground">
+            Paste a full image URL (e.g. Cloudinary). Leave empty to use the gradient placeholder.
+          </p>
           {form.cover_image_url ? (
             <img
               src={form.cover_image_url}
