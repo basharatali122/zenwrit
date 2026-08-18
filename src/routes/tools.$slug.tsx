@@ -53,7 +53,21 @@ export const Route = createFileRoute("/tools/$slug")({
                   acceptedAnswer: { "@type": "Answer", text: faq.a },
                 })),
               },
+              {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "Home", item: "https://zenwrit.com/" },
+                  { "@type": "ListItem", position: 2, name: "Tools", item: "https://zenwrit.com/tools" },
+                  {
+                    "@type": "ListItem",
+                    position: 3,
+                    name: tool.name,
+                    item: `https://zenwrit.com/tools/${tool.slug}`,
+                  },
+                ],
+              },
             ],
+
           }),
         },
       ],
