@@ -3,6 +3,7 @@ import { AdSlot } from "@/components/site/AdSlot";
 import { ToolIcon } from "@/components/site/ToolIcon";
 import { ToolRunner } from "@/components/site/ToolRunner";
 import { MarkdownArticle } from "@/components/site/MarkdownArticle";
+import { ToolSummary, buildToolSummary } from "@/components/site/ToolSummary";
 import { getPublishedTool } from "@/lib/content.functions";
 import type { ToolRecord } from "@/lib/content";
 
@@ -37,8 +38,9 @@ export const Route = createFileRoute("/tools/$slug")({
               {
                 "@type": "SoftwareApplication",
                 name: tool.name,
+                url: `https://zenwrit.com/tools/${tool.slug}`,
                 applicationCategory: "BusinessApplication",
-                operatingSystem: "Web",
+                operatingSystem: "All (Web-based)",
                 description,
                 offers: [
                   { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
@@ -107,6 +109,8 @@ function ToolPage() {
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div>
           <ToolRunner tool={tool} />
+
+          <ToolSummary name={tool.name} summary={buildToolSummary(tool.name, tool.short_description)} />
 
           <article className="prose-article mt-12 max-w-none">
             {tool.article_title ? <h2 className="!mt-0 text-2xl">{tool.article_title}</h2> : null}

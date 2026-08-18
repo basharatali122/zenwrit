@@ -3,6 +3,7 @@ import { Gauge } from "lucide-react";
 import { AdSlot } from "@/components/site/AdSlot";
 import { AtsChecker } from "@/components/site/AtsChecker";
 import { MarkdownArticle } from "@/components/site/MarkdownArticle";
+import { ToolSummary } from "@/components/site/ToolSummary";
 import { getPublishedTool } from "@/lib/content.functions";
 import type { ToolRecord } from "@/lib/content";
 
@@ -30,8 +31,9 @@ export const Route = createFileRoute("/tools/ats-resume-checker")({
             {
               "@type": "SoftwareApplication",
               name: "ATS Resume Checker",
+              url: "https://zenwrit.com/tools/ats-resume-checker",
               applicationCategory: "BusinessApplication",
-              operatingSystem: "Web",
+              operatingSystem: "All (Web-based)",
               description: DESCRIPTION,
               offers: [
                 { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
@@ -103,6 +105,11 @@ function AtsPage() {
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div>
           <AtsChecker />
+
+          <ToolSummary
+            name="ATS Resume Checker"
+            summary="ZenWrit's ATS Resume Checker is a free AI tool that scores your resume for applicant tracking system compatibility in about 30 seconds. It flags missing keywords, formatting problems and red flags, then gives you the exact fixes. No signup required, and it is free to use 3 times per day."
+          />
 
           {tool ? (
             <article className="prose-article mt-12 max-w-none">
