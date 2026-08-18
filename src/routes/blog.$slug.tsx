@@ -31,14 +31,49 @@ export const Route = createFileRoute("/blog/$slug")({
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Article",
-            headline: post.title,
-            description,
-            datePublished: post.published_at,
-            author: { "@type": "Organization", name: "ZenWrit" },
+            "@graph": [
+              {
+                "@type": "Article",
+                headline: post.title,
+                description,
+                datePublished: post.published_at,
+                dateModified: post.updated_at ?? post.published_at,
+                image: post.cover_image_url
+                  ? [post.cover_image_url]
+                  : ["https://zenwrit.com/og-default.png"],
+                mainEntityOfPage: {
+                  "@type": "WebPage",
+                  "@id": `https://zenwrit.com/blog/${post.slug}`,
+                },
+                author: { "@type": "Organization", name: "ZenWrit", url: "https://zenwrit.com" },
+                publisher: {
+                  "@type": "Organization",
+                  name: "ZenWrit",
+                  url: "https://zenwrit.com",
+                  logo: {
+                    "@type": "ImageObject",
+                    url: "https://zenwrit.com/favicon.ico",
+                  },
+                },
+              },
+              {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "Home", item: "https://zenwrit.com/" },
+                  { "@type": "ListItem", position: 2, name: "Blog", item: "https://zenwrit.com/blog" },
+                  {
+                    "@type": "ListItem",
+                    position: 3,
+                    name: post.category || post.title,
+                    item: `https://zenwrit.com/blog/${post.slug}`,
+                  },
+                ],
+              },
+            ],
           }),
         },
       ],
+
     };
   },
   component: BlogPostPage,
