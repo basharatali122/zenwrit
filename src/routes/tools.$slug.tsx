@@ -109,6 +109,8 @@ function ToolPage() {
         <div>
           <ToolRunner tool={tool} />
 
+          <ToolSummary name={tool.name} summary={buildToolSummary(tool.name, tool.short_description)} />
+
           <article className="prose-article mt-12 max-w-none">
             {tool.article_title ? <h2 className="!mt-0 text-2xl">{tool.article_title}</h2> : null}
             <MarkdownArticle markdown={tool.article_content} />
