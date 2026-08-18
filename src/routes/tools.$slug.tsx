@@ -37,8 +37,9 @@ export const Route = createFileRoute("/tools/$slug")({
               {
                 "@type": "SoftwareApplication",
                 name: tool.name,
+                url: `https://zenwrit.com/tools/${tool.slug}`,
                 applicationCategory: "BusinessApplication",
-                operatingSystem: "Web",
+                operatingSystem: "All (Web-based)",
                 description,
                 offers: [
                   { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
