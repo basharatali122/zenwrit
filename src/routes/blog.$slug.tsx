@@ -37,7 +37,6 @@ export const Route = createFileRoute("/blog/$slug")({
                 headline: post.title,
                 description,
                 datePublished: post.published_at,
-                dateModified: post.updated_at ?? post.published_at,
                 image: post.cover_image_url
                   ? [post.cover_image_url]
                   : ["https://zenwrit.com/og-default.png"],
