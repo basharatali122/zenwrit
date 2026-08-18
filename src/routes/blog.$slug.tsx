@@ -17,6 +17,7 @@ export const Route = createFileRoute("/blog/$slug")({
     const { post } = loaderData;
     const title = post.meta_title || `${post.title} | ZenWrit`;
     const description = post.meta_description || post.excerpt;
+    const image = post.cover_image_url && /^https?:\/\//.test(post.cover_image_url) ? post.cover_image_url : null;
     return {
       meta: [
         { title },
@@ -24,8 +25,16 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:title", content: post.title },
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },
+        { property: "og:url", content: `https://zenwrit.com/blog/${post.slug}` },
         { name: "twitter:card", content: "summary_large_image" },
+        ...(image
+          ? [
+              { property: "og:image", content: image },
+              { name: "twitter:image", content: image },
+            ]
+          : []),
       ],
+      links: [{ rel: "canonical", href: `https://zenwrit.com/blog/${post.slug}` }],
       scripts: [
         {
           type: "application/ld+json",
