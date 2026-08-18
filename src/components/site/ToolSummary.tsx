@@ -18,7 +18,8 @@ export function ToolSummary({ name, summary }: ToolSummaryProps) {
 }
 
 export function buildToolSummary(name: string, shortDescription: string): string {
-  const desc = shortDescription.replace(/\s+$/, "").replace(/\.$/, "");
+  const trimmed = shortDescription.trim().replace(/\.$/, "");
+  const desc = trimmed ? trimmed.charAt(0).toLowerCase() + trimmed.slice(1) : "";
   const lead = desc
     ? `ZenWrit's ${name} is ${/^(a|an)\s/i.test(desc) ? desc : `a free AI tool — ${desc}`}.`
     : `ZenWrit's ${name} is a free AI writing tool.`;
