@@ -46,7 +46,21 @@ export const Route = createFileRoute("/tools/ats-resume-checker")({
                 acceptedAnswer: { "@type": "Answer", text: faq.a },
               })),
             },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://zenwrit.com/" },
+                { "@type": "ListItem", position: 2, name: "Tools", item: "https://zenwrit.com/tools" },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: "ATS Resume Checker",
+                  item: "https://zenwrit.com/tools/ats-resume-checker",
+                },
+              ],
+            },
           ],
+
         }),
       },
     ],
