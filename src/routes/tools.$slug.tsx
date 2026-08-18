@@ -3,6 +3,7 @@ import { AdSlot } from "@/components/site/AdSlot";
 import { ToolIcon } from "@/components/site/ToolIcon";
 import { ToolRunner } from "@/components/site/ToolRunner";
 import { MarkdownArticle } from "@/components/site/MarkdownArticle";
+import { ToolSummary, buildToolSummary } from "@/components/site/ToolSummary";
 import { getPublishedTool } from "@/lib/content.functions";
 import type { ToolRecord } from "@/lib/content";
 
