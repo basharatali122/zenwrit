@@ -37,9 +37,7 @@ export const Route = createFileRoute("/blog/$slug")({
                 headline: post.title,
                 description,
                 datePublished: post.published_at,
-                image: post.cover_image_url
-                  ? [post.cover_image_url]
-                  : ["https://zenwrit.com/og-default.png"],
+                image: [post.cover_image_url || "https://zenwrit.com/favicon.png"],
                 mainEntityOfPage: {
                   "@type": "WebPage",
                   "@id": `https://zenwrit.com/blog/${post.slug}`,
@@ -51,7 +49,7 @@ export const Route = createFileRoute("/blog/$slug")({
                   url: "https://zenwrit.com",
                   logo: {
                     "@type": "ImageObject",
-                    url: "https://zenwrit.com/favicon.ico",
+                    url: "https://zenwrit.com/favicon.png",
                   },
                 },
               },
