@@ -10,7 +10,6 @@ const STATIC_PATHS = [
   "/contact",
   "/privacy",
   "/terms",
-  "/refund-policy",
   "/disclaimer",
 ];
 
