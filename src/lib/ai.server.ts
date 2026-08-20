@@ -2,8 +2,6 @@ import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { getRequest } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 import { createHash } from "node:crypto";
-import { FREE_DAILY_LIMIT } from "./content";
-import { getServerPaymentsEnv } from "./payments-env";
 
 /** OpenAI provider — used in both preview and production (Vercel). */
 export function createAiProvider(apiKey: string) {
@@ -85,16 +83,6 @@ export type Quota = {
   limit: number;
   remaining: number;
 };
-
-/** True when the subscription row still entitles the user to Pro. */
-export function isEntitled(row: { status: string; current_period_end: string | null } | null): boolean {
-  if (!row) return false;
-  const notExpired = !row.current_period_end || new Date(row.current_period_end) > new Date();
-  if (["active", "trialing", "past_due"].includes(row.status)) return notExpired;
-  // Canceled subscriptions keep access until the end of the paid period.
-  if (row.status === "canceled") return Boolean(row.current_period_end) && notExpired;
-  return false;
-}
 
 /**
  * All tools are free and unlimited — quota is kept only so callers keep a
