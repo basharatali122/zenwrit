@@ -115,8 +115,8 @@ function Home() {
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Resume bullets, cover letters, LinkedIn posts, YouTube titles and product copy — written
-              in seconds, tuned for the outcome you actually want. Start typing on the right, no
-              signup, no limits.
+              in seconds, tuned for the outcome you actually want. Start right here — no signup,
+              no limits.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg" variant="outline" className="h-12 px-6 text-base">
