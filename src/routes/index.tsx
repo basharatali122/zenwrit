@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { AdSlot } from "@/components/site/AdSlot";
 import { ToolIcon } from "@/components/site/ToolIcon";
+import { HeroToolWidget } from "@/components/site/HeroToolWidget";
 import { listPublishedTools } from "@/lib/content.functions";
 import type { ToolRecord } from "@/lib/content";
 
