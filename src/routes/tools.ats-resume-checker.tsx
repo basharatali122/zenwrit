@@ -37,7 +37,6 @@ export const Route = createFileRoute("/tools/ats-resume-checker")({
               description: DESCRIPTION,
               offers: [
                 { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
-                { "@type": "Offer", price: "5", priceCurrency: "USD", name: "Pro (monthly)" },
               ],
             },
             {
@@ -151,18 +150,6 @@ function AtsPage() {
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="surface-panel border-primary/50 p-5">
-              <h2 className="text-sm font-semibold">Go unlimited</h2>
-              <p className="mt-1.5 text-sm text-muted-foreground">
-                $5/month for unlimited checks, no ads and priority speed.
-              </p>
-              <Link
-                to="/pricing"
-                className="mt-3 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-              >
-                Upgrade to Pro
-              </Link>
             </div>
           </div>
         </aside>

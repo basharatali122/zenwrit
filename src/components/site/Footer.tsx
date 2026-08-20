@@ -16,8 +16,8 @@ export function Footer({ tools }: { tools: ToolRecord[] }) {
             ZenWrit
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
-            Free AI micro-tools for creators and professionals. Go Pro for $5/month for unlimited,
-            ad-free generations.
+            Free, unlimited AI micro-tools for creators and professionals. No signup, no
+            subscription, no limits.
           </p>
           <p className="mt-4 max-w-xs text-xs leading-relaxed text-muted-foreground">
             ZenWrit is committed to accurate, helpful content. Ads on this site help keep our
@@ -47,7 +47,6 @@ export function Footer({ tools }: { tools: ToolRecord[] }) {
           <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground">Company</h2>
           <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
             <li><Link to="/about" className="hover:text-foreground">About</Link></li>
-            <li><Link to="/pricing" className="hover:text-foreground">Pricing</Link></li>
             <li><Link to="/blog" className="hover:text-foreground">Blog</Link></li>
             <li><Link to="/contact" className="hover:text-foreground">Contact</Link></li>
           </ul>
@@ -58,7 +57,6 @@ export function Footer({ tools }: { tools: ToolRecord[] }) {
           <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
             <li><Link to="/privacy" className="hover:text-foreground">Privacy Policy</Link></li>
             <li><Link to="/terms" className="hover:text-foreground">Terms of Service</Link></li>
-            <li><Link to="/refund-policy" className="hover:text-foreground">Refund Policy</Link></li>
             <li><Link to="/disclaimer" className="hover:text-foreground">Disclaimer</Link></li>
           </ul>
         </div>
