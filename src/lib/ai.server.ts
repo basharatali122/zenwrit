@@ -2,8 +2,6 @@ import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { getRequest } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 import { createHash } from "node:crypto";
-import { FREE_DAILY_LIMIT } from "./content";
-import { getServerPaymentsEnv } from "./payments-env";
 
 /** OpenAI provider — used in both preview and production (Vercel). */
 export function createAiProvider(apiKey: string) {
@@ -86,61 +84,23 @@ export type Quota = {
   remaining: number;
 };
 
-/** True when the subscription row still entitles the user to Pro. */
-export function isEntitled(row: { status: string; current_period_end: string | null } | null): boolean {
-  if (!row) return false;
-  const notExpired = !row.current_period_end || new Date(row.current_period_end) > new Date();
-  if (["active", "trialing", "past_due"].includes(row.status)) return notExpired;
-  // Canceled subscriptions keep access until the end of the paid period.
-  if (row.status === "canceled") return Boolean(row.current_period_end) && notExpired;
-  return false;
-}
-
+/**
+ * All tools are free and unlimited — quota is kept only so callers keep a
+ * stable shape. There is no paid plan and no daily cap.
+ */
 export async function getQuota(
-  userId: string | null,
-  visitorKey: string,
-  ipHash?: string | null,
+  _userId: string | null,
+  _visitorKey: string,
+  _ipHash?: string | null,
 ): Promise<Quota> {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-  let isPro = false;
-  if (userId) {
-    const environment = getServerPaymentsEnv();
-    const { data } = await supabaseAdmin
-      .from("subscriptions")
-      .select("status, current_period_end")
-      .eq("user_id", userId)
-      .eq("environment", environment)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    isPro = isEntitled(data as { status: string; current_period_end: string | null } | null);
-  }
-
-  if (isPro) {
-    return { isPro: true, used: 0, limit: Number.POSITIVE_INFINITY, remaining: Number.POSITIVE_INFINITY };
-  }
-
-  const since = startOfUtcDay();
-  const query = supabaseAdmin
-    .from("usage_logs")
-    .select("id", { count: "exact", head: true })
-    .gte("created_at", since);
-
-  const { count } = userId
-    ? await query.eq("user_id", userId)
-    : ipHash
-      ? await query.or(`visitor_key.eq.${visitorKey},ip_hash.eq.${ipHash}`)
-      : await query.eq("visitor_key", visitorKey);
-
-  const used = count ?? 0;
   return {
-    isPro: false,
-    used,
-    limit: FREE_DAILY_LIMIT,
-    remaining: Math.max(0, FREE_DAILY_LIMIT - used),
+    isPro: true,
+    used: 0,
+    limit: Number.POSITIVE_INFINITY,
+    remaining: Number.POSITIVE_INFINITY,
   };
 }
+
 
 export async function recordGeneration(params: {
   userId: string | null;

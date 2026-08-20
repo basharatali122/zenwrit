@@ -40,7 +40,6 @@ export const Route = createFileRoute("/privacy")({
           heading: "Who we share data with",
           paragraphs: [
             "Service providers and subprocessors who host our infrastructure and database, send our transactional email, and provide the AI model that produces your output. They act on our instructions only.",
-            "Paddle.com, our Merchant of Record, for the sale of subscriptions, subscription management, payments, invoicing and tax compliance. Payment and billing data is collected and processed by Paddle under its own privacy policy; we never see your full card details.",
             "Professional advisers (legal, accounting) where necessary, and authorities where required by law.",
             "We do not sell personal data, and we do not use your content to train AI models.",
           ],
@@ -48,7 +47,7 @@ export const Route = createFileRoute("/privacy")({
         {
           heading: "Retention",
           paragraphs: [
-            "Account, content and subscription records are kept for as long as your account is active. If you delete your account, profile, generation, usage and subscription records are deleted immediately, except where we must keep transaction records for tax and accounting purposes (typically up to 7 years). Anonymous usage counters are kept for up to 12 months and then deleted or anonymised. Support emails are kept for up to 24 months.",
+            "Account and content records are kept for as long as your account is active. If you delete your account, your profile, generation and usage records are deleted immediately. Anonymous usage counters are kept for up to 12 months and then deleted or anonymised. Support emails are kept for up to 24 months.",
           ],
         },
         {

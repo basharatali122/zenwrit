@@ -17,7 +17,7 @@ export const Route = createFileRoute("/auth")({
       {
         name: "description",
         content:
-          "Create a free ZenWrit account to save your generation history, track daily usage and manage your Pro subscription.",
+          "Create a free ZenWrit account to save your generation history across devices.",
       },
       { property: "og:title", content: "Log in or Sign up | ZenWrit" },
       { property: "og:description", content: "Save your AI generations and manage your ZenWrit plan." },
@@ -81,7 +81,7 @@ function AuthPage() {
         <p className="mt-1.5 text-sm text-muted-foreground">
           {mode === "signup"
             ? "Save your generations and manage your plan."
-            : "Log in to see your history and subscription."}
+            : "Log in to see your saved history."}
         </p>
 
         <Button variant="outline" className="mt-5 w-full" onClick={google}>

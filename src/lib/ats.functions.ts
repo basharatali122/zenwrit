@@ -5,7 +5,6 @@ import {
   createAiProvider,
   FREE_MODEL,
   getQuota,
-  PRO_MODEL,
   recordGeneration,
   resolveIpHash,
   resolveOptionalUserId,
@@ -91,7 +90,7 @@ export const analyzeResume = createServerFn({ method: "POST" })
     let raw: string;
     try {
       const result = await generateText({
-        model: openai(quota.isPro ? PRO_MODEL : FREE_MODEL),
+        model: openai(FREE_MODEL),
         system: ATS_SYSTEM_PROMPT,
         prompt: jobDescription
           ? `Resume text:\n\n${data.resumeText}\n\nJob description:\n\n${jobDescription.slice(0, 12000)}\n\nReturn the JSON report now.`

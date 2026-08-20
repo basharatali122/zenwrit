@@ -35,7 +35,6 @@ export function ToolRunner({ tool }: { tool: ToolRecord }) {
     };
   }, [fetchQuota]);
 
-  const limitReached = quota != null && !quota.isPro && (quota.remaining ?? 0) <= 0;
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -57,10 +56,6 @@ export function ToolRunner({ tool }: { tool: ToolRecord }) {
         limit: result.isPro ? null : result.limit,
         remaining: result.isPro ? null : result.remaining,
       });
-      if (!result.ok) {
-        toast.error("You've used all 3 free generations today. Go Pro for unlimited.");
-        return;
-      }
       setOutput(result.output);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Something went wrong. Please try again.");
@@ -122,31 +117,16 @@ export function ToolRunner({ tool }: { tool: ToolRecord }) {
         ))}
 
         <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
-          <Button type="submit" disabled={busy || limitReached} size="lg" className="sm:w-auto">
+          <Button type="submit" disabled={busy} size="lg" className="sm:w-auto">
             {busy ? <Loader2 className="animate-spin" /> : <Sparkles />}
             {busy ? "Generating…" : "Generate"}
           </Button>
           <p className="text-xs text-muted-foreground" aria-live="polite">
-            {quota == null
-              ? "Checking your free usage…"
-              : quota.isPro
-                ? "Pro plan · unlimited generations"
-                : `${quota.remaining}/${quota.limit} free generations left today`}
+            Unlimited free generations — no account needed.
           </p>
         </div>
       </form>
 
-      {limitReached ? (
-        <div className="mt-5 rounded-lg border border-primary/40 bg-accent p-4 text-sm text-accent-foreground">
-          <p className="font-medium">Daily free limit reached.</p>
-          <p className="mt-1 text-muted-foreground">
-            Your free generations reset at midnight UTC — or go unlimited for $5/month.
-          </p>
-          <Button asChild size="sm" className="mt-3">
-            <Link to="/pricing">Upgrade to Pro</Link>
-          </Button>
-        </div>
-      ) : null}
 
       <div className="mt-6">
         <div className="mb-2 flex items-center justify-between">

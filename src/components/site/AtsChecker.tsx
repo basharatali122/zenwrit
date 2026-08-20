@@ -298,7 +298,6 @@ export function AtsChecker() {
     };
   }, [fetchShared]);
 
-  const limitReached = quota != null && !quota.isPro && (quota.remaining ?? 0) <= 0;
 
   function acceptFile(next: File | undefined | null) {
     if (!next) return;
@@ -352,7 +351,7 @@ export function AtsChecker() {
         remaining: result.isPro ? null : result.remaining,
       });
       if (!result.ok || !result.report) {
-        toast.error("You've used all 3 free checks today. Go Pro for unlimited.");
+        toast.error("Something went wrong. Please try again.");
         return;
       }
       setReport(result.report);
@@ -755,30 +754,15 @@ export function AtsChecker() {
       </div>
 
       <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Button size="lg" disabled={!file || busy || limitReached} onClick={onCheck}>
+        <Button size="lg" disabled={!file || busy} onClick={onCheck}>
           {busy ? <Loader2 className="animate-spin" /> : null}
           {busy ? "Analyzing your resume…" : "Check ATS Score"}
         </Button>
         <p className="text-xs text-muted-foreground" aria-live="polite">
-          {quota == null
-            ? "Checking your free usage…"
-            : quota.isPro
-              ? "Pro plan · unlimited checks"
-              : `${quota.used}/${quota.limit} free checks used today`}
+          Unlimited free checks — no account needed.
         </p>
       </div>
 
-      {limitReached ? (
-        <div className="mt-5 rounded-lg border border-primary/40 bg-accent p-4 text-sm text-accent-foreground">
-          <p className="font-medium">Daily free limit reached.</p>
-          <p className="mt-1 text-muted-foreground">
-            Your free checks reset at midnight UTC — or go unlimited for $5/month.
-          </p>
-          <Button asChild size="sm" className="mt-3">
-            <Link to="/pricing">Upgrade to Pro</Link>
-          </Button>
-        </div>
-      ) : null}
     </div>
   );
 }

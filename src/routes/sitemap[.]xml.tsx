@@ -5,13 +5,11 @@ const BASE_URL = "https://zenwrit.com";
 const STATIC_PATHS = [
   "/",
   "/tools",
-  "/pricing",
   "/blog",
   "/about",
   "/contact",
   "/privacy",
   "/terms",
-  "/refund-policy",
   "/disclaimer",
 ];
 

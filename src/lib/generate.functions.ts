@@ -5,7 +5,6 @@ import {
   createAiProvider,
   FREE_MODEL,
   getQuota,
-  PRO_MODEL,
   recordGeneration,
   resolveIpHash,
   resolveOptionalUserId,
@@ -81,7 +80,7 @@ export const generateContent = createServerFn({ method: "POST" })
     let text: string;
     try {
       const result = streamText({
-        model: openai(quota.isPro ? PRO_MODEL : FREE_MODEL),
+        model: openai(FREE_MODEL),
         system: tool.system_prompt,
         prompt: `${details}\n\nProduce the output now.`,
         maxOutputTokens: 1800,

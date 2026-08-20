@@ -9,7 +9,6 @@ import { checkIsAdmin } from "@/lib/content.functions";
 
 const NAV = [
   { to: "/tools", label: "Tools" },
-  { to: "/pricing", label: "Pricing" },
   { to: "/blog", label: "Blog" },
   { to: "/about", label: "About" },
 ] as const;

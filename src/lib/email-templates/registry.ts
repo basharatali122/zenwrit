@@ -1,6 +1,4 @@
 import type { ComponentType } from 'react'
-import { template as proWelcomeTemplate } from './pro-welcome'
-import { template as paymentFailedTemplate } from './payment-failed'
 import { template as atsReportTemplate } from './ats-report'
 
 export interface TemplateEntry {
@@ -21,7 +19,5 @@ export interface TemplateEntry {
  *   // then add to TEMPLATES: 'welcome': welcomeTemplate
  */
 export const TEMPLATES: Record<string, TemplateEntry> = {
-  'pro-welcome': proWelcomeTemplate,
-  'payment-failed': paymentFailedTemplate,
   'ats-report': atsReportTemplate,
 }

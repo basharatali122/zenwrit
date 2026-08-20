@@ -7,10 +7,10 @@ export const Route = createFileRoute("/terms")({
       { title: "Terms of Service | ZenWrit" },
       {
         name: "description",
-        content: "The terms governing your use of ZenWrit's free and Pro AI writing tools, including acceptable use, billing and our reseller Paddle.",
+        content: "The terms governing your use of ZenWrit's free AI writing tools, including acceptable use and liability.",
       },
       { property: "og:title", content: "Terms of Service | ZenWrit" },
-      { property: "og:description", content: "Acceptable use, subscriptions and liability terms for ZenWrit." },
+      { property: "og:description", content: "Acceptable use and liability terms for ZenWrit." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -49,16 +49,9 @@ export const Route = createFileRoute("/terms")({
           ],
         },
         {
-          heading: "Payments and our reseller",
-          paragraphs: [
-            "Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns.",
-            "Pro costs $5 per month (or $50 per year) and renews automatically until cancelled. Payment, billing, tax, invoicing, cancellation and refund mechanics are governed by Paddle's Buyer Terms at https://www.paddle.com/legal/checkout-buyer-terms and our Refund Policy. You can cancel at any time from your dashboard and retain access until the end of the paid period.",
-          ],
-        },
-        {
           heading: "Suspension and termination",
           paragraphs: [
-            "We may suspend or terminate your access, with notice where practicable, for material breach of these terms, non-payment, suspected fraud or security risk, or repeated or serious policy violations. You may close your account at any time from your dashboard.",
+            "We may suspend or terminate your access, with notice where practicable, for material breach of these terms, suspected fraud or security risk, or repeated or serious policy violations. You may close your account at any time from your dashboard.",
             "On termination your access ends and your account data is deleted; export anything you need beforehand from your dashboard.",
           ],
         },
@@ -66,7 +59,7 @@ export const Route = createFileRoute("/terms")({
           heading: "Availability, warranties and liability",
           paragraphs: [
             "The service is provided as-is. We do not guarantee uninterrupted or error-free performance, and to the fullest extent permitted by law we disclaim all implied warranties including merchantability and fitness for a particular purpose.",
-            "To the maximum extent permitted by law, our aggregate liability is limited to the amount you paid us in the preceding twelve months, and we exclude indirect, consequential or special damages including loss of profits, data or goodwill. Nothing limits liability for fraud, death or personal injury where the law does not allow it.",
+            "To the maximum extent permitted by law, our aggregate liability is limited to USD 100, and we exclude indirect, consequential or special damages including loss of profits, data or goodwill. Nothing limits liability for fraud, death or personal injury where the law does not allow it.",
             "You indemnify SaaScript against claims arising from your content, your unlawful use of the service, or your breach of these terms.",
           ],
         },
