@@ -105,7 +105,7 @@ function Home() {
         <div className="pointer-events-none absolute inset-0 hero-glow" aria-hidden="true" />
         <div className="pointer-events-none absolute inset-0 grid-backdrop" aria-hidden="true" />
         <div className="container-page relative grid items-start gap-12 py-16 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,540px)]">
-          <div>
+          <div className="min-w-0">
             <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3.5 py-1.5 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur">
               <Sparkles className="size-3.5 text-primary" />
               {tools.length} focused AI tools · built for creators &amp; job seekers

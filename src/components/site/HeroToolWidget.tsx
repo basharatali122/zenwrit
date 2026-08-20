@@ -14,7 +14,7 @@ export function HeroToolWidget({ tools }: { tools: ToolRecord[] }) {
   if (!active) return null;
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0">
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
           Try it right here
