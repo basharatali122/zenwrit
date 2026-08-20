@@ -2,8 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
   BadgeCheck,
-  Check,
-  CreditCard,
   Gauge,
   MousePointerClick,
   PenLine,
@@ -11,7 +9,6 @@ import {
   Sparkles,
   UserX,
   Wand2,
-  X,
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,13 +25,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Free AI micro-tools for resumes, cover letters, LinkedIn posts, YouTube titles and product copy. Try free, no signup needed. Pro is $5/month.",
+          "Free AI micro-tools for resumes, cover letters, LinkedIn posts, YouTube titles and product copy. Unlimited and free, no signup needed.",
       },
       { property: "og:title", content: "ZenWrit — Free AI Tools for Creators & Professionals" },
       {
         property: "og:description",
         content:
-          "Five focused AI writing tools for job seekers and creators. 3 free generations a day, unlimited on Pro for $5/month.",
+          "Focused AI writing tools for job seekers and creators. Unlimited generations, completely free.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -64,19 +61,10 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const COMPARISON = [
-  { feature: "Access to all 5 tools", free: true, pro: true },
-  { feature: "Daily generations", free: "3 per day", pro: "Unlimited" },
-  { feature: "Ads", free: "Shown", pro: "None" },
-  { feature: "Advanced AI model (higher quality)", free: false, pro: true },
-  { feature: "Saved generation history", free: "Last 3", pro: "Full history" },
-  { feature: "Early access to new tools", free: false, pro: true },
-];
-
 const TRUST = [
   { icon: UserX, label: "No signup required" },
   { icon: Gauge, label: "Results in ~5 seconds" },
-  { icon: CreditCard, label: "Free to try, no credit card" },
+  { icon: Sparkles, label: "Unlimited and free, no credit card" },
   { icon: BadgeCheck, label: "Built by a developer, not a template" },
 ];
 
@@ -134,7 +122,7 @@ function Home() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="h-12 px-6 text-base">
-              <Link to="/pricing">See pricing</Link>
+              <Link to="/blog">Read the guides</Link>
             </Button>
           </div>
         </div>
@@ -160,7 +148,7 @@ function Home() {
           Pick a tool and start writing
         </h2>
         <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">
-          Every tool is single-purpose, mobile-friendly and free to try three times a day.
+          Every tool is single-purpose, mobile-friendly and completely free to use.
         </p>
 
         <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -231,90 +219,31 @@ function Home() {
         </section>
       */}
 
-      <section className="container-page py-16" aria-labelledby="pro-heading">
-        <div className="surface-panel overflow-hidden">
-          <div className="border-b border-border p-6 sm:p-8">
-            <h2 id="pro-heading" className="text-2xl font-bold tracking-tight sm:text-3xl">
-              Why go Pro
-            </h2>
-            <p className="mt-2 max-w-lg text-sm leading-relaxed text-muted-foreground">
-              Free covers the occasional draft. Pro is for the week you are applying to twenty jobs
-              or shipping thirty product pages.
-            </p>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <caption className="sr-only">Free plan compared with Pro plan</caption>
-              <thead>
-                <tr className="border-b border-border bg-surface text-left">
-                  <th scope="col" className="p-4 font-semibold">Feature</th>
-                  <th scope="col" className="p-4 font-semibold">Free</th>
-                  <th scope="col" className="p-4 font-semibold text-primary">Pro</th>
-                </tr>
-              </thead>
-              <tbody>
-                {COMPARISON.map((row) => (
-                  <tr key={row.feature} className="border-b border-border last:border-0">
-                    <th scope="row" className="p-4 text-left font-medium">{row.feature}</th>
-                    <td className="p-4 text-muted-foreground"><Cell value={row.free} /></td>
-                    <td className="p-4 text-muted-foreground"><Cell value={row.pro} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      <section className="container-page py-16" aria-labelledby="free-heading">
+        <div className="surface-panel p-7 sm:p-10">
+          <h2 id="free-heading" className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Everything is free. Really.
+          </h2>
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
+            No plans, no paywalls, no credit card. Every tool is unlimited for everyone — ads on the
+            site keep the lights on.
+          </p>
+          <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+            <li className="flex gap-2 text-sm text-muted-foreground"><Zap className="size-4 shrink-0 text-primary" /> Unlimited generations, every day</li>
+            <li className="flex gap-2 text-sm text-muted-foreground"><Zap className="size-4 shrink-0 text-primary" /> All tools, including the ATS resume checker</li>
+            <li className="flex gap-2 text-sm text-muted-foreground"><Zap className="size-4 shrink-0 text-primary" /> No signup needed to start</li>
+            <li className="flex gap-2 text-sm text-muted-foreground"><Zap className="size-4 shrink-0 text-primary" /> Free account to save your history</li>
+          </ul>
+          <Button asChild size="lg" className="mt-8">
+            <Link to="/tools">Start writing — free forever</Link>
+          </Button>
+          <p className="mt-5 flex items-center gap-2 text-xs text-muted-foreground">
+            <ShieldOff className="size-3.5 text-primary" />
+            No account required. No payment details, ever.
+          </p>
         </div>
-      </section>
-
-      <section className="container-page pb-20" aria-labelledby="pricing-heading">
-        <h2 id="pricing-heading" className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Simple pricing
-        </h2>
-        <div className="mt-8 grid gap-5 md:grid-cols-2">
-          <div className="surface-panel flex flex-col p-7">
-            <h3 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">Free</h3>
-            <p className="mt-3 text-4xl font-bold tracking-tight">$0</p>
-            <p className="mt-1.5 text-sm text-muted-foreground">3 generations per day, with ads.</p>
-            <ul className="mt-6 flex-1 space-y-2.5 text-sm text-muted-foreground">
-              <li className="flex gap-2"><Check className="size-4 shrink-0 text-success" /> All 5 tools</li>
-              <li className="flex gap-2"><Check className="size-4 shrink-0 text-success" /> No signup to try</li>
-              <li className="flex gap-2"><Check className="size-4 shrink-0 text-success" /> Copy to clipboard</li>
-            </ul>
-            <Button asChild variant="outline" className="mt-7">
-              <Link to="/tools">Start free</Link>
-            </Button>
-          </div>
-
-          <div className="surface-panel relative flex flex-col border-primary/60 p-7 shadow-lg">
-            <span className="absolute right-5 top-5 rounded-full bg-primary px-2.5 py-1 text-[11px] font-semibold text-primary-foreground">
-              Most popular
-            </span>
-            <h3 className="text-sm font-semibold uppercase tracking-widest text-primary">Pro</h3>
-            <p className="mt-3 text-4xl font-bold tracking-tight">
-              $5<span className="text-base font-medium text-muted-foreground">/month</span>
-            </p>
-            <p className="mt-1.5 text-sm text-muted-foreground">Unlimited generations, zero ads.</p>
-            <ul className="mt-6 flex-1 space-y-2.5 text-sm text-muted-foreground">
-              <li className="flex gap-2"><Zap className="size-4 shrink-0 text-primary" /> Unlimited daily generations</li>
-              <li className="flex gap-2"><Zap className="size-4 shrink-0 text-primary" /> Ad-free interface</li>
-              <li className="flex gap-2"><Zap className="size-4 shrink-0 text-primary" /> Advanced model &amp; full history</li>
-            </ul>
-            <Button asChild className="mt-7">
-              <Link to="/pricing">Go Pro — $5/month</Link>
-            </Button>
-          </div>
-        </div>
-        <p className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
-          <ShieldOff className="size-3.5 text-primary" />
-          No account required to start. Cancel Pro anytime.
-        </p>
       </section>
     </>
   );
 }
 
-function Cell({ value }: { value: string | boolean }) {
-  if (value === true) return <Check className="size-4 text-success" aria-label="Included" />;
-  if (value === false) return <X className="size-4 text-muted-foreground" aria-label="Not included" />;
-  return <span>{value}</span>;
-}
