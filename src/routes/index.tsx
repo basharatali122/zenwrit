@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { AdSlot } from "@/components/site/AdSlot";
 import { ToolIcon } from "@/components/site/ToolIcon";
+import { HeroToolWidget } from "@/components/site/HeroToolWidget";
 import { listPublishedTools } from "@/lib/content.functions";
 import type { ToolRecord } from "@/lib/content";
 
@@ -103,29 +104,35 @@ function Home() {
       <section className="relative overflow-hidden border-b border-border">
         <div className="pointer-events-none absolute inset-0 hero-glow" aria-hidden="true" />
         <div className="pointer-events-none absolute inset-0 grid-backdrop" aria-hidden="true" />
-        <div className="container-page relative py-20 sm:py-28">
-          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3.5 py-1.5 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur">
-            <Sparkles className="size-3.5 text-primary" />
-            5 focused AI tools · built for creators &amp; job seekers
-          </p>
-          <h1 className="mt-6 max-w-4xl text-[2.75rem] font-bold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
-            <span className="text-gradient-brand">Free AI tools for creators &amp; professionals</span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Resume bullets, cover letters, LinkedIn posts, YouTube titles and product copy — written
-            in seconds, tuned for the outcome you actually want.
-          </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="lg" className="h-12 px-6 text-base">
-              <Link to="/tools">
-                Try free, no signup needed <ArrowRight />
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="h-12 px-6 text-base">
-              <Link to="/blog">Read the guides</Link>
-            </Button>
+        <div className="container-page relative grid items-start gap-12 py-16 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,540px)]">
+          <div className="min-w-0">
+            <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3.5 py-1.5 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur">
+              <Sparkles className="size-3.5 text-primary" />
+              {tools.length} focused AI tools · built for creators &amp; job seekers
+            </p>
+            <h1 className="mt-6 max-w-3xl text-[2.5rem] font-bold leading-[1.04] tracking-tight sm:text-5xl lg:text-6xl">
+              <span className="text-gradient-brand">Free AI tools for creators &amp; professionals</span>
+            </h1>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Resume bullets, cover letters, LinkedIn posts, YouTube titles and product copy — written
+              in seconds, tuned for the outcome you actually want. Start right here — no signup,
+              no limits.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Button asChild size="lg" variant="outline" className="h-12 px-6 text-base">
+                <Link to="/tools">
+                  Browse all tools <ArrowRight />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="ghost" className="h-12 px-6 text-base">
+                <Link to="/tools/ats-resume-checker">Check my resume score</Link>
+              </Button>
+            </div>
           </div>
+
+          <HeroToolWidget tools={tools} />
         </div>
+
       </section>
 
       <section aria-label="Why people trust ZenWrit" className="border-b border-border bg-surface">
