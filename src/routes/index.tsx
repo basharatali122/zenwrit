@@ -329,8 +329,9 @@ function Home() {
           {tools.map((tool, i) => (
             <Reveal as="li" key={tool.slug} delay={(i % 3) * 90}>
               <Link
-                to="/tools/$slug"
-                params={{ slug: tool.slug }}
+                {...(tool.slug === "ats-resume-checker"
+                  ? ({ to: "/tools/ats-resume-checker" } as const)
+                  : ({ to: "/tools/$slug", params: { slug: tool.slug } } as const))}
                 className="surface-panel card-lift group flex h-full flex-col p-6"
               >
                 <span className="flex size-11 items-center justify-center rounded-full bg-accent text-accent-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
