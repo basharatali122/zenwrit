@@ -238,3 +238,69 @@
   line-height: 1.25rem;
   color: var(--color-muted-foreground);
 }
+
+@keyframes zw-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes zw-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes zw-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-float {
+  animation: zw-float 6s ease-in-out infinite;
+}
+
+@utility animate-fade-up {
+  animation: zw-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility marquee-track {
+  display: flex;
+  width: max-content;
+  animation: zw-marquee 32s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-fade-up,
+  .marquee-track {
+    animation: none !important;
+  }
+}
+
+@utility card-lift {
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in oklch, var(--color-primary) 45%, transparent);
+    box-shadow: 0 18px 40px -22px color-mix(in oklch, var(--color-primary) 55%, transparent);
+  }
+}
+
