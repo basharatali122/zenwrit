@@ -8,18 +8,24 @@ export const Route = createFileRoute("/blog/")({
   loader: async () => ({ posts: await listPublishedPosts() }),
   head: () => ({
     meta: [
-      { title: "Blog — Career & Creator Writing Guides | ZenWrit" },
+      { title: "Resume & Job Search Advice | ZenWrit Blog" },
       {
         name: "description",
         content:
-          "Practical guides on job searching with AI, LinkedIn writing cadence and ecommerce SEO — from the team behind ZenWrit's free AI tools.",
+          "Practical advice on resumes, ATS optimization, cover letters and job searching. Written for real job seekers, not recruiters.",
       },
-      { property: "og:title", content: "ZenWrit Blog" },
-      { property: "og:description", content: "Guides on AI job searching, LinkedIn writing and ecommerce SEO." },
+      { property: "og:title", content: "Resume & Job Search Advice | ZenWrit Blog" },
+      {
+        property: "og:description",
+        content: "Practical advice on resumes, ATS optimization, cover letters and job searching.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://zenwrit.com/blog" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://zenwrit.com/blog" }],
   }),
+
   component: BlogIndex,
 });
 
