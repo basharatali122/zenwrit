@@ -8,10 +8,10 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "ZenWrit builds fast, single-purpose AI writing tools for creators and job seekers. Free to try, $5/month for unlimited use.",
+          "ZenWrit builds one fast, focused tool: a free ATS resume checker for job seekers. No signup, no limits.",
       },
       { property: "og:title", content: "About ZenWrit" },
-      { property: "og:description", content: "Why we build small, focused AI tools instead of one bloated assistant." },
+      { property: "og:description", content: "Why we build one focused, free ATS resume checker instead of a bloated suite." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

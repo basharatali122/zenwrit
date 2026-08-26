@@ -159,7 +159,7 @@ function Dashboard() {
             Every tool is free with no daily limits.
           </p>
           <Button asChild size="sm" className="mt-4">
-            <Link to="/tools">Start generating</Link>
+            <Link to="/check">Check my resume</Link>
           </Button>
         </div>
 
@@ -234,7 +234,7 @@ function Dashboard() {
           <p className="mt-3 text-sm text-muted-foreground">Loading…</p>
         ) : history.length === 0 ? (
           <p className="mt-3 text-sm text-muted-foreground">
-            Nothing yet — <Link to="/tools" className="text-primary hover:underline">try a tool</Link>.
+            Nothing yet — <Link to="/check" className="text-primary hover:underline">check your resume</Link>.
           </p>
         ) : (
           <ul className="mt-4 space-y-3">

@@ -7,7 +7,7 @@ export const Route = createFileRoute("/terms")({
       { title: "Terms of Service | ZenWrit" },
       {
         name: "description",
-        content: "The terms governing your use of ZenWrit's free AI writing tools, including acceptable use and liability.",
+        content: "The terms governing your use of ZenWrit's free ATS resume checker, including acceptable use and liability.",
       },
       { property: "og:title", content: "Terms of Service | ZenWrit" },
       { property: "og:description", content: "Acceptable use and liability terms for ZenWrit." },
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/terms")({
         {
           heading: "The service",
           paragraphs: [
-            "ZenWrit provides AI-assisted writing tools (resume bullet points, cover letters, LinkedIn posts, YouTube titles and product descriptions). Free accounts may generate up to three outputs per day; Pro subscribers have unlimited generations subject to fair use to prevent automated abuse.",
+            "ZenWrit provides a free, AI-assisted ATS resume checker. Use is unlimited and requires no account, subject to fair use to prevent automated abuse.",
             "We grant you a limited, non-exclusive, non-transferable right to use the service within the plan you have selected.",
           ],
         },

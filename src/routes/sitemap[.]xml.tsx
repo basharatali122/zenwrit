@@ -4,7 +4,7 @@ const BASE_URL = "https://zenwrit.com";
 
 const STATIC_PATHS = [
   "/",
-  "/tools",
+  "/check",
   "/blog",
   "/about",
   "/contact",
@@ -21,14 +21,10 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         const { getPublicSupabase } = await import("@/lib/content.server");
         const client = getPublicSupabase();
-        const [toolsRes, postsRes] = await Promise.all([
-          client.from("tools").select("slug").eq("is_published", true),
-          client.from("blog_posts").select("slug").eq("is_published", true),
-        ]);
+        const postsRes = await client.from("blog_posts").select("slug").eq("is_published", true);
 
         const urls = [
-          ...STATIC_PATHS.map((path) => ({ loc: `${origin}${path}`, priority: path === "/" ? "1.0" : "0.7" })),
-          ...(toolsRes.data ?? []).map((tool) => ({ loc: `${origin}/tools/${tool.slug}`, priority: "0.9" })),
+          ...STATIC_PATHS.map((path) => ({ loc: `${origin}${path}`, priority: path === "/" ? "1.0" : path === "/check" ? "0.9" : "0.7" })),
           ...(postsRes.data ?? []).map((post) => ({ loc: `${origin}/blog/${post.slug}`, priority: "0.6" })),
         ];
 
