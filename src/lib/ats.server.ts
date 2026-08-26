@@ -115,25 +115,29 @@ function clampScore(value: unknown, fallback = 0): number {
 /** Coerces a raw model response into a safe, fully-populated report object. */
 export function normalizeReport(raw: any): AtsReport {
   const categories: AtsCategory[] = Array.isArray(raw?.categories)
-    ? raw.categories.map((category: any) => ({
-        name: String(category?.name ?? "Category"),
-        score: clampScore(category?.score),
-        icon: String(category?.icon ?? "shield"),
-        checks: Array.isArray(category?.checks)
-          ? category.checks.map((check: any) => ({
-              name: String(check?.name ?? "Check"),
-              status: STATUSES.has(check?.status) ? check.status : "warn",
-              message: String(check?.message ?? ""),
-            }))
-          : [],
-      }))
+    ? raw.categories.map((category: any) => {
+        const name = String(category?.name ?? "Category");
+        return {
+          name,
+          score: clampScore(category?.score),
+          icon: String(category?.icon ?? iconForCategory(name)),
+          checks: Array.isArray(category?.checks)
+            ? category.checks.map((check: any) => ({
+                name: String(check?.name ?? "Check"),
+                status: STATUSES.has(check?.status) ? check.status : "warn",
+                message: String(check?.detail ?? check?.message ?? ""),
+              }))
+            : [],
+        };
+      })
     : [];
 
   const matchRaw = raw?.job_match_percent;
+  const fixes = raw?.top_fixes ?? raw?.top_issues ?? raw?.issues;
   return {
     overall_score: clampScore(raw?.overall_score ?? raw?.score),
     score_label: String(raw?.score_label ?? "Fair"),
-    parsed_rate: clampScore(raw?.parsed_rate, 100),
+    parsed_rate: clampScore(raw?.parse_rate ?? raw?.parsed_rate, 100),
     summary: String(raw?.summary ?? ""),
     job_match_percent: matchRaw == null || matchRaw === "" ? null : clampScore(matchRaw),
     categories,
@@ -141,16 +145,29 @@ export function normalizeReport(raw: any): AtsReport {
       found: Array.isArray(raw?.keywords?.found) ? raw.keywords.found.map(String) : [],
       missing: Array.isArray(raw?.keywords?.missing) ? raw.keywords.missing.map(String) : [],
     },
-    top_issues: Array.isArray(raw?.top_issues ?? raw?.issues)
-      ? (raw.top_issues ?? raw.issues).map((issue: any) => ({
-          severity: ["High", "Medium", "Low"].includes(issue?.severity) ? issue.severity : "Medium",
-          issue: String(issue?.issue ?? ""),
-          fix: String(issue?.fix ?? ""),
-        }))
+    top_issues: Array.isArray(fixes)
+      ? fixes.map((issue: any) => {
+          const severity = issue?.impact ?? issue?.severity;
+          return {
+            severity: ["High", "Medium", "Low"].includes(severity) ? severity : "Medium",
+            issue: String(issue?.issue ?? ""),
+            fix: String(issue?.fix ?? ""),
+          };
+        })
       : [],
     quick_wins: Array.isArray(raw?.quick_wins) ? raw.quick_wins.map(String) : [],
   };
 }
+
+function iconForCategory(name: string): string {
+  const key = name.toLowerCase();
+  if (key.includes("keyword")) return "search";
+  if (key.includes("content")) return "file-text";
+  if (key.includes("structure") || key.includes("format")) return "layout";
+  if (key.includes("flag")) return "alert-triangle";
+  return "shield";
+}
+
 
 /** Extracts the first JSON object from a model response. */
 export function parseReportJson(text: string): any {
