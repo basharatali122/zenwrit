@@ -55,13 +55,23 @@ export const Route = createFileRoute("/")({
   loader: async () => ({ posts: await listPublishedPosts() }),
   head: () => ({
     meta: [
-      { title: "Free ATS Resume Checker — Instant Score & Fixes | ZenWrit" },
+      { title: TITLE },
       { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
+      { property: "og:title", content: "Free ATS Resume Checker — Instant Score | ZenWrit" },
+      {
+        property: "og:description",
+        content:
+          "Upload your resume and get a free ATS score in 30 seconds. 20+ checks, missing keywords, specific fixes. No signup needed.",
+      },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://zenwrit.com/" },
+      { property: "og:site_name", content: "ZenWrit" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Free ATS Resume Checker | ZenWrit" },
+      {
+        name: "twitter:description",
+        content: "Free ATS score in 30 seconds. No signup needed.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://zenwrit.com/" }],
     scripts: [
@@ -69,14 +79,42 @@ export const Route = createFileRoute("/")({
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "ZenWrit",
+          url: "https://zenwrit.com",
+          description: "Free ATS resume checker with instant scoring and specific fixes.",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: "https://zenwrit.com/blog?q={search_term_string}",
+            "query-input": "required name=search_term_string",
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
           "@type": "SoftwareApplication",
           name: "ZenWrit ATS Resume Checker",
           applicationCategory: "BusinessApplication",
-          operatingSystem: "Web",
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-          description:
-            "Free ATS resume checker with 20+ checks, keyword analysis, and specific fixes. No signup required.",
+          operatingSystem: "Web Browser",
           url: "https://zenwrit.com",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+            description: "Free, no signup required",
+          },
+          description:
+            "Free ATS resume checker that scores your resume across 20+ checks including keyword matching, formatting, content quality and recruiter red flags.",
+          featureList: [
+            "0-100 ATS compatibility score",
+            "Keyword gap analysis",
+            "20+ resume checks",
+            "No signup required",
+            "PDF and DOCX support",
+            "Results in 30 seconds",
+          ],
         }),
       },
       {
@@ -93,6 +131,7 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
+
   component: Home,
 });
 
