@@ -19,9 +19,10 @@ import { Reveal } from "@/components/site/Reveal";
 import { listPublishedPosts } from "@/lib/content.functions";
 import type { BlogPostRecord } from "@/lib/content";
 
-const TITLE = "ZenWrit — Free ATS Resume Checker";
+const TITLE = "Free ATS Resume Checker & AI Scanner (No Signup) | ZenWrit";
 const DESCRIPTION =
-  "The free ATS resume checker that gives you a real score, not a sales pitch. Upload your resume, get 20+ checks, missing keywords, and specific fixes in 30 seconds. No account required.";
+  "Scan your resume for free with ZenWrit. Get an instant 0-100 ATS score, identify missing keywords, and fix formatting errors to land more interviews. No signup, no credit card.";
+
 
 const FAQS = [
   {
