@@ -1,65 +1,93 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
-  BadgeCheck,
+  Check,
+  Clock,
+  FileUp,
   Gauge,
-  Linkedin,
   ListChecks,
-  MousePointerClick,
-  PenLine,
-  ShieldOff,
+  Lock,
   Sparkles,
-  Star,
   UserX,
-  Wand2,
-  Zap,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AdSlot } from "@/components/site/AdSlot";
-import { ToolIcon } from "@/components/site/ToolIcon";
-import { HeroToolWidget } from "@/components/site/HeroToolWidget";
-import { AtsScorePreview } from "@/components/site/AtsScorePreview";
+import { AtsChecker } from "@/components/site/AtsChecker";
+import { BlogCover } from "@/components/site/BlogCover";
 import { Reveal } from "@/components/site/Reveal";
-import { listPublishedTools } from "@/lib/content.functions";
-import type { ToolRecord } from "@/lib/content";
+import { listPublishedPosts } from "@/lib/content.functions";
+import type { BlogPostRecord } from "@/lib/content";
+
+const TITLE = "ZenWrit — Free ATS Resume Checker";
+const DESCRIPTION =
+  "The free ATS resume checker that gives you a real score, not a sales pitch. Upload your resume, get 20+ checks, missing keywords, and specific fixes in 30 seconds. No account required.";
+
+const FAQS = [
+  {
+    q: "What is an ATS resume checker?",
+    a: "An ATS (Applicant Tracking System) checker analyzes your resume the same way automated hiring software does — looking at keywords, formatting, structure and content — and gives you a score with specific improvements.",
+  },
+  {
+    q: "Is ZenWrit's ATS checker really free?",
+    a: "Yes, completely free with no account required and no credit card. We earn through ads shown during the experience.",
+  },
+  {
+    q: "Does ZenWrit store my resume?",
+    a: "No. Your resume is read, analyzed, and immediately discarded. We never store, share, or use your resume data.",
+  },
+  {
+    q: "How accurate is the ATS score?",
+    a: "ZenWrit uses GPT-4o to simulate ATS analysis across 20+ checks. While no checker can replicate every ATS system exactly, our scoring is calibrated to real recruiter expectations and keyword-matching patterns used by major ATS platforms like Workday, Greenhouse, and Lever.",
+  },
+  {
+    q: "Do I need to paste a job description?",
+    a: "No — the tool works without one. But adding a job description enables keyword matching and shows exactly which keywords from that specific job you are missing, which significantly improves the accuracy.",
+  },
+  {
+    q: "What file formats are supported?",
+    a: "PDF and DOCX files up to 5MB.",
+  },
+] as const;
 
 export const Route = createFileRoute("/")({
-  loader: async () => ({ tools: await listPublishedTools() }),
+  loader: async () => ({ posts: await listPublishedPosts() }),
   head: () => ({
     meta: [
-      { title: "ZenWrit — Free ATS Resume Checker & AI Writing Tools" },
-      {
-        name: "description",
-        content:
-          "Score your resume against any job description, generate LinkedIn posts and resume bullet points with free AI tools. Unlimited, no signup required.",
-      },
-      { property: "og:title", content: "ZenWrit — Free ATS Resume Checker & AI Writing Tools" },
-      {
-        property: "og:description",
-        content:
-          "Free ATS resume checker, LinkedIn post generator and resume bullet point generator. Unlimited generations, no signup.",
-      },
+      { title: "Free ATS Resume Checker — Instant Score & Fixes | ZenWrit" },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://zenwrit.com/" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://zenwrit.com/" }],
     scripts: [
       {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "WebSite",
-          name: "ZenWrit",
-          url: "https://zenwrit.com/",
+          "@type": "SoftwareApplication",
+          name: "ZenWrit ATS Resume Checker",
+          applicationCategory: "BusinessApplication",
+          operatingSystem: "Web",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
           description:
-            "Free ATS resume checker plus AI micro-tools for resumes, cover letters, LinkedIn posts, YouTube titles and product copy.",
-          potentialAction: {
-            "@type": "SearchAction",
-            target: {
-              "@type": "EntryPoint",
-              urlTemplate: "https://zenwrit.com/tools?q={search_term_string}",
-            },
-            "query-input": "required name=search_term_string",
-          },
+            "Free ATS resume checker with 20+ checks, keyword analysis, and specific fixes. No signup required.",
+          url: "https://zenwrit.com",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((faq) => ({
+            "@type": "Question",
+            name: faq.q,
+            acceptedAnswer: { "@type": "Answer", text: faq.a },
+          })),
         }),
       },
     ],
@@ -67,357 +95,244 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const TRUST = [
-  { icon: UserX, label: "No signup required" },
-  { icon: Gauge, label: "Results in seconds" },
-  { icon: Sparkles, label: "Unlimited and free, no credit card" },
-  { icon: BadgeCheck, label: "Built by a developer, not a template" },
+const HERO_BADGES = [
+  { icon: Lock, label: "Never stored" },
+  { icon: Clock, label: "~30 seconds" },
+  { icon: ListChecks, label: "20+ checks" },
+  { icon: UserX, label: "No account needed" },
 ];
 
-const FLAGSHIP = [
-  {
-    icon: Gauge,
-    slug: "ats-resume-checker",
-    eyebrow: "Most used",
-    title: "ATS Resume Checker",
-    body: "Upload your resume, paste the job description, and get a 0–100 score with 20+ checks across parsing, keywords, structure and red flags.",
-    points: ["Job-description match %", "Parse-rate diagnostics", "Prioritised quick wins"],
-    cta: "Score my resume",
-  },
-  {
-    icon: Linkedin,
-    slug: "linkedin-post-generator",
-    eyebrow: "Creators",
-    title: "LinkedIn Post Generator",
-    body: "Turn a rough idea into a scroll-stopping post with a strong hook, readable line breaks and a natural call to action.",
-    points: ["Hook-first structure", "Sounds human, not AI", "Ready to paste"],
-    cta: "Write a post",
-  },
-  {
-    icon: ListChecks,
-    slug: "resume-bullet-point-generator",
-    eyebrow: "Job seekers",
-    title: "Resume Bullet Point Generator",
-    body: "Rewrite flat duty statements into achievement bullets with strong verbs and measurable results recruiters actually read.",
-    points: ["Action-verb openers", "Metrics baked in", "ATS-friendly phrasing"],
-    cta: "Rewrite my bullets",
-  },
-];
+const COMPANIES = ["Microsoft", "Google", "Amazon", "Meta", "Apple", "Stripe", "Shopify"];
 
 const STEPS = [
   {
-    icon: MousePointerClick,
-    title: "Pick a tool",
-    body: "Single-purpose tools — no prompt engineering, no blank page.",
+    icon: FileUp,
+    title: "Upload your resume",
+    body: "PDF or DOCX. We extract the text and never store your file.",
   },
   {
-    icon: PenLine,
-    title: "Describe what you need",
-    body: "A few short fields: the role, the topic, the product. That is it.",
+    icon: ListChecks,
+    title: "Paste the job description",
+    body: "Optional but adds keyword matching — shows exactly which keywords you're missing.",
   },
   {
-    icon: Wand2,
-    title: "Get results in seconds",
-    body: "Copy-ready output in seconds, tuned for the outcome.",
+    icon: Gauge,
+    title: "Get your ATS report",
+    body: "A 0–100 score, 20+ specific checks, missing keywords, and prioritised fixes — in about 30 seconds.",
   },
 ];
 
-const USE_CASES = [
-  "Beat the ATS filter",
-  "Rewrite weak bullets",
-  "Post on LinkedIn daily",
-  "Tailor to a job ad",
-  "Write cover letters fast",
-  "Title YouTube videos",
-  "Describe products that sell",
-  "Draft job descriptions",
+const COMPARISON = [
+  { bad: "Jobscan: $49/month after trial", good: "ZenWrit: Free, forever" },
+  { bad: "Most tools: Require signup first", good: "ZenWrit: Check instantly, no account" },
+  {
+    bad: "Generic feedback",
+    good: "ZenWrit: 20+ specific checks with exact fixes, not vague suggestions",
+  },
+  { bad: "Your resume stored on their servers", good: "ZenWrit: Never stored, never shared" },
 ];
-
-const TAGS: Record<string, string[]> = {
-  resume: ["#resume", "#career"],
-  letter: ["#coverletter", "#jobsearch"],
-  linkedin: ["#linkedin", "#personalbrand"],
-  youtube: ["#youtube", "#ctr"],
-  product: ["#ecommerce", "#copywriting"],
-  gauge: ["#ats", "#resume", "#jobsearch"],
-};
 
 function Home() {
-  const { tools } = Route.useLoaderData() as { tools: ToolRecord[] };
-  const widgetTools = tools.filter((tool) => tool.slug !== "ats-resume-checker");
+  const { posts } = Route.useLoaderData() as { posts: BlogPostRecord[] };
 
   return (
-    <>
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border">
-        <div className="pointer-events-none absolute inset-0 hero-glow" aria-hidden="true" />
-        <div className="pointer-events-none absolute inset-0 grid-backdrop" aria-hidden="true" />
-        <div className="container-page relative grid items-center gap-14 py-16 sm:py-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,480px)]">
-          <div className="min-w-0">
-            <p className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3.5 py-1.5 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur">
-              <Sparkles className="size-3.5 text-primary" />
-              {tools.length} focused AI tools · free forever
-            </p>
-            <h1
-              className="animate-fade-up mt-6 max-w-3xl text-[2.6rem] font-bold leading-[1.03] tracking-tight sm:text-5xl lg:text-[3.75rem]"
-              style={{ animationDelay: "80ms" }}
-            >
-              Is your resume getting{" "}
-              <span className="text-gradient-brand">filtered out by the ATS?</span>
-            </h1>
-            <p
-              className="animate-fade-up mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
-              style={{ animationDelay: "160ms" }}
-            >
-              Get a free ATS score against any job description in seconds — then fix what is broken
-              with our LinkedIn post generator and resume bullet point generator. No signup, no
-              limits, no credit card.
-            </p>
-            <div
-              className="animate-fade-up mt-8 flex flex-col gap-3 sm:flex-row"
-              style={{ animationDelay: "240ms" }}
-            >
-              <Button asChild size="lg" className="h-12 px-6 text-base">
-                <Link to="/tools/ats-resume-checker">
-                  Check my resume score <ArrowRight />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="h-12 px-6 text-base">
-                <Link to="/tools">Browse all tools</Link>
-              </Button>
-            </div>
-            <ul
-              className="animate-fade-up mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground"
-              style={{ animationDelay: "320ms" }}
-            >
-              <li className="flex items-center gap-1.5">
-                <Star className="size-4 fill-primary text-primary" /> Free forever
-              </li>
-              <li className="flex items-center gap-1.5">
-                <ShieldOff className="size-4 text-primary" /> Files never stored
-              </li>
-              <li className="flex items-center gap-1.5">
-                <Zap className="size-4 text-primary" /> Results in ~10s
-              </li>
-            </ul>
+    <div>
+      {/* HERO */}
+      <section className="border-b border-border bg-surface/40">
+        <div className="container-page py-16 text-center sm:py-24">
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-accent px-3.5 py-1.5 text-xs font-semibold text-accent-foreground">
+            <Sparkles className="size-3.5" />
+            #1 Free ATS Resume Checker — No Signup
+          </span>
+
+          <h1 className="zw-fade-up mx-auto mt-6 max-w-3xl text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
+            Is your resume getting filtered out before a human sees it?
+          </h1>
+
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            Upload your resume and paste the job description. Get a 0–100 ATS score, missing
+            keywords, format issues, and recruiter red flags — in under 30 seconds. Free, forever.
+            No account needed.
+          </p>
+
+          <ul className="mx-auto mt-6 flex max-w-xl flex-col items-center gap-2 text-sm font-medium sm:flex-row sm:justify-center sm:gap-6">
+            <li className="flex items-center gap-2">
+              <Check className="size-4 text-green-600 dark:text-green-400" />
+              20+ checks across 5 categories
+            </li>
+            <li className="flex items-center gap-2">
+              <Check className="size-4 text-green-600 dark:text-green-400" />
+              Your resume is never stored or shared
+            </li>
+          </ul>
+
+          <div className="mt-9">
+            <Button asChild size="lg" className="h-14 px-8 text-base">
+              <a href="#ats-tool">Check My ATS Score Free →</a>
+            </Button>
           </div>
 
-          <div className="motion-safe:animate-float">
-            <AtsScorePreview />
-          </div>
+          <ul className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
+            {HERO_BADGES.map(({ icon: Icon, label }) => (
+              <li
+                key={label}
+                className="flex items-center gap-1.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs font-medium text-muted-foreground"
+              >
+                <Icon className="size-3.5 text-primary" />
+                {label}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      {/* Use-case marquee */}
-      <section aria-label="What people use ZenWrit for" className="overflow-hidden border-b border-border bg-surface py-3">
-        <div className="marquee-track gap-3">
-          {[...USE_CASES, ...USE_CASES].map((item, i) => (
-            <span key={`${item}-${i}`} className="tag-pill whitespace-nowrap px-3 py-1 text-xs">
-              {item}
+      {/* SOCIAL PROOF */}
+      <section className="border-b border-border">
+        <div className="container-page flex flex-wrap items-center justify-center gap-3 py-6 text-xs text-muted-foreground">
+          <span className="font-medium">Used by job seekers applying to</span>
+          {COMPANIES.map((company) => (
+            <span
+              key={company}
+              className="rounded-full bg-muted px-3 py-1 font-medium text-muted-foreground/90"
+            >
+              {company}
             </span>
           ))}
+          <span>and more</span>
         </div>
       </section>
 
-      {/* Trust bar */}
-      <section aria-label="Why people trust ZenWrit" className="border-b border-border">
-        <ul className="container-page grid gap-4 py-6 sm:grid-cols-2 lg:grid-cols-4">
-          {TRUST.map((item, i) => (
-            <Reveal as="li" key={item.label} delay={i * 70} className="flex items-center gap-2.5 text-sm font-medium">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
-                <item.icon className="size-4" />
-              </span>
-              <span className="text-muted-foreground">{item.label}</span>
-            </Reveal>
-          ))}
-        </ul>
+      <AdSlot id="ad-slot-1" label="Ad slot 1 — below hero" className="container-page pt-8" />
+
+      {/* THE TOOL */}
+      <section id="ats-tool" className="container-page scroll-mt-20 py-14">
+        <Reveal>
+          <h2 className="text-center text-2xl font-bold sm:text-3xl">
+            Paste your resume below — results in ~30 seconds
+          </h2>
+        </Reveal>
+        <div className="mx-auto mt-8 max-w-3xl">
+          <AtsChecker />
+        </div>
       </section>
 
-      {/* Flagship tools */}
-      <section className="container-page py-16 sm:py-20" aria-labelledby="flagship-heading">
-        <Reveal>
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-            Our three most-used tools
-          </p>
-          <h2 id="flagship-heading" className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-            Land the interview. Then own the feed.
-          </h2>
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
-            Everything else on ZenWrit is a bonus — these three do the heavy lifting for job seekers
-            and creators.
-          </p>
-        </Reveal>
+      <AdSlot id="ad-slot-2" label="Ad slot 2 — below tool" className="container-page" />
 
-        <ul className="mt-10 grid gap-5 lg:grid-cols-3">
-          {FLAGSHIP.map((tool, i) => (
-            <Reveal as="li" key={tool.slug} delay={i * 110}>
-              <div className="surface-panel card-lift group flex h-full flex-col p-6 sm:p-7">
-                <div className="flex items-center justify-between">
-                  <span className="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                    <tool.icon className="size-6" />
-                  </span>
-                  <span className="tag-pill">{tool.eyebrow}</span>
-                </div>
-                <h3 className="mt-5 text-xl font-semibold tracking-tight">{tool.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{tool.body}</p>
-                <ul className="mt-4 flex-1 space-y-2">
-                  {tool.points.map((point) => (
-                    <li key={point} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Zap className="size-3.5 shrink-0 text-primary" />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-                <Button asChild className="mt-6 w-full">
-                  <Link to="/tools/$slug" params={{ slug: tool.slug }}>
-                    {tool.cta} <ArrowRight />
-                  </Link>
-                </Button>
+      {/* HOW IT WORKS */}
+      <section className="container-page py-16">
+        <Reveal>
+          <h2 className="text-center text-2xl font-bold sm:text-3xl">How it works</h2>
+        </Reveal>
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {STEPS.map((step, index) => (
+            <Reveal key={step.title} delay={index * 90}>
+              <div className="surface-panel card-lift h-full p-6">
+                <span className="flex size-11 items-center justify-center rounded-xl bg-accent text-accent-foreground">
+                  <step.icon className="size-5" />
+                </span>
+                <p className="mt-4 text-xs font-semibold uppercase tracking-widest text-primary">
+                  Step {index + 1}
+                </p>
+                <h3 className="mt-1 text-lg font-semibold">{step.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
               </div>
             </Reveal>
           ))}
-        </ul>
-      </section>
-
-      {/* Live try-it widget */}
-      <section className="border-y border-border bg-surface" aria-labelledby="try-heading">
-        <div className="container-page grid items-start gap-12 py-16 sm:py-20 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)]">
-          <Reveal className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-              No signup wall
-            </p>
-            <h2 id="try-heading" className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-              Try a tool right here, right now
-            </h2>
-            <p className="mt-3 max-w-md text-base leading-relaxed text-muted-foreground">
-              Pick a tool, type one or two lines, and hit generate. You will have copy-ready output
-              before you finish reading this paragraph.
-            </p>
-            <ul className="mt-6 space-y-3 text-sm text-muted-foreground">
-              <li className="flex items-center gap-2">
-                <Zap className="size-4 shrink-0 text-primary" /> Unlimited generations, every day
-              </li>
-              <li className="flex items-center gap-2">
-                <Zap className="size-4 shrink-0 text-primary" /> Optional free account to save history
-              </li>
-              <li className="flex items-center gap-2">
-                <Zap className="size-4 shrink-0 text-primary" /> Works on mobile just as well
-              </li>
-            </ul>
-          </Reveal>
-
-          <Reveal delay={120} className="min-w-0">
-            <HeroToolWidget tools={widgetTools} />
-          </Reveal>
         </div>
       </section>
 
-      <AdSlot id="ad-slot-home-hero" label="Ad slot — below hero" className="container-page py-10" />
-
-      {/* All tools */}
-      <section className="container-page py-16 sm:py-20" aria-labelledby="tools-heading">
-        <Reveal>
-          <h2 id="tools-heading" className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Every tool in the toolkit
-          </h2>
-          <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">
-            Single-purpose, mobile-friendly and completely free to use.
-          </p>
-        </Reveal>
-
-        <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {tools.map((tool, i) => (
-            <Reveal as="li" key={tool.slug} delay={(i % 3) * 90}>
-              <Link
-                {...(tool.slug === "ats-resume-checker"
-                  ? ({ to: "/tools/ats-resume-checker" } as const)
-                  : ({ to: "/tools/$slug", params: { slug: tool.slug } } as const))}
-                className="surface-panel card-lift group flex h-full flex-col p-6"
-              >
-                <span className="flex size-11 items-center justify-center rounded-full bg-accent text-accent-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <ToolIcon icon={tool.icon} className="size-5" />
-                </span>
-                <h3 className="mt-5 text-lg font-semibold tracking-tight">{tool.name}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-                  {tool.short_description}
-                </p>
-                <span className="mt-4 flex flex-wrap gap-1.5">
-                  {(TAGS[tool.icon] ?? ["#ai", "#writing"]).map((tag) => (
-                    <span key={tag} className="tag-pill">{tag}</span>
-                  ))}
-                </span>
-                <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-                  Open tool <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            </Reveal>
-          ))}
-        </ul>
-      </section>
-
-      {/* How it works */}
-      <section className="border-y border-border bg-surface" aria-labelledby="how-heading">
-        <div className="container-page py-16 sm:py-20">
+      {/* WHY ZENWRIT */}
+      <section className="border-y border-border bg-surface/40">
+        <div className="container-page py-16">
           <Reveal>
-            <h2 id="how-heading" className="text-3xl font-bold tracking-tight sm:text-4xl">
-              How it works
+            <h2 className="text-center text-2xl font-bold sm:text-3xl">
+              Why job seekers choose ZenWrit over paid tools
             </h2>
-            <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">
-              Three steps, no onboarding, no credit card.
-            </p>
           </Reveal>
-          <ol className="mt-10 grid gap-5 md:grid-cols-3">
-            {STEPS.map((step, i) => (
-              <Reveal as="li" key={step.title} delay={i * 110}>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2">
+            {COMPARISON.map((item, index) => (
+              <Reveal key={item.good} delay={index * 80}>
                 <div className="surface-panel card-lift h-full p-6">
-                  <div className="flex items-center gap-3">
-                    <span className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      <step.icon className="size-5" />
-                    </span>
-                    <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                      Step {i + 1}
-                    </span>
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold tracking-tight">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
+                  <p className="flex items-start gap-2.5 text-sm text-muted-foreground line-through decoration-red-500/50">
+                    <X className="mt-0.5 size-4 shrink-0 text-red-500 no-underline" />
+                    <span>{item.bad}</span>
+                  </p>
+                  <p className="mt-4 flex items-start gap-2.5 text-sm font-semibold">
+                    <Check className="mt-0.5 size-4 shrink-0 text-green-600 dark:text-green-400" />
+                    <span>{item.good}</span>
+                  </p>
                 </div>
               </Reveal>
             ))}
-          </ol>
+          </div>
         </div>
       </section>
 
-      {/* Closing CTA */}
-      <section className="container-page py-16 sm:py-20" aria-labelledby="free-heading">
+      <AdSlot id="ad-slot-3" label="Ad slot 3 — after comparison" className="container-page pt-10" />
+
+      {/* FAQ */}
+      <section className="container-page py-16">
         <Reveal>
-          <div className="surface-panel relative overflow-hidden p-8 sm:p-12">
-            <div className="pointer-events-none absolute inset-0 hero-glow opacity-70" aria-hidden="true" />
-            <div className="relative">
-              <h2 id="free-heading" className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Everything is free. Really.
-              </h2>
-              <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
-                No plans, no paywalls, no credit card. Every tool is unlimited for everyone — ads on
-                the site keep the lights on.
-              </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button asChild size="lg" className="h-12 px-6 text-base">
-                  <Link to="/tools/ats-resume-checker">
-                    Start with my resume score <ArrowRight />
-                  </Link>
-                </Button>
-                <Button asChild size="lg" variant="outline" className="h-12 px-6 text-base">
-                  <Link to="/tools">See all tools</Link>
-                </Button>
-              </div>
-              <p className="mt-5 flex items-center gap-2 text-xs text-muted-foreground">
-                <ShieldOff className="size-3.5 text-primary" />
-                No account required. No payment details, ever.
-              </p>
-            </div>
-          </div>
+          <h2 className="text-center text-2xl font-bold sm:text-3xl">Frequently asked questions</h2>
         </Reveal>
+        <dl className="mx-auto mt-10 max-w-3xl divide-y divide-border rounded-2xl border border-border bg-surface">
+          {FAQS.map((faq) => (
+            <div key={faq.q} className="p-6">
+              <dt className="text-base font-semibold">{faq.q}</dt>
+              <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">{faq.a}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
-    </>
+
+      <AdSlot id="ad-slot-4" label="Ad slot 4 — after FAQ" className="container-page" />
+
+      {/* BLOG PREVIEW */}
+      {posts.length ? (
+        <section className="container-page py-16">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <h2 className="text-2xl font-bold sm:text-3xl">Resume advice worth reading</h2>
+            <Link to="/blog" className="text-sm font-medium text-primary hover:underline">
+              Read all articles →
+            </Link>
+          </div>
+          <ul className="mt-8 grid gap-5 md:grid-cols-3">
+            {posts.slice(0, 3).map((post) => (
+              <li key={post.slug}>
+                <Link
+                  to="/blog/$slug"
+                  params={{ slug: post.slug }}
+                  className="flex h-full flex-col overflow-hidden surface-panel card-lift p-0"
+                >
+                  <BlogCover src={post.cover_image_url} title={post.title} category={post.category} />
+                  <div className="flex flex-1 flex-col p-5">
+                    <p className="text-xs font-medium uppercase tracking-wide text-primary">
+                      {post.category}
+                    </p>
+                    <h3 className="mt-2 text-base font-semibold">{post.title}</h3>
+                    <p className="mt-2 flex-1 text-sm text-muted-foreground">{post.excerpt}</p>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {/* FINAL CTA */}
+      <section className="container-page pb-20">
+        <div className="rounded-3xl border border-primary/30 bg-accent px-6 py-14 text-center">
+          <h2 className="text-2xl font-bold sm:text-3xl">Ready to find out your ATS score?</h2>
+          <p className="mt-3 text-sm text-muted-foreground sm:text-base">
+            Takes 30 seconds. Free forever.
+          </p>
+          <Button asChild size="lg" className="mt-7 h-14 px-8 text-base">
+            <a href="#ats-tool">
+              Check My Resume Now <ArrowRight />
+            </a>
+          </Button>
+        </div>
+      </section>
+    </div>
   );
 }

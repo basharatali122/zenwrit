@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import { checkIsAdmin } from "@/lib/content.functions";
 
 const NAV = [
-  { to: "/tools", label: "Tools" },
   { to: "/blog", label: "Blog" },
   { to: "/about", label: "About" },
 ] as const;
@@ -56,22 +55,14 @@ export function Header() {
                     <Link to="/admin">Admin</Link>
                   </Button>
                 ) : null}
-                <Button asChild size="sm">
+                <Button asChild variant="ghost" size="sm">
                   <Link to="/dashboard">Dashboard</Link>
                 </Button>
               </>
-            ) : (
-              <>
-                <Button asChild variant="ghost" size="sm">
-                  <Link to="/auth">Log in</Link>
-                </Button>
-                <Button asChild size="sm">
-                  <Link to="/auth" search={{ mode: "signup" }}>
-                    Get started
-                  </Link>
-                </Button>
-              </>
-            )}
+            ) : null}
+            <Button asChild size="sm">
+              <Link to="/check">Check My Resume</Link>
+            </Button>
           </div>
           <Button
             variant="ghost"
@@ -102,9 +93,16 @@ export function Header() {
             <Link
               to={user ? "/dashboard" : "/auth"}
               onClick={() => setOpen(false)}
+              className="rounded-md px-2 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
+              {user ? "Dashboard" : "Log in"}
+            </Link>
+            <Link
+              to="/check"
+              onClick={() => setOpen(false)}
               className="mt-2 rounded-md bg-primary px-3 py-2.5 text-center text-sm font-medium text-primary-foreground"
             >
-              {user ? "Dashboard" : "Log in / Sign up"}
+              Check My Resume
             </Link>
           </nav>
         </div>

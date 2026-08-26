@@ -89,8 +89,10 @@ const CATEGORY_ICONS: Record<string, typeof Shield> = {
 };
 
 const SHORT_NAMES: Record<string, string> = {
+  "ATS Parsing": "Parsing",
   "ATS Compatibility": "ATS",
   "Content Quality": "Content",
+  "Keyword Match": "Keywords",
   "Keywords & Skills": "Keywords",
   "Structure & Format": "Structure",
   "Recruiter Red Flags": "Red Flags",
@@ -369,7 +371,7 @@ export function AtsChecker() {
       toast.error("Share link isn't available for this report.");
       return;
     }
-    const url = `${window.location.origin}/tools/ats-resume-checker?r=${shareId}`;
+    const url = `${window.location.origin}/check?r=${shareId}`;
     try {
       await navigator.clipboard.writeText(url);
       toast.success("Shareable link copied to clipboard");
@@ -411,7 +413,7 @@ export function AtsChecker() {
     setEmail("");
     if (inputRef.current) inputRef.current.value = "";
     if (window.location.search.includes("r=")) {
-      window.history.replaceState({}, "", "/tools/ats-resume-checker");
+      window.history.replaceState({}, "", window.location.pathname);
     }
   }
 
@@ -642,22 +644,6 @@ export function AtsChecker() {
           )}
         </section>
 
-        <section className="surface-panel p-6">
-          <h2 className="text-base font-semibold">Now improve your resume:</h2>
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-            <Button asChild>
-              <Link to="/tools/$slug" params={{ slug: "resume-bullet-point-generator" }}>
-                Resume Bullet Point Generator <ArrowRight />
-              </Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link to="/tools/$slug" params={{ slug: "cover-letter-generator" }}>
-                Cover Letter Generator <ArrowRight />
-              </Link>
-            </Button>
-          </div>
-        </section>
-
         <div className="flex flex-wrap justify-center gap-3">
           <Button variant="outline" onClick={onCopyShare}>
             <Share2 /> Copy shareable result link
@@ -673,8 +659,8 @@ export function AtsChecker() {
   }
 
   return (
-    <div className="surface-panel p-5 sm:p-6">
-      <ul className="mb-5 flex flex-wrap gap-2">
+    <div className="surface-panel p-5 sm:p-8">
+      <ul className="mb-6 flex flex-wrap gap-2">
         {TRUST_BADGES.map(({ icon: Icon, label }) => (
           <li
             key={label}
@@ -685,6 +671,13 @@ export function AtsChecker() {
           </li>
         ))}
       </ul>
+
+      <div className="flex items-baseline gap-2">
+        <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-bold text-primary-foreground">
+          Step 1
+        </span>
+        <h3 className="text-base font-semibold">Upload resume (PDF or DOCX)</h3>
+      </div>
 
       <div
         role="button"
@@ -703,13 +696,17 @@ export function AtsChecker() {
           setDragging(false);
           acceptFile(e.dataTransfer.files?.[0]);
         }}
-        className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-10 text-center transition-colors ${
+        className={`mt-3 flex min-h-[220px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center transition-colors sm:min-h-[260px] ${
           dragging ? "border-primary bg-accent" : "border-border hover:border-primary/60 hover:bg-surface"
         }`}
       >
-        <FileUp className="size-8 text-muted-foreground" />
-        <p className="mt-4 text-sm font-medium">Drop your resume here or click to browse</p>
-        <p className="mt-1 text-xs text-muted-foreground">Supports PDF and DOCX files up to 5MB</p>
+        <span className="flex size-14 items-center justify-center rounded-2xl bg-accent text-accent-foreground">
+          <FileUp className="size-7" />
+        </span>
+        <p className="mt-5 text-base font-semibold sm:text-lg">
+          Drop your resume here or click to browse
+        </p>
+        <p className="mt-1.5 text-sm text-muted-foreground">PDF or DOCX, up to 5MB</p>
         <input
           ref={inputRef}
           type="file"
@@ -736,33 +733,39 @@ export function AtsChecker() {
         </p>
       ) : null}
 
-      <div className="mt-5">
-        <label htmlFor="ats-job-description" className="text-sm font-medium">
-          Paste job description (optional but recommended)
-        </label>
+      <div className="mt-7">
+        <div className="flex items-baseline gap-2">
+          <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-bold text-primary-foreground">
+            Step 2
+          </span>
+          <label htmlFor="ats-job-description" className="text-base font-semibold">
+            Paste job description
+          </label>
+        </div>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Optional but recommended — it improves accuracy and shows the exact keywords you're
+          missing.
+        </p>
         <Textarea
           id="ats-job-description"
           value={jobDescription}
           onChange={(event) => setJobDescription(event.target.value)}
           placeholder="Paste the job posting you're applying for to get keyword matching and tailored feedback..."
-          rows={5}
-          className="mt-2"
+          rows={6}
+          className="mt-3"
         />
-        <p className="mt-1.5 text-xs text-muted-foreground">
-          Adding a job description improves your score accuracy by 40%
-        </p>
       </div>
 
-      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Button size="lg" disabled={!file || busy} onClick={onCheck}>
+      <div className="mt-6">
+        <Button size="lg" className="h-14 w-full text-base" disabled={!file || busy} onClick={onCheck}>
           {busy ? <Loader2 className="animate-spin" /> : null}
-          {busy ? "Analyzing your resume…" : "Check ATS Score"}
+          {busy ? "Analyzing your resume…" : "Check ATS Score →"}
         </Button>
-        <p className="text-xs text-muted-foreground" aria-live="polite">
-          Unlimited free checks — no account needed.
+        <p className="mt-3 text-center text-xs text-muted-foreground" aria-live="polite">
+          Unlimited free checks — no account needed. Your resume is never stored.
         </p>
       </div>
-
     </div>
   );
 }
+

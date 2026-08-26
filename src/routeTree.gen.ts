@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CheckRouteImport } from './routes/check'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
@@ -24,8 +25,6 @@ import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
-import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
-import { Route as ToolsAtsResumeCheckerRouteImport } from './routes/tools.ats-resume-checker'
 import { Route as AdminBlogIdRouteImport } from './routes/admin.blog.$id'
 import { Route as AdminToolsIdRouteImport } from './routes/admin.tools.$id'
 import { Route as ApiPublicImageSplatRouteImport } from './routes/api/public/image.$'
@@ -49,6 +48,11 @@ const AdminRoute = AdminRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckRoute = CheckRouteImport.update({
+  id: '/check',
+  path: '/check',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -106,16 +110,6 @@ const ToolsIndexRoute = ToolsIndexRouteImport.update({
   path: '/tools/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ToolsSlugRoute = ToolsSlugRouteImport.update({
-  id: '/tools/$slug',
-  path: '/tools/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ToolsAtsResumeCheckerRoute = ToolsAtsResumeCheckerRouteImport.update({
-  id: '/tools/ats-resume-checker',
-  path: '/tools/ats-resume-checker',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminBlogIdRoute = AdminBlogIdRouteImport.update({
   id: '/blog/$id',
   path: '/blog/$id',
@@ -143,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/check': typeof CheckRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -151,8 +146,6 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/tools/$slug': typeof ToolsSlugRoute
-  '/tools/ats-resume-checker': typeof ToolsAtsResumeCheckerRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/tools/': typeof ToolsIndexRoute
@@ -165,6 +158,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/check': typeof CheckRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -173,8 +167,6 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/tools/$slug': typeof ToolsSlugRoute
-  '/tools/ats-resume-checker': typeof ToolsAtsResumeCheckerRoute
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/tools': typeof ToolsIndexRoute
@@ -189,6 +181,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/check': typeof CheckRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
@@ -197,8 +190,6 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/tools/$slug': typeof ToolsSlugRoute
-  '/tools/ats-resume-checker': typeof ToolsAtsResumeCheckerRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/tools/': typeof ToolsIndexRoute
@@ -214,6 +205,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/auth'
+    | '/check'
     | '/contact'
     | '/dashboard'
     | '/disclaimer'
@@ -222,8 +214,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/admin/messages'
     | '/blog/$slug'
-    | '/tools/$slug'
-    | '/tools/ats-resume-checker'
     | '/admin/'
     | '/blog/'
     | '/tools/'
@@ -236,6 +226,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/check'
     | '/contact'
     | '/dashboard'
     | '/disclaimer'
@@ -244,8 +235,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/admin/messages'
     | '/blog/$slug'
-    | '/tools/$slug'
-    | '/tools/ats-resume-checker'
     | '/admin'
     | '/blog'
     | '/tools'
@@ -259,6 +248,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/auth'
+    | '/check'
     | '/contact'
     | '/dashboard'
     | '/disclaimer'
@@ -267,8 +257,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/admin/messages'
     | '/blog/$slug'
-    | '/tools/$slug'
-    | '/tools/ats-resume-checker'
     | '/admin/'
     | '/blog/'
     | '/tools/'
@@ -283,6 +271,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
+  CheckRoute: typeof CheckRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   DisclaimerRoute: typeof DisclaimerRoute
@@ -290,8 +279,6 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   BlogSlugRoute: typeof BlogSlugRoute
-  ToolsSlugRoute: typeof ToolsSlugRoute
-  ToolsAtsResumeCheckerRoute: typeof ToolsAtsResumeCheckerRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
   ApiPublicImageSplatRoute: typeof ApiPublicImageSplatRoute
@@ -326,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/check': {
+      id: '/check'
+      path: '/check'
+      fullPath: '/check'
+      preLoaderRoute: typeof CheckRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -405,20 +399,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tools/$slug': {
-      id: '/tools/$slug'
-      path: '/tools/$slug'
-      fullPath: '/tools/$slug'
-      preLoaderRoute: typeof ToolsSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tools/ats-resume-checker': {
-      id: '/tools/ats-resume-checker'
-      path: '/tools/ats-resume-checker'
-      fullPath: '/tools/ats-resume-checker'
-      preLoaderRoute: typeof ToolsAtsResumeCheckerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin/blog/$id': {
       id: '/admin/blog/$id'
       path: '/blog/$id'
@@ -471,6 +451,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
+  CheckRoute: CheckRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   DisclaimerRoute: DisclaimerRoute,
@@ -478,8 +459,6 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   BlogSlugRoute: BlogSlugRoute,
-  ToolsSlugRoute: ToolsSlugRoute,
-  ToolsAtsResumeCheckerRoute: ToolsAtsResumeCheckerRoute,
   BlogIndexRoute: BlogIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
   ApiPublicImageSplatRoute: ApiPublicImageSplatRoute,
