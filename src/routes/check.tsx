@@ -3,9 +3,10 @@ import { Gauge } from "lucide-react";
 import { AdSlot } from "@/components/site/AdSlot";
 import { AtsChecker } from "@/components/site/AtsChecker";
 
-const TITLE = "Free ATS Resume Checker — Instant Score & Fixes | ZenWrit";
+const TITLE = "Check Your ATS Resume Score Free — Instant Results | ZenWrit";
 const DESCRIPTION =
-  "Upload your resume and paste any job description. Get a free ATS compatibility score with 20+ checks, missing keywords, and specific fixes in under 30 seconds. No signup, no account, no credit card.";
+  "Upload your resume (PDF or DOCX) and paste a job description. Get a 0-100 ATS compatibility score with 20+ checks and specific fixes in under 30 seconds.";
+
 
 export const Route = createFileRoute("/check")({
   head: () => ({
