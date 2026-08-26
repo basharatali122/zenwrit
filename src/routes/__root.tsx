@@ -17,8 +17,6 @@ import { Footer } from "@/components/site/Footer";
 import { themeInitScript } from "@/components/site/ThemeToggle";
 import { Toaster } from "@/components/ui/sonner";
 import { analyticsExclusionScript } from "@/lib/analytics";
-import { listPublishedTools } from "@/lib/content.functions";
-import type { ToolRecord } from "@/lib/content";
 
 function NotFoundComponent() {
   return (
@@ -85,10 +83,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ZenWrit" },
+      { title: "ZenWrit — Free ATS Resume Checker" },
       {
         name: "description",
-        content: "ZenWrit — free AI micro-tools for creators and job seekers.",
+        content:
+          "The free ATS resume checker that gives you a real score, not a sales pitch. Upload your resume, get 20+ checks, missing keywords, and specific fixes in 30 seconds. No account required.",
       },
       { name: "author", content: "ZenWrit" },
       {
@@ -96,6 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "aENF7cv2YaQFIXv5Xqgbsm1MQe6J_fjPrrX0PimVgho",
       },
       { property: "og:site_name", content: "ZenWrit" },
+      { property: "og:title", content: "ZenWrit — Free ATS Resume Checker" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -110,7 +110,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
     ],
   }),
-  loader: async () => ({ tools: await listPublishedTools() }),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -135,7 +134,6 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const { tools } = Route.useLoaderData() as { tools: ToolRecord[] };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -145,7 +143,7 @@ function RootComponent() {
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
         </main>
-        <Footer tools={tools} />
+        <Footer />
       </div>
       <Toaster />
     </QueryClientProvider>
