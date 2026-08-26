@@ -1,9 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Sparkles } from "lucide-react";
-import type { ToolRecord } from "@/lib/content";
 import { AdSlot } from "./AdSlot";
 
-export function Footer({ tools }: { tools: ToolRecord[] }) {
+export function Footer() {
   return (
     <footer className="mt-20 border-t border-border bg-surface">
       <AdSlot id="ad-slot-footer" label="Ad slot — footer" variant="banner" className="container-page py-8" />
@@ -16,30 +15,22 @@ export function Footer({ tools }: { tools: ToolRecord[] }) {
             ZenWrit
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
-            Free, unlimited AI micro-tools for creators and professionals. No signup, no
-            subscription, no limits.
+            Free ATS Resume Checker — No Signup, No Limits.
           </p>
           <p className="mt-4 max-w-xs text-xs leading-relaxed text-muted-foreground">
-            ZenWrit is committed to accurate, helpful content. Ads on this site help keep our
-            tools free.
+            ZenWrit is committed to accurate, helpful content. Ads on this site help keep the tool
+            free.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground">Tools</h2>
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground">Tool</h2>
           <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
-
-            {tools.map((tool) => (
-              <li key={tool.slug}>
-                <Link
-                  to="/tools/$slug"
-                  params={{ slug: tool.slug }}
-                  className="hover:text-foreground"
-                >
-                  {tool.name}
-                </Link>
-              </li>
-            ))}
+            <li>
+              <Link to="/check" className="hover:text-foreground">
+                ATS Resume Checker
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -65,7 +56,7 @@ export function Footer({ tools }: { tools: ToolRecord[] }) {
       <div className="border-t border-border">
         <div className="container-page flex flex-col gap-2 py-5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} ZenWrit. All rights reserved.</p>
-          <p>Built for creators and job seekers.</p>
+          <p>Built for job seekers.</p>
         </div>
       </div>
     </footer>
