@@ -24,6 +24,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as AdminBlogIdRouteImport } from './routes/admin.blog.$id'
 import { Route as AdminToolsIdRouteImport } from './routes/admin.tools.$id'
 import { Route as ApiPublicImageSplatRouteImport } from './routes/api/public/image.$'
@@ -104,6 +105,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolsIndexRoute = ToolsIndexRouteImport.update({
+  id: '/tools/',
+  path: '/tools/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminBlogIdRoute = AdminBlogIdRouteImport.update({
   id: '/blog/$id',
   path: '/blog/$id',
@@ -142,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/tools/': typeof ToolsIndexRoute
   '/admin/blog/$id': typeof AdminBlogIdRoute
   '/admin/tools/$id': typeof AdminToolsIdRoute
   '/api/public/image/$': typeof ApiPublicImageSplatRoute
@@ -162,6 +169,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
+  '/tools': typeof ToolsIndexRoute
   '/admin/blog/$id': typeof AdminBlogIdRoute
   '/admin/tools/$id': typeof AdminToolsIdRoute
   '/api/public/image/$': typeof ApiPublicImageSplatRoute
@@ -184,6 +192,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/tools/': typeof ToolsIndexRoute
   '/admin/blog/$id': typeof AdminBlogIdRoute
   '/admin/tools/$id': typeof AdminToolsIdRoute
   '/api/public/image/$': typeof ApiPublicImageSplatRoute
@@ -207,6 +216,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/admin/'
     | '/blog/'
+    | '/tools/'
     | '/admin/blog/$id'
     | '/admin/tools/$id'
     | '/api/public/image/$'
@@ -227,6 +237,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/admin'
     | '/blog'
+    | '/tools'
     | '/admin/blog/$id'
     | '/admin/tools/$id'
     | '/api/public/image/$'
@@ -248,6 +259,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/admin/'
     | '/blog/'
+    | '/tools/'
     | '/admin/blog/$id'
     | '/admin/tools/$id'
     | '/api/public/image/$'
@@ -268,6 +280,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  ToolsIndexRoute: typeof ToolsIndexRoute
   ApiPublicImageSplatRoute: typeof ApiPublicImageSplatRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
@@ -379,6 +392,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools/': {
+      id: '/tools/'
+      path: '/tools'
+      fullPath: '/tools/'
+      preLoaderRoute: typeof ToolsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/blog/$id': {
       id: '/admin/blog/$id'
       path: '/blog/$id'
@@ -440,6 +460,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
+  ToolsIndexRoute: ToolsIndexRoute,
   ApiPublicImageSplatRoute: ApiPublicImageSplatRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
