@@ -181,13 +181,17 @@ function Home() {
       <section className="border-b border-border bg-surface/40">
         <div className="container-page py-16 text-center sm:py-24">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-accent px-3.5 py-1.5 text-xs font-semibold text-accent-foreground">
-            <Sparkles className="size-3.5" />
+            <Sparkles className="size-3.5" aria-hidden="true" />
             #1 Free ATS Resume Checker — No Signup
           </span>
 
           <h1 className="zw-fade-up mx-auto mt-6 max-w-3xl text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
-            Is your resume getting filtered out before a human sees it?
+            Free ATS Resume Checker &amp; AI Scanner
           </h1>
+
+          <p className="mx-auto mt-5 max-w-2xl text-lg font-semibold text-foreground sm:text-xl">
+            Is your resume getting filtered out before a human sees it?
+          </p>
 
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             Upload your resume and paste the job description. Get a 0–100 ATS score, missing
@@ -197,11 +201,11 @@ function Home() {
 
           <ul className="mx-auto mt-6 flex max-w-xl flex-col items-center gap-2 text-sm font-medium sm:flex-row sm:justify-center sm:gap-6">
             <li className="flex items-center gap-2">
-              <Check className="size-4 text-green-600 dark:text-green-400" />
+              <Check className="size-4 text-green-600 dark:text-green-400" aria-hidden="true" />
               20+ checks across 5 categories
             </li>
             <li className="flex items-center gap-2">
-              <Check className="size-4 text-green-600 dark:text-green-400" />
+              <Check className="size-4 text-green-600 dark:text-green-400" aria-hidden="true" />
               Your resume is never stored or shared
             </li>
           </ul>
@@ -218,7 +222,7 @@ function Home() {
                 key={label}
                 className="flex items-center gap-1.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs font-medium text-muted-foreground"
               >
-                <Icon className="size-3.5 text-primary" />
+                <Icon className="size-3.5 text-primary" aria-hidden="true" />
                 {label}
               </li>
             ))}
@@ -268,7 +272,7 @@ function Home() {
             <Reveal key={step.title} delay={index * 90}>
               <div className="surface-panel card-lift h-full p-6">
                 <span className="flex size-11 items-center justify-center rounded-xl bg-accent text-accent-foreground">
-                  <step.icon className="size-5" />
+                  <step.icon className="size-5" aria-hidden="true" />
                 </span>
                 <p className="mt-4 text-xs font-semibold uppercase tracking-widest text-primary">
                   Step {index + 1}
@@ -286,7 +290,7 @@ function Home() {
         <div className="container-page py-16">
           <Reveal>
             <h2 className="text-center text-2xl font-bold sm:text-3xl">
-              Why job seekers choose ZenWrit over paid tools
+              Why job seekers choose ZenWrit
             </h2>
           </Reveal>
           <div className="mt-10 grid gap-5 sm:grid-cols-2">
@@ -294,11 +298,11 @@ function Home() {
               <Reveal key={item.good} delay={index * 80}>
                 <div className="surface-panel card-lift h-full p-6">
                   <p className="flex items-start gap-2.5 text-sm text-muted-foreground line-through decoration-red-500/50">
-                    <X className="mt-0.5 size-4 shrink-0 text-red-500 no-underline" />
+                    <X className="mt-0.5 size-4 shrink-0 text-red-500 no-underline" aria-hidden="true" />
                     <span>{item.bad}</span>
                   </p>
                   <p className="mt-4 flex items-start gap-2.5 text-sm font-semibold">
-                    <Check className="mt-0.5 size-4 shrink-0 text-green-600 dark:text-green-400" />
+                    <Check className="mt-0.5 size-4 shrink-0 text-green-600 dark:text-green-400" aria-hidden="true" />
                     <span>{item.good}</span>
                   </p>
                 </div>
@@ -318,7 +322,9 @@ function Home() {
         <dl className="mx-auto mt-10 max-w-3xl divide-y divide-border rounded-2xl border border-border bg-surface">
           {FAQS.map((faq) => (
             <div key={faq.q} className="p-6">
-              <dt className="text-base font-semibold">{faq.q}</dt>
+              <dt>
+                <h3 className="text-base font-semibold">{faq.q}</h3>
+              </dt>
               <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">{faq.a}</dd>
             </div>
           ))}
@@ -368,7 +374,7 @@ function Home() {
           </p>
           <Button asChild size="lg" className="mt-7 h-14 px-8 text-base">
             <a href="#ats-tool">
-              Check My Resume Now <ArrowRight />
+              Check My Resume Now <ArrowRight aria-hidden="true" />
             </a>
           </Button>
         </div>
