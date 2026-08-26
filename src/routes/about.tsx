@@ -13,8 +13,10 @@ export const Route = createFileRoute("/about")({
       { property: "og:title", content: "About ZenWrit" },
       { property: "og:description", content: "Why we build one focused, free ATS resume checker instead of a bloated suite." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://zenwrit.com/about" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://zenwrit.com/about" }],
   }),
   component: About,
 });
