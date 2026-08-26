@@ -24,9 +24,6 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
-import { Route as ToolsIndexRouteImport } from './routes/tools.index'
-import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
-import { Route as ToolsAtsResumeCheckerRouteImport } from './routes/tools.ats-resume-checker'
 import { Route as AdminBlogIdRouteImport } from './routes/admin.blog.$id'
 import { Route as AdminToolsIdRouteImport } from './routes/admin.tools.$id'
 import { Route as ApiPublicImageSplatRouteImport } from './routes/api/public/image.$'
@@ -107,21 +104,6 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ToolsIndexRoute = ToolsIndexRouteImport.update({
-  id: '/tools/',
-  path: '/tools/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ToolsSlugRoute = ToolsSlugRouteImport.update({
-  id: '/tools/$slug',
-  path: '/tools/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ToolsAtsResumeCheckerRoute = ToolsAtsResumeCheckerRouteImport.update({
-  id: '/tools/ats-resume-checker',
-  path: '/tools/ats-resume-checker',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminBlogIdRoute = AdminBlogIdRouteImport.update({
   id: '/blog/$id',
   path: '/blog/$id',
@@ -158,11 +140,8 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/tools/$slug': typeof ToolsSlugRoute
-  '/tools/ats-resume-checker': typeof ToolsAtsResumeCheckerRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
-  '/tools/': typeof ToolsIndexRoute
   '/admin/blog/$id': typeof AdminBlogIdRoute
   '/admin/tools/$id': typeof AdminToolsIdRoute
   '/api/public/image/$': typeof ApiPublicImageSplatRoute
@@ -181,11 +160,8 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/tools/$slug': typeof ToolsSlugRoute
-  '/tools/ats-resume-checker': typeof ToolsAtsResumeCheckerRoute
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
-  '/tools': typeof ToolsIndexRoute
   '/admin/blog/$id': typeof AdminBlogIdRoute
   '/admin/tools/$id': typeof AdminToolsIdRoute
   '/api/public/image/$': typeof ApiPublicImageSplatRoute
@@ -206,11 +182,8 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/tools/$slug': typeof ToolsSlugRoute
-  '/tools/ats-resume-checker': typeof ToolsAtsResumeCheckerRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
-  '/tools/': typeof ToolsIndexRoute
   '/admin/blog/$id': typeof AdminBlogIdRoute
   '/admin/tools/$id': typeof AdminToolsIdRoute
   '/api/public/image/$': typeof ApiPublicImageSplatRoute
@@ -232,11 +205,8 @@ export interface FileRouteTypes {
     | '/terms'
     | '/admin/messages'
     | '/blog/$slug'
-    | '/tools/$slug'
-    | '/tools/ats-resume-checker'
     | '/admin/'
     | '/blog/'
-    | '/tools/'
     | '/admin/blog/$id'
     | '/admin/tools/$id'
     | '/api/public/image/$'
@@ -255,11 +225,8 @@ export interface FileRouteTypes {
     | '/terms'
     | '/admin/messages'
     | '/blog/$slug'
-    | '/tools/$slug'
-    | '/tools/ats-resume-checker'
     | '/admin'
     | '/blog'
-    | '/tools'
     | '/admin/blog/$id'
     | '/admin/tools/$id'
     | '/api/public/image/$'
@@ -279,11 +246,8 @@ export interface FileRouteTypes {
     | '/terms'
     | '/admin/messages'
     | '/blog/$slug'
-    | '/tools/$slug'
-    | '/tools/ats-resume-checker'
     | '/admin/'
     | '/blog/'
-    | '/tools/'
     | '/admin/blog/$id'
     | '/admin/tools/$id'
     | '/api/public/image/$'
@@ -303,10 +267,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   BlogSlugRoute: typeof BlogSlugRoute
-  ToolsSlugRoute: typeof ToolsSlugRoute
-  ToolsAtsResumeCheckerRoute: typeof ToolsAtsResumeCheckerRoute
   BlogIndexRoute: typeof BlogIndexRoute
-  ToolsIndexRoute: typeof ToolsIndexRoute
   ApiPublicImageSplatRoute: typeof ApiPublicImageSplatRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
@@ -418,27 +379,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tools/': {
-      id: '/tools/'
-      path: '/tools'
-      fullPath: '/tools/'
-      preLoaderRoute: typeof ToolsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tools/$slug': {
-      id: '/tools/$slug'
-      path: '/tools/$slug'
-      fullPath: '/tools/$slug'
-      preLoaderRoute: typeof ToolsSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tools/ats-resume-checker': {
-      id: '/tools/ats-resume-checker'
-      path: '/tools/ats-resume-checker'
-      fullPath: '/tools/ats-resume-checker'
-      preLoaderRoute: typeof ToolsAtsResumeCheckerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin/blog/$id': {
       id: '/admin/blog/$id'
       path: '/blog/$id'
@@ -499,10 +439,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   BlogSlugRoute: BlogSlugRoute,
-  ToolsSlugRoute: ToolsSlugRoute,
-  ToolsAtsResumeCheckerRoute: ToolsAtsResumeCheckerRoute,
   BlogIndexRoute: BlogIndexRoute,
-  ToolsIndexRoute: ToolsIndexRoute,
   ApiPublicImageSplatRoute: ApiPublicImageSplatRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
