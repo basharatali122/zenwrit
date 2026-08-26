@@ -15,7 +15,7 @@ export const Route = createFileRoute("/blog/$slug")({
       return { meta: [{ title: "Article not found | ZenWrit" }, { name: "robots", content: "noindex" }] };
     }
     const { post } = loaderData;
-    const title = post.meta_title || `${post.title} | ZenWrit`;
+    const title = post.meta_title || `${post.title} | ZenWrit Blog`;
     const description = post.meta_description || post.excerpt;
     const image = post.cover_image_url && /^https?:\/\//.test(post.cover_image_url) ? post.cover_image_url : null;
     return {

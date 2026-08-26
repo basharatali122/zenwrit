@@ -14,13 +14,15 @@ export const Route = createFileRoute("/contact")({
       { title: "Contact ZenWrit — Support & Feedback" },
       {
         name: "description",
-        content: "Questions about billing, a bug to report or a tool you'd like us to build? Get in touch with the ZenWrit team.",
+        content: "Questions, feedback or a bug to report? Get in touch with the ZenWrit team behind the free ATS resume checker.",
       },
       { property: "og:title", content: "Contact ZenWrit" },
       { property: "og:description", content: "Support, billing questions and tool requests." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://zenwrit.com/contact" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://zenwrit.com/contact" }],
   }),
   component: Contact,
 });

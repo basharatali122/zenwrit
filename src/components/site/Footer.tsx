@@ -10,7 +10,7 @@ export function Footer() {
         <div>
           <Link to="/" className="flex items-center gap-2 font-display text-base font-bold">
             <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <Sparkles className="size-3.5" />
+              <Sparkles className="size-3.5" aria-hidden="true" />
             </span>
             ZenWrit
           </Link>
@@ -24,7 +24,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground">Tool</h2>
+          <p className="text-xs font-semibold uppercase tracking-widest text-foreground">Tool</p>
           <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
             <li>
               <Link to="/check" className="hover:text-foreground">
@@ -35,7 +35,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground">Company</h2>
+          <p className="text-xs font-semibold uppercase tracking-widest text-foreground">Company</p>
           <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
             <li><Link to="/about" className="hover:text-foreground">About</Link></li>
             <li><Link to="/blog" className="hover:text-foreground">Blog</Link></li>
@@ -44,7 +44,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-foreground">Legal</h2>
+          <p className="text-xs font-semibold uppercase tracking-widest text-foreground">Legal</p>
           <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
             <li><Link to="/privacy" className="hover:text-foreground">Privacy Policy</Link></li>
             <li><Link to="/terms" className="hover:text-foreground">Terms of Service</Link></li>

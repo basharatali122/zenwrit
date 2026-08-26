@@ -19,9 +19,10 @@ import { Reveal } from "@/components/site/Reveal";
 import { listPublishedPosts } from "@/lib/content.functions";
 import type { BlogPostRecord } from "@/lib/content";
 
-const TITLE = "ZenWrit — Free ATS Resume Checker";
+const TITLE = "Free ATS Resume Checker & AI Scanner (No Signup) | ZenWrit";
 const DESCRIPTION =
-  "The free ATS resume checker that gives you a real score, not a sales pitch. Upload your resume, get 20+ checks, missing keywords, and specific fixes in 30 seconds. No account required.";
+  "Scan your resume for free with ZenWrit. Get an instant 0-100 ATS score, identify missing keywords, and fix formatting errors to land more interviews. No signup, no credit card.";
+
 
 const FAQS = [
   {
@@ -54,13 +55,23 @@ export const Route = createFileRoute("/")({
   loader: async () => ({ posts: await listPublishedPosts() }),
   head: () => ({
     meta: [
-      { title: "Free ATS Resume Checker — Instant Score & Fixes | ZenWrit" },
+      { title: TITLE },
       { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
+      { property: "og:title", content: "Free ATS Resume Checker — Instant Score | ZenWrit" },
+      {
+        property: "og:description",
+        content:
+          "Upload your resume and get a free ATS score in 30 seconds. 20+ checks, missing keywords, specific fixes. No signup needed.",
+      },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://zenwrit.com/" },
+      { property: "og:site_name", content: "ZenWrit" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Free ATS Resume Checker | ZenWrit" },
+      {
+        name: "twitter:description",
+        content: "Free ATS score in 30 seconds. No signup needed.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://zenwrit.com/" }],
     scripts: [
@@ -68,14 +79,42 @@ export const Route = createFileRoute("/")({
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "ZenWrit",
+          url: "https://zenwrit.com",
+          description: "Free ATS resume checker with instant scoring and specific fixes.",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: "https://zenwrit.com/blog?q={search_term_string}",
+            "query-input": "required name=search_term_string",
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
           "@type": "SoftwareApplication",
           name: "ZenWrit ATS Resume Checker",
           applicationCategory: "BusinessApplication",
-          operatingSystem: "Web",
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-          description:
-            "Free ATS resume checker with 20+ checks, keyword analysis, and specific fixes. No signup required.",
+          operatingSystem: "Web Browser",
           url: "https://zenwrit.com",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+            description: "Free, no signup required",
+          },
+          description:
+            "Free ATS resume checker that scores your resume across 20+ checks including keyword matching, formatting, content quality and recruiter red flags.",
+          featureList: [
+            "0-100 ATS compatibility score",
+            "Keyword gap analysis",
+            "20+ resume checks",
+            "No signup required",
+            "PDF and DOCX support",
+            "Results in 30 seconds",
+          ],
         }),
       },
       {
@@ -92,6 +131,7 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
+
   component: Home,
 });
 
@@ -141,13 +181,17 @@ function Home() {
       <section className="border-b border-border bg-surface/40">
         <div className="container-page py-16 text-center sm:py-24">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-accent px-3.5 py-1.5 text-xs font-semibold text-accent-foreground">
-            <Sparkles className="size-3.5" />
+            <Sparkles className="size-3.5" aria-hidden="true" />
             #1 Free ATS Resume Checker — No Signup
           </span>
 
           <h1 className="zw-fade-up mx-auto mt-6 max-w-3xl text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
-            Is your resume getting filtered out before a human sees it?
+            Free ATS Resume Checker &amp; AI Scanner
           </h1>
+
+          <p className="mx-auto mt-5 max-w-2xl text-lg font-semibold text-foreground sm:text-xl">
+            Is your resume getting filtered out before a human sees it?
+          </p>
 
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             Upload your resume and paste the job description. Get a 0–100 ATS score, missing
@@ -157,11 +201,11 @@ function Home() {
 
           <ul className="mx-auto mt-6 flex max-w-xl flex-col items-center gap-2 text-sm font-medium sm:flex-row sm:justify-center sm:gap-6">
             <li className="flex items-center gap-2">
-              <Check className="size-4 text-green-600 dark:text-green-400" />
+              <Check className="size-4 text-green-600 dark:text-green-400" aria-hidden="true" />
               20+ checks across 5 categories
             </li>
             <li className="flex items-center gap-2">
-              <Check className="size-4 text-green-600 dark:text-green-400" />
+              <Check className="size-4 text-green-600 dark:text-green-400" aria-hidden="true" />
               Your resume is never stored or shared
             </li>
           </ul>
@@ -178,7 +222,7 @@ function Home() {
                 key={label}
                 className="flex items-center gap-1.5 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs font-medium text-muted-foreground"
               >
-                <Icon className="size-3.5 text-primary" />
+                <Icon className="size-3.5 text-primary" aria-hidden="true" />
                 {label}
               </li>
             ))}
@@ -228,7 +272,7 @@ function Home() {
             <Reveal key={step.title} delay={index * 90}>
               <div className="surface-panel card-lift h-full p-6">
                 <span className="flex size-11 items-center justify-center rounded-xl bg-accent text-accent-foreground">
-                  <step.icon className="size-5" />
+                  <step.icon className="size-5" aria-hidden="true" />
                 </span>
                 <p className="mt-4 text-xs font-semibold uppercase tracking-widest text-primary">
                   Step {index + 1}
@@ -246,7 +290,7 @@ function Home() {
         <div className="container-page py-16">
           <Reveal>
             <h2 className="text-center text-2xl font-bold sm:text-3xl">
-              Why job seekers choose ZenWrit over paid tools
+              Why job seekers choose ZenWrit
             </h2>
           </Reveal>
           <div className="mt-10 grid gap-5 sm:grid-cols-2">
@@ -254,11 +298,11 @@ function Home() {
               <Reveal key={item.good} delay={index * 80}>
                 <div className="surface-panel card-lift h-full p-6">
                   <p className="flex items-start gap-2.5 text-sm text-muted-foreground line-through decoration-red-500/50">
-                    <X className="mt-0.5 size-4 shrink-0 text-red-500 no-underline" />
+                    <X className="mt-0.5 size-4 shrink-0 text-red-500 no-underline" aria-hidden="true" />
                     <span>{item.bad}</span>
                   </p>
                   <p className="mt-4 flex items-start gap-2.5 text-sm font-semibold">
-                    <Check className="mt-0.5 size-4 shrink-0 text-green-600 dark:text-green-400" />
+                    <Check className="mt-0.5 size-4 shrink-0 text-green-600 dark:text-green-400" aria-hidden="true" />
                     <span>{item.good}</span>
                   </p>
                 </div>
@@ -278,7 +322,9 @@ function Home() {
         <dl className="mx-auto mt-10 max-w-3xl divide-y divide-border rounded-2xl border border-border bg-surface">
           {FAQS.map((faq) => (
             <div key={faq.q} className="p-6">
-              <dt className="text-base font-semibold">{faq.q}</dt>
+              <dt>
+                <h3 className="text-base font-semibold">{faq.q}</h3>
+              </dt>
               <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">{faq.a}</dd>
             </div>
           ))}
@@ -328,7 +374,7 @@ function Home() {
           </p>
           <Button asChild size="lg" className="mt-7 h-14 px-8 text-base">
             <a href="#ats-tool">
-              Check My Resume Now <ArrowRight />
+              Check My Resume Now <ArrowRight aria-hidden="true" />
             </a>
           </Button>
         </div>
