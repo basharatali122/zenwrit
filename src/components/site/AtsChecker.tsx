@@ -89,8 +89,10 @@ const CATEGORY_ICONS: Record<string, typeof Shield> = {
 };
 
 const SHORT_NAMES: Record<string, string> = {
+  "ATS Parsing": "Parsing",
   "ATS Compatibility": "ATS",
   "Content Quality": "Content",
+  "Keyword Match": "Keywords",
   "Keywords & Skills": "Keywords",
   "Structure & Format": "Structure",
   "Recruiter Red Flags": "Red Flags",
@@ -369,7 +371,7 @@ export function AtsChecker() {
       toast.error("Share link isn't available for this report.");
       return;
     }
-    const url = `${window.location.origin}/tools/ats-resume-checker?r=${shareId}`;
+    const url = `${window.location.origin}/check?r=${shareId}`;
     try {
       await navigator.clipboard.writeText(url);
       toast.success("Shareable link copied to clipboard");
@@ -411,7 +413,7 @@ export function AtsChecker() {
     setEmail("");
     if (inputRef.current) inputRef.current.value = "";
     if (window.location.search.includes("r=")) {
-      window.history.replaceState({}, "", "/tools/ats-resume-checker");
+      window.history.replaceState({}, "", window.location.pathname);
     }
   }
 
@@ -640,22 +642,6 @@ export function AtsChecker() {
               </label>
             </>
           )}
-        </section>
-
-        <section className="surface-panel p-6">
-          <h2 className="text-base font-semibold">Now improve your resume:</h2>
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-            <Button asChild>
-              <Link to="/tools/$slug" params={{ slug: "resume-bullet-point-generator" }}>
-                Resume Bullet Point Generator <ArrowRight />
-              </Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link to="/tools/$slug" params={{ slug: "cover-letter-generator" }}>
-                Cover Letter Generator <ArrowRight />
-              </Link>
-            </Button>
-          </div>
         </section>
 
         <div className="flex flex-wrap justify-center gap-3">

@@ -240,8 +240,8 @@ export async function storeReportEmail(params: {
         summary: params.report.summary,
         quickWins: params.report.quick_wins,
         reportUrl: params.shareId
-          ? `https://zenwrit.com/tools/ats-resume-checker?r=${params.shareId}`
-          : "https://zenwrit.com/tools/ats-resume-checker",
+          ? `https://zenwrit.com/check?r=${params.shareId}`
+          : "https://zenwrit.com/check",
       },
     });
   } catch {
