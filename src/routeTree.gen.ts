@@ -18,6 +18,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ResumeScannerRouteImport } from './routes/resume-scanner'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -73,6 +74,11 @@ const DisclaimerRoute = DisclaimerRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResumeScannerRoute = ResumeScannerRouteImport.update({
+  id: '/resume-scanner',
+  path: '/resume-scanner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -142,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
   '/privacy': typeof PrivacyRoute
+  '/resume-scanner': typeof ResumeScannerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
   '/privacy': typeof PrivacyRoute
+  '/resume-scanner': typeof ResumeScannerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -186,6 +194,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
   '/privacy': typeof PrivacyRoute
+  '/resume-scanner': typeof ResumeScannerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/disclaimer'
     | '/privacy'
+    | '/resume-scanner'
     | '/sitemap.xml'
     | '/terms'
     | '/admin/messages'
@@ -231,6 +241,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/disclaimer'
     | '/privacy'
+    | '/resume-scanner'
     | '/sitemap.xml'
     | '/terms'
     | '/admin/messages'
@@ -253,6 +264,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/disclaimer'
     | '/privacy'
+    | '/resume-scanner'
     | '/sitemap.xml'
     | '/terms'
     | '/admin/messages'
@@ -276,6 +288,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   DisclaimerRoute: typeof DisclaimerRoute
   PrivacyRoute: typeof PrivacyRoute
+  ResumeScannerRoute: typeof ResumeScannerRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -348,6 +361,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resume-scanner': {
+      id: '/resume-scanner'
+      path: '/resume-scanner'
+      fullPath: '/resume-scanner'
+      preLoaderRoute: typeof ResumeScannerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -456,6 +476,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   DisclaimerRoute: DisclaimerRoute,
   PrivacyRoute: PrivacyRoute,
+  ResumeScannerRoute: ResumeScannerRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   BlogSlugRoute: BlogSlugRoute,
