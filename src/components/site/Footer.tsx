@@ -31,6 +31,11 @@ export function Footer() {
                 ATS Resume Checker
               </Link>
             </li>
+            <li>
+              <Link to="/resume-scanner" className="hover:text-foreground">
+                Resume Scanner
+              </Link>
+            </li>
           </ul>
         </div>
 

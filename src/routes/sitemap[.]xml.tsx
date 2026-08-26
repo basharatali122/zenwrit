@@ -5,6 +5,7 @@ const BASE_URL = "https://zenwrit.com";
 const STATIC_ENTRIES: { path: string; changefreq: string; priority: string }[] = [
   { path: "/", changefreq: "daily", priority: "1.0" },
   { path: "/check", changefreq: "weekly", priority: "0.9" },
+  { path: "/resume-scanner", changefreq: "weekly", priority: "0.9" },
   { path: "/blog", changefreq: "daily", priority: "0.8" },
   { path: "/about", changefreq: "monthly", priority: "0.5" },
   { path: "/contact", changefreq: "monthly", priority: "0.5" },
