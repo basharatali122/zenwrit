@@ -89,35 +89,59 @@ function BlogPostPage() {
   const { post } = Route.useLoaderData() as { post: BlogPostRecord };
 
   return (
-    <div className="container-page py-12">
+    <div className="container-page py-10 sm:py-14">
       <nav aria-label="Breadcrumb" className="text-xs text-muted-foreground">
         <Link to="/blog" className="hover:text-foreground">Blog</Link>
         <span className="px-1.5">/</span>
         <span className="text-foreground">{post.category}</span>
       </nav>
 
-      <article className="mx-auto mt-5 max-w-2xl">
-        <h1 className="text-3xl font-bold sm:text-4xl">{post.title}</h1>
-        <p className="mt-3 text-sm text-muted-foreground">
-          {post.published_at ? `${new Date(post.published_at).toLocaleDateString()} · ` : ""}
-          {post.reading_time}
-        </p>
+      <article className="mx-auto mt-6 max-w-2xl">
+        <span className="eyebrow">{post.category}</span>
+        <h1 className="mt-3 text-3xl font-bold leading-tight sm:text-[2.6rem]">{post.title}</h1>
+        {post.excerpt ? (
+          <p className="mt-4 text-base leading-relaxed text-muted-foreground">{post.excerpt}</p>
+        ) : null}
+
+        <AuthorByline date={post.published_at} readingTime={post.reading_time} />
 
         {post.cover_image_url ? (
           <img
             src={post.cover_image_url}
             alt={post.title}
-            className="mt-6 aspect-[16/9] w-full rounded-xl border border-border object-cover"
+            className="mt-8 aspect-[16/9] w-full rounded-xl border border-border object-cover"
             loading="lazy"
           />
         ) : null}
 
-      <AdSlot id="ad-slot-1" label="Ad slot 1 — below hero" className="my-8" />
+        <AdSlot id="ad-slot-1" label="Ad slot 1 — below hero" className="my-8" />
 
-        <div className="prose-article">
+        <div className="prose-article mt-8">
           <MarkdownArticle markdown={post.content} />
+        </div>
+
+        <AuthorBio />
+
+        <div className="mt-10 rounded-xl border border-border bg-brand p-6 text-center text-brand-foreground sm:p-8">
+          <h2 className="text-xl font-bold sm:text-2xl">Is your resume ATS-ready?</h2>
+          <p className="mx-auto mt-2 max-w-md text-sm text-brand-foreground/75">
+            Run a free compatibility check — no account, no limits, nothing stored.
+          </p>
+          <Link
+            to="/check"
+            className="mt-5 inline-flex items-center rounded-lg bg-gold px-6 py-3 text-sm font-semibold text-gold-foreground transition-opacity hover:opacity-90"
+          >
+            Check my resume
+          </Link>
+        </div>
+
+        <div className="mt-10 text-sm">
+          <Link to="/blog" className="font-medium text-primary hover:underline">
+            ← Back to all articles
+          </Link>
         </div>
       </article>
     </div>
   );
 }
+
