@@ -35,7 +35,7 @@ export function Header() {
             alt="ZenWrit logo"
             width={32}
             height={32}
-            className="size-8 shrink-0 object-contain"
+            className="size-8 shrink-0 rounded-md object-contain dark:bg-brand-foreground dark:p-0.5"
           />
           ZenWrit
         </Link>
