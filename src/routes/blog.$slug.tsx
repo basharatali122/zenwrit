@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { AdSlot } from "@/components/site/AdSlot";
 import { MarkdownArticle } from "@/components/site/MarkdownArticle";
+import { AuthorBio, AuthorByline } from "@/components/site/AuthorBio";
 import { getPublishedPost } from "@/lib/content.functions";
 import type { BlogPostRecord } from "@/lib/content";
 
