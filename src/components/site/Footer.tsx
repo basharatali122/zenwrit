@@ -9,9 +9,14 @@ export function Footer() {
       <div className="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <Link to="/" className="flex items-center gap-2 font-display text-base font-extrabold">
-            <span className="flex size-7 items-center justify-center rounded-lg bg-gold text-gold-foreground">
-              <FileCheck2 className="size-3.5" aria-hidden="true" />
-            </span>
+            <img
+              src={logo}
+              alt="ZenWrit logo"
+              width={28}
+              height={28}
+              loading="lazy"
+              className="size-7 shrink-0 rounded-md bg-brand-foreground object-contain p-0.5"
+            />
             ZenWrit
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-brand-foreground/75">
