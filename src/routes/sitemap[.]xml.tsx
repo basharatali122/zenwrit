@@ -12,6 +12,8 @@ const STATIC_ENTRIES: { path: string; changefreq: string; priority: string }[] =
   { path: "/privacy", changefreq: "yearly", priority: "0.3" },
   { path: "/terms", changefreq: "yearly", priority: "0.3" },
   { path: "/disclaimer", changefreq: "yearly", priority: "0.3" },
+  { path: "/dmca", changefreq: "yearly", priority: "0.3" },
+  { path: "/editorial-guidelines", changefreq: "yearly", priority: "0.3" },
 ];
 
 export const Route = createFileRoute("/sitemap.xml")({
