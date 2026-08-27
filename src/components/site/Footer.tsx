@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { FileCheck2 } from "lucide-react";
 import { AdSlot } from "./AdSlot";
+import logo from "@/assets/zenwrit-logo.png";
 
 export function Footer() {
   return (
