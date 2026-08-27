@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, Sparkles, X } from "lucide-react";
+import { FileCheck2, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { useAuth } from "@/hooks/useAuth";
@@ -8,8 +8,11 @@ import { useQuery } from "@tanstack/react-query";
 import { checkIsAdmin } from "@/lib/content.functions";
 
 const NAV = [
+  { to: "/check", label: "ATS Checker" },
+  { to: "/resume-scanner", label: "Resume Scanner" },
   { to: "/blog", label: "Blog" },
   { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
 ] as const;
 
 export function Header() {
@@ -25,9 +28,9 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/85 backdrop-blur">
       <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Sparkles className="size-4" />
+        <Link to="/" className="flex items-center gap-2 font-display text-lg font-extrabold tracking-tight">
+          <span className="flex size-8 items-center justify-center rounded-lg bg-brand text-brand-foreground">
+            <FileCheck2 className="size-4" aria-hidden="true" />
           </span>
           ZenWrit
         </Link>
@@ -60,7 +63,7 @@ export function Header() {
                 </Button>
               </>
             ) : null}
-            <Button asChild size="sm">
+            <Button asChild size="sm" className="bg-gold font-semibold text-gold-foreground hover:bg-gold/90">
               <Link to="/check">Check My Resume</Link>
             </Button>
           </div>
@@ -100,7 +103,7 @@ export function Header() {
             <Link
               to="/check"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-md bg-primary px-3 py-2.5 text-center text-sm font-medium text-primary-foreground"
+              className="mt-2 rounded-md bg-gold px-3 py-2.5 text-center text-sm font-semibold text-gold-foreground"
             >
               Check My Resume
             </Link>
