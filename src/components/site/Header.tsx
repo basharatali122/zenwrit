@@ -30,9 +30,13 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/85 backdrop-blur">
       <div className="container-page flex h-16 items-center justify-between gap-4">
         <Link to="/" className="flex items-center gap-2 font-display text-lg font-extrabold tracking-tight">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-brand text-brand-foreground">
-            <FileCheck2 className="size-4" aria-hidden="true" />
-          </span>
+          <img
+            src={logo}
+            alt="ZenWrit logo"
+            width={32}
+            height={32}
+            className="size-8 shrink-0 object-contain"
+          />
           ZenWrit
         </Link>
 
