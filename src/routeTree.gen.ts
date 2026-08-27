@@ -17,6 +17,8 @@ import { Route as CheckRouteImport } from './routes/check'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DisclaimerRouteImport } from './routes/disclaimer'
+import { Route as DmcaRouteImport } from './routes/dmca'
+import { Route as EditorialGuidelinesRouteImport } from './routes/editorial-guidelines'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResumeScannerRouteImport } from './routes/resume-scanner'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -69,6 +71,16 @@ const DashboardRoute = DashboardRouteImport.update({
 const DisclaimerRoute = DisclaimerRouteImport.update({
   id: '/disclaimer',
   path: '/disclaimer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DmcaRoute = DmcaRouteImport.update({
+  id: '/dmca',
+  path: '/dmca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EditorialGuidelinesRoute = EditorialGuidelinesRouteImport.update({
+  id: '/editorial-guidelines',
+  path: '/editorial-guidelines',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -147,6 +159,8 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/dmca': typeof DmcaRoute
+  '/editorial-guidelines': typeof EditorialGuidelinesRoute
   '/privacy': typeof PrivacyRoute
   '/resume-scanner': typeof ResumeScannerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -169,6 +183,8 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/dmca': typeof DmcaRoute
+  '/editorial-guidelines': typeof EditorialGuidelinesRoute
   '/privacy': typeof PrivacyRoute
   '/resume-scanner': typeof ResumeScannerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -193,6 +209,8 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/disclaimer': typeof DisclaimerRoute
+  '/dmca': typeof DmcaRoute
+  '/editorial-guidelines': typeof EditorialGuidelinesRoute
   '/privacy': typeof PrivacyRoute
   '/resume-scanner': typeof ResumeScannerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -218,6 +236,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/disclaimer'
+    | '/dmca'
+    | '/editorial-guidelines'
     | '/privacy'
     | '/resume-scanner'
     | '/sitemap.xml'
@@ -240,6 +260,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/disclaimer'
+    | '/dmca'
+    | '/editorial-guidelines'
     | '/privacy'
     | '/resume-scanner'
     | '/sitemap.xml'
@@ -263,6 +285,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/disclaimer'
+    | '/dmca'
+    | '/editorial-guidelines'
     | '/privacy'
     | '/resume-scanner'
     | '/sitemap.xml'
@@ -287,6 +311,8 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   DisclaimerRoute: typeof DisclaimerRoute
+  DmcaRoute: typeof DmcaRoute
+  EditorialGuidelinesRoute: typeof EditorialGuidelinesRoute
   PrivacyRoute: typeof PrivacyRoute
   ResumeScannerRoute: typeof ResumeScannerRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -354,6 +380,20 @@ declare module '@tanstack/react-router' {
       path: '/disclaimer'
       fullPath: '/disclaimer'
       preLoaderRoute: typeof DisclaimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dmca': {
+      id: '/dmca'
+      path: '/dmca'
+      fullPath: '/dmca'
+      preLoaderRoute: typeof DmcaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/editorial-guidelines': {
+      id: '/editorial-guidelines'
+      path: '/editorial-guidelines'
+      fullPath: '/editorial-guidelines'
+      preLoaderRoute: typeof EditorialGuidelinesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -475,6 +515,8 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   DisclaimerRoute: DisclaimerRoute,
+  DmcaRoute: DmcaRoute,
+  EditorialGuidelinesRoute: EditorialGuidelinesRoute,
   PrivacyRoute: PrivacyRoute,
   ResumeScannerRoute: ResumeScannerRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
