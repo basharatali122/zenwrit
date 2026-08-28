@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      article_ratings: {
+        Row: {
+          created_at: string
+          id: string
+          post_slug: string
+          rating: number
+          user_ip: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_slug: string
+          rating: number
+          user_ip?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_slug?: string
+          rating?: number
+          user_ip?: string
+        }
+        Relationships: []
+      }
       ats_reports: {
         Row: {
           created_at: string
@@ -167,6 +191,30 @@ export type Database = {
           output?: string
           tool_slug?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          email: string
+          id: string
+          is_active: boolean
+          source: string
+          subscribed_at: string
+        }
+        Insert: {
+          email: string
+          id?: string
+          is_active?: boolean
+          source?: string
+          subscribed_at?: string
+        }
+        Update: {
+          email?: string
+          id?: string
+          is_active?: boolean
+          source?: string
+          subscribed_at?: string
         }
         Relationships: []
       }
@@ -394,6 +442,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      article_rating_summary: {
+        Args: { _slug: string }
+        Returns: {
+          avg_rating: number
+          rating_count: number
+        }[]
+      }
       has_active_subscription: {
         Args: { check_env?: string; user_uuid: string }
         Returns: boolean
