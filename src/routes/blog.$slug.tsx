@@ -206,9 +206,9 @@ function BlogPostPage() {
             ) : null}
 
             <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 border-y border-border py-4 text-sm">
-              <img src={logo} alt="" width={36} height={36} className="h-9 w-9 rounded-full bg-surface p-1" />
-              <Link to="/about" className="font-semibold text-foreground hover:text-primary">
-                ZenWrit Editorial Team
+              <img src={SITE_AUTHOR.avatar} alt="" width={36} height={36} className="h-9 w-9 rounded-full bg-surface p-1" />
+              <Link to="/author/editorial-team" className="font-semibold text-foreground hover:text-primary">
+                {SITE_AUTHOR.name}
               </Link>
               <span className="text-muted-foreground">·</span>
               <span className={`rounded-full border px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide ${categoryBadgeClass(post.category)}`}>
