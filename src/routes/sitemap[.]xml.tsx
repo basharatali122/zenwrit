@@ -7,6 +7,7 @@ const STATIC_ENTRIES: { path: string; changefreq: string; priority: string }[] =
   { path: "/check", changefreq: "weekly", priority: "0.9" },
   { path: "/resume-scanner", changefreq: "weekly", priority: "0.9" },
   { path: "/blog", changefreq: "daily", priority: "0.8" },
+  { path: "/author/editorial-team", changefreq: "weekly", priority: "0.5" },
   { path: "/about", changefreq: "monthly", priority: "0.5" },
   { path: "/contact", changefreq: "monthly", priority: "0.5" },
   { path: "/privacy", changefreq: "yearly", priority: "0.3" },
