@@ -442,13 +442,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      article_rating_summary: {
-        Args: { _slug: string }
-        Returns: {
-          avg_rating: number
-          rating_count: number
-        }[]
-      }
       has_active_subscription: {
         Args: { check_env?: string; user_uuid: string }
         Returns: boolean
