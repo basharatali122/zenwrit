@@ -6,18 +6,22 @@ import { AtsChecker } from "@/components/site/AtsChecker";
 const TITLE = "Check Your ATS Resume Score Free — Instant Results | ZenWrit";
 const DESCRIPTION =
   "Upload your resume (PDF or DOCX) and paste a job description. Get a 0-100 ATS compatibility score with 20+ checks and specific fixes in under 30 seconds.";
-
+const OG_IMAGE = "https://zenwrit.com/og-image.png";
 
 export const Route = createFileRoute("/check")({
   head: () => ({
     meta: [
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: "ZenWrit — Free ATS Resume Checker" },
+      { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://zenwrit.com/check" },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [{ rel: "canonical", href: "https://zenwrit.com/check" }],
     scripts: [

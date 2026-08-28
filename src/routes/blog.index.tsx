@@ -5,24 +5,25 @@ import { AUTHOR_NAME } from "@/components/site/AuthorBio";
 import { listPublishedPosts } from "@/lib/content.functions";
 import type { BlogPostRecord } from "@/lib/content";
 
+const TITLE = "Resume & Job Search Advice | ZenWrit Blog";
+const DESCRIPTION = "Practical advice on resumes, ATS optimization, cover letters and job searching. Written for real job seekers, not recruiters.";
+const OG_IMAGE = "https://zenwrit.com/og-image.png";
+
 export const Route = createFileRoute("/blog/")({
   loader: async () => ({ posts: await listPublishedPosts() }),
   head: () => ({
     meta: [
-      { title: "Resume & Job Search Advice | ZenWrit Blog" },
-      {
-        name: "description",
-        content:
-          "Practical advice on resumes, ATS optimization, cover letters and job searching. Written for real job seekers, not recruiters.",
-      },
-      { property: "og:title", content: "Resume & Job Search Advice | ZenWrit Blog" },
-      {
-        property: "og:description",
-        content: "Practical advice on resumes, ATS optimization, cover letters and job searching.",
-      },
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://zenwrit.com/blog" },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [{ rel: "canonical", href: "https://zenwrit.com/blog" }],
   }),

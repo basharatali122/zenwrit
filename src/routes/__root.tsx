@@ -83,20 +83,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "theme-color", content: "#2563eb" },
-      { title: "ZenWrit — Free ATS Resume Checker" },
-      {
-        name: "description",
-        content:
-          "The free ATS resume checker that gives you a real score, not a sales pitch. Upload your resume, get 20+ checks, missing keywords, and specific fixes in 30 seconds. No account required.",
-      },
+      { name: "theme-color", content: "#0f172a" },
       { name: "author", content: "ZenWrit" },
       {
         name: "google-site-verification",
         content: "aENF7cv2YaQFIXv5Xqgbsm1MQe6J_fjPrrX0PimVgho",
       },
       { property: "og:site_name", content: "ZenWrit" },
-      { property: "og:title", content: "ZenWrit — Free ATS Resume Checker" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -110,9 +103,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600&family=Urbanist:wght@600;700;800&display=swap",
       },
-
     ],
-
   }),
   shellComponent: RootShell,
   component: RootComponent,

@@ -6,6 +6,7 @@ import { AtsChecker } from "@/components/site/AtsChecker";
 const TITLE = "Free Resume Scanner — Scan Your Resume Against Any Job | ZenWrit";
 const DESCRIPTION =
   "Scan your resume online for free. ZenWrit's AI resume scanner reads your PDF or DOCX like an ATS does, flags parsing and formatting issues, and lists the keywords you're missing.";
+const OG_IMAGE = "https://zenwrit.com/og-image.png";
 
 const SCANS = [
   {
@@ -58,13 +59,15 @@ export const Route = createFileRoute("/resume-scanner")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: "Free Resume Scanner | ZenWrit" },
+      { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://zenwrit.com/resume-scanner" },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Free Resume Scanner | ZenWrit" },
+      { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [{ rel: "canonical", href: "https://zenwrit.com/resume-scanner" }],
     scripts: [
