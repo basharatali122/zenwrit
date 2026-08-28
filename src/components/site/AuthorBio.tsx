@@ -1,20 +1,19 @@
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/zenwrit-logo.png";
+import { SITE_AUTHOR } from "@/lib/author";
 
-export const AUTHOR_NAME = "ZenWrit Editorial Team";
-export const AUTHOR_ROLE = "Resume & ATS research desk";
-export const AUTHOR_BIO =
-  "We test resumes against real applicant tracking systems — Workday, Greenhouse, Lever, iCIMS and Taleo — and write up what actually changes callbacks. Every article is reviewed for accuracy before it goes live, and our advice is never influenced by advertising.";
+export const AUTHOR_NAME = SITE_AUTHOR.name;
+export const AUTHOR_ROLE = SITE_AUTHOR.role;
+export const AUTHOR_BIO = SITE_AUTHOR.bio;
 
 export function AuthorByline({ date, readingTime }: { date?: string | null; readingTime?: string }) {
   return (
     <div className="mt-5 flex flex-wrap items-center gap-3 border-y border-border py-4">
       <img
-        src={logo}
-        alt=""
+        src={SITE_AUTHOR.avatar}
+        alt={SITE_AUTHOR.name}
         width={36}
         height={36}
-        className="h-9 w-9 rounded-full bg-surface p-1"
+        className="h-9 w-9 rounded-full object-cover"
       />
       <div className="text-sm">
         <p className="font-semibold text-foreground">
@@ -38,11 +37,11 @@ export function AuthorBio() {
       <div className="mt-4 flex flex-col gap-4 sm:flex-row">
         <Link to="/author/basharat-ali" className="shrink-0">
           <img
-            src={logo}
-            alt="ZenWrit editorial team"
+            src={SITE_AUTHOR.avatar}
+            alt={SITE_AUTHOR.name}
             width={64}
             height={64}
-            className="h-16 w-16 rounded-full bg-card p-2"
+            className="h-16 w-16 rounded-full object-cover"
           />
         </Link>
         <div>
@@ -61,7 +60,7 @@ export function AuthorBio() {
               Editorial policy
             </Link>
             <Link to="/contact" className="font-medium text-primary hover:underline">
-              Contact the desk
+              Contact
             </Link>
           </div>
         </div>

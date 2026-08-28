@@ -1,13 +1,13 @@
-import logo from "@/assets/zenwrit-logo.png";
+import avatarAsset from "@/assets/basharat-ali.jpg.asset.json";
 
 export const SITE_AUTHOR = {
-  name: "ZenWrit Editorial Team",
-  slug: "editorial-team",
-  role: "Resume & Career Content Specialists",
-  avatar: logo,
-  bio: "The ZenWrit team has reviewed thousands of resumes and job postings. Our guides are written by practitioners who work with ATS data directly — not journalists summarizing other articles. Every piece we publish is tested against real resumes before it goes live. ZenWrit was built because too many strong candidates get filtered out by systems they do not understand.",
-  profileUrl: "/author/editorial-team",
-  profileUrlAbsolute: "https://zenwrit.com/author/editorial-team",
+  name: "Basharat Ali",
+  slug: "basharat-ali",
+  role: "Software Engineer & Founder of ZenWrit",
+  avatar: avatarAsset.url,
+  bio: "Basharat Ali is a software engineer and the builder behind ZenWrit. He started this project after noticing how many good resumes get rejected by hiring software for reasons no one explains clearly. ZenWrit is his attempt to fix that — a free ATS resume checker and a set of honest, no-fluff guides that show exactly what applicant tracking systems look for and how to fix what is holding your resume back. Every guide on ZenWrit is tested against real ATS behavior before it is published, and no advice here is influenced by advertisers or affiliates.",
+  profileUrl: "/author/basharat-ali",
+  profileUrlAbsolute: "https://zenwrit.com/author/basharat-ali",
 } as const;
 
 /** First two sentences of the bio, for compact author boxes on posts. */
