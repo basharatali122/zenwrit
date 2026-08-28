@@ -1,23 +1,34 @@
-import { AdSlot } from "./AdSlot";
+import { ArticleCta } from "./ArticleCta";
 import { renderMarkdown, splitMarkdownBlocks } from "@/lib/content";
 
 /**
- * Renders admin-authored markdown with the same in-content ad placement
- * the hardcoded articles used (ad slot 2 after the second block).
+ * Renders admin-authored markdown, adding a content-relevant tool CTA
+ * roughly mid-article (after the 4th paragraph).
  */
 export function MarkdownArticle({ markdown }: { markdown: string }) {
   const blocks = splitMarkdownBlocks(markdown);
+  let paragraphCount = 0;
+  let ctaPlaced = false;
 
   return (
     <>
-      {blocks.map((block, index) => (
-        <div key={index}>
-          <div dangerouslySetInnerHTML={{ __html: renderMarkdown(block) }} />
-          {index === 1 ? (
-            <AdSlot id="ad-slot-2" label="Ad slot 2 — in content" variant="inline" className="my-6" />
-          ) : null}
-        </div>
-      ))}
+      {blocks.map((block, index) => {
+        const isParagraph = !/^(#|>|-|\*|\d+\.|```|\||!\[)/.test(block);
+        if (isParagraph) paragraphCount += 1;
+        const isLead = isParagraph && paragraphCount === 1;
+        const showCta = !ctaPlaced && isParagraph && paragraphCount >= 4;
+        if (showCta) ctaPlaced = true;
+
+        return (
+          <div key={index}>
+            <div
+              className={isLead ? "lead-paragraph" : undefined}
+              dangerouslySetInnerHTML={{ __html: renderMarkdown(block) }}
+            />
+            {showCta ? <ArticleCta /> : null}
+          </div>
+        );
+      })}
     </>
   );
 }
