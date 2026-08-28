@@ -11,7 +11,7 @@ const DESCRIPTION =
   "Career and resume content from the ZenWrit team. Practical ATS and job search guides tested against real resumes.";
 const OG_IMAGE = "https://zenwrit.com/og-image.png";
 
-export const Route = createFileRoute("/author/editorial-team")({
+export const Route = createFileRoute("/author/basharat-ali")({
   loader: async () => ({ posts: await listPublishedPosts() }),
   head: () => ({
     meta: [

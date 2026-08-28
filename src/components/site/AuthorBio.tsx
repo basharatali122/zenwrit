@@ -18,7 +18,7 @@ export function AuthorByline({ date, readingTime }: { date?: string | null; read
       />
       <div className="text-sm">
         <p className="font-semibold text-foreground">
-          <Link to="/author/editorial-team" className="hover:text-primary hover:underline">
+          <Link to="/author/basharat-ali" className="hover:text-primary hover:underline">
             {AUTHOR_NAME}
           </Link>
         </p>
@@ -36,7 +36,7 @@ export function AuthorBio() {
     <aside className="mt-12 rounded-xl border border-border bg-surface p-6 sm:p-7">
       <span className="eyebrow">About the author</span>
       <div className="mt-4 flex flex-col gap-4 sm:flex-row">
-        <Link to="/author/editorial-team" className="shrink-0">
+        <Link to="/author/basharat-ali" className="shrink-0">
           <img
             src={logo}
             alt="ZenWrit editorial team"
@@ -47,14 +47,14 @@ export function AuthorBio() {
         </Link>
         <div>
           <p className="text-base font-semibold text-foreground">
-            <Link to="/author/editorial-team" className="hover:text-primary hover:underline">
+            <Link to="/author/basharat-ali" className="hover:text-primary hover:underline">
               {AUTHOR_NAME}
             </Link>
           </p>
           <p className="text-xs uppercase tracking-widest text-muted-foreground">{AUTHOR_ROLE}</p>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{AUTHOR_BIO}</p>
           <div className="mt-4 flex flex-wrap gap-3 text-sm">
-            <Link to="/author/editorial-team" className="font-medium text-primary hover:underline">
+            <Link to="/author/basharat-ali" className="font-medium text-primary hover:underline">
               View author profile
             </Link>
             <Link to="/about" className="font-medium text-primary hover:underline">

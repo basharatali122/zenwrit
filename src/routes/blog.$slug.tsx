@@ -152,7 +152,7 @@ function AuthorCard() {
         <div>
           <p className="text-base font-semibold text-foreground">
             Written by{" "}
-            <Link to="/author/editorial-team" className="text-primary hover:underline">
+            <Link to="/author/basharat-ali" className="text-primary hover:underline">
               {SITE_AUTHOR.name}
             </Link>
           </p>
@@ -207,7 +207,7 @@ function BlogPostPage() {
 
             <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 border-y border-border py-4 text-sm">
               <img src={SITE_AUTHOR.avatar} alt="" width={36} height={36} className="h-9 w-9 rounded-full bg-surface p-1" />
-              <Link to="/author/editorial-team" className="font-semibold text-foreground hover:text-primary">
+              <Link to="/author/basharat-ali" className="font-semibold text-foreground hover:text-primary">
                 {SITE_AUTHOR.name}
               </Link>
               <span className="text-muted-foreground">·</span>
