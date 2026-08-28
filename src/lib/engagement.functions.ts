@@ -52,12 +52,13 @@ export const rateArticle = createServerFn({ method: "POST" })
     SlugSchema.extend({ rating: z.number().int().min(1).max(5) }).parse(input),
   )
   .handler(async ({ data }) => {
-    const { getRequestHeader } = await import("@tanstack/react-start/server");
-    const forwarded = getRequestHeader("x-forwarded-for") ?? "";
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const headers = getRequest().headers;
+    const forwarded = headers.get("x-forwarded-for") ?? "";
     const ip =
       forwarded.split(",")[0]?.trim() ||
-      getRequestHeader("cf-connecting-ip") ||
-      getRequestHeader("x-real-ip") ||
+      headers.get("cf-connecting-ip") ||
+      headers.get("x-real-ip") ||
       "unknown";
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
