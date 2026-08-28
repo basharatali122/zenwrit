@@ -12,9 +12,8 @@ const DESCRIPTION = "Practical advice on resumes, ATS optimization, cover letter
 const OG_IMAGE = "https://zenwrit.com/og-image.png";
 
 export const Route = createFileRoute("/blog/")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    category: typeof search['category'] === "string" ? (search['category'] as string) : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { category?: string } =>
+    typeof search['category'] === "string" ? { category: search['category'] as string } : {},
   loader: async () => ({ posts: await listPublishedPosts() }),
   head: () => ({
     meta: [
@@ -66,7 +65,7 @@ function BlogIndex() {
   const rest = showFeatured ? filtered.slice(1) : filtered;
 
   const setCategory = (category: string) => {
-    void navigate({ search: category === "All" ? {} : { category }, replace: true });
+    void navigate({ search: () => (category === "All" ? {} : { category }), replace: true });
   };
 
   return (
