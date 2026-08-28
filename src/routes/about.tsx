@@ -1,20 +1,24 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AdSlot } from "@/components/site/AdSlot";
 
+const TITLE = "About ZenWrit — Free ATS Resume Checker";
+const DESCRIPTION = "ZenWrit builds one fast, focused tool: a free ATS resume checker for job seekers. No signup, no limits.";
+const OG_IMAGE = "https://zenwrit.com/og-image.png";
+
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About ZenWrit — Small AI Tools, Fairly Priced" },
-      {
-        name: "description",
-        content:
-          "ZenWrit builds one fast, focused tool: a free ATS resume checker for job seekers. No signup, no limits.",
-      },
-      { property: "og:title", content: "About ZenWrit" },
-      { property: "og:description", content: "Why we build one focused, free ATS resume checker instead of a bloated suite." },
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://zenwrit.com/about" },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [{ rel: "canonical", href: "https://zenwrit.com/about" }],
   }),

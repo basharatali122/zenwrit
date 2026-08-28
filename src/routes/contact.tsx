@@ -8,19 +8,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
+const TITLE = "Contact ZenWrit — Support & Feedback";
+const DESCRIPTION = "Questions, feedback or a bug to report? Get in touch with the ZenWrit team behind the free ATS resume checker.";
+const OG_IMAGE = "https://zenwrit.com/og-image.png";
+
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact ZenWrit — Support & Feedback" },
-      {
-        name: "description",
-        content: "Questions, feedback or a bug to report? Get in touch with the ZenWrit team behind the free ATS resume checker.",
-      },
-      { property: "og:title", content: "Contact ZenWrit" },
-      { property: "og:description", content: "Support, billing questions and tool requests." },
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://zenwrit.com/contact" },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [{ rel: "canonical", href: "https://zenwrit.com/contact" }],
   }),

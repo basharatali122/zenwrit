@@ -21,9 +21,10 @@ import { listPublishedPosts } from "@/lib/content.functions";
 import type { BlogPostRecord } from "@/lib/content";
 import heroImage from "@/assets/hero-resume.jpg";
 
-const TITLE = "Free ATS Resume Checker & AI Scanner (No Signup) | ZenWrit";
+const TITLE = "Free ATS Resume Checker — Instant Score & Fixes | ZenWrit";
 const DESCRIPTION =
   "Scan your resume for free with ZenWrit. Get an instant 0-100 ATS score, identify missing keywords, and fix formatting errors to land more interviews. No signup, no credit card.";
+const OG_IMAGE = "https://zenwrit.com/og-image.png";
 
 const FAQS = [
   {
@@ -58,21 +59,16 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: "Free ATS Resume Checker — Instant Score | ZenWrit" },
-      {
-        property: "og:description",
-        content:
-          "Upload your resume and get a free ATS score in 30 seconds. 20+ checks, missing keywords, specific fixes. No signup needed.",
-      },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://zenwrit.com/" },
       { property: "og:site_name", content: "ZenWrit" },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Free ATS Resume Checker | ZenWrit" },
-      {
-        name: "twitter:description",
-        content: "Free ATS score in 30 seconds. No signup needed.",
-      },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [{ rel: "canonical", href: "https://zenwrit.com/" }],
     scripts: [
