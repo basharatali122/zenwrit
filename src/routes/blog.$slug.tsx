@@ -1,30 +1,33 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { AdSlot } from "@/components/site/AdSlot";
 import { MarkdownArticle } from "@/components/site/MarkdownArticle";
-import { AuthorByline } from "@/components/site/AuthorBio";
 import { ReadingProgress } from "@/components/site/ReadingProgress";
 import { ShareButtons } from "@/components/site/ShareButtons";
+import { NewsletterSignup } from "@/components/site/NewsletterSignup";
+import { ArticleRating } from "@/components/site/ArticleRating";
 import { TableOfContentsMobile, TableOfContentsSidebar } from "@/components/site/TableOfContents";
 import { RelatedPosts, pickRelated } from "@/components/site/RelatedPosts";
 import { getPublishedPost, listPublishedPosts } from "@/lib/content.functions";
+import { getArticleRating } from "@/lib/engagement.functions";
 import { categoryBadgeClass, extractHeadings, formatPostDate, readingMinutes } from "@/lib/content";
 import type { BlogPostRecord } from "@/lib/content";
-import logo from "@/assets/zenwrit-logo.png";
+import { SITE_AUTHOR, SITE_AUTHOR_SHORT_BIO } from "@/lib/author";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
-    const [post, all] = await Promise.all([
+    const [post, all, rating] = await Promise.all([
       getPublishedPost({ data: { slug: params.slug } }),
       listPublishedPosts(),
+      getArticleRating({ data: { slug: params.slug } }),
     ]);
     if (!post) throw notFound();
-    return { post, related: pickRelated(all, post) };
+    return { post, related: pickRelated(all, post), rating };
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
       return { meta: [{ title: "Article not found | ZenWrit" }, { name: "robots", content: "noindex" }] };
     }
-    const { post } = loaderData;
+    const { post, rating } = loaderData;
     const title = post.meta_title || `${post.title} | ZenWrit Blog`;
     const description = post.meta_description || post.excerpt;
     const image = post.cover_image_url && /^https?:\/\//.test(post.cover_image_url) ? post.cover_image_url : "https://zenwrit.com/og-image.png";
@@ -32,6 +35,8 @@ export const Route = createFileRoute("/blog/$slug")({
       meta: [
         { title },
         { name: "description", content: description },
+        { name: "author", content: SITE_AUTHOR.name },
+        { property: "article:author", content: SITE_AUTHOR.profileUrlAbsolute },
         { property: "og:title", content: post.title },
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },
@@ -57,7 +62,22 @@ export const Route = createFileRoute("/blog/$slug")({
                   "@type": "WebPage",
                   "@id": `https://zenwrit.com/blog/${post.slug}`,
                 },
-                author: { "@type": "Organization", name: "ZenWrit", url: "https://zenwrit.com" },
+                author: {
+                  "@type": "Organization",
+                  name: SITE_AUTHOR.name,
+                  url: SITE_AUTHOR.profileUrlAbsolute,
+                },
+                ...(rating && rating.count > 0
+                  ? {
+                      aggregateRating: {
+                        "@type": "AggregateRating",
+                        ratingValue: String(rating.average),
+                        ratingCount: String(rating.count),
+                        bestRating: "5",
+                        worstRating: "1",
+                      },
+                    }
+                  : {}),
                 publisher: {
                   "@type": "Organization",
                   name: "ZenWrit",
@@ -122,13 +142,22 @@ function AuthorCard() {
   return (
     <aside className="mt-12 rounded-xl border border-border bg-surface p-6 sm:p-7">
       <div className="flex flex-col gap-4 sm:flex-row">
-        <img src={logo} alt="ZenWrit Editorial Team" width={48} height={48} className="h-12 w-12 shrink-0 rounded-full bg-card p-1.5" />
+        <img
+          src={SITE_AUTHOR.avatar}
+          alt={`${SITE_AUTHOR.name} avatar`}
+          width={56}
+          height={56}
+          className="h-14 w-14 shrink-0 rounded-full bg-card p-1.5"
+        />
         <div>
-          <p className="text-base font-semibold text-foreground">Written by ZenWrit Editorial Team</p>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            The ZenWrit team reviews hundreds of resumes and job postings every month. Our guides are written to
-            give job seekers practical, testable advice — not generic tips recycled from other career blogs.
+          <p className="text-base font-semibold text-foreground">
+            Written by{" "}
+            <Link to="/author/editorial-team" className="text-primary hover:underline">
+              {SITE_AUTHOR.name}
+            </Link>
           </p>
+          <p className="text-xs uppercase tracking-widest text-muted-foreground">{SITE_AUTHOR.role}</p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{SITE_AUTHOR_SHORT_BIO}</p>
           <Link
             to="/"
             className="mt-4 inline-flex items-center rounded-lg bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground transition-opacity hover:opacity-90"
@@ -142,7 +171,11 @@ function AuthorCard() {
 }
 
 function BlogPostPage() {
-  const { post, related } = Route.useLoaderData() as { post: BlogPostRecord; related: BlogPostRecord[] };
+  const { post, related, rating } = Route.useLoaderData() as {
+    post: BlogPostRecord;
+    related: BlogPostRecord[];
+    rating: { average: number; count: number };
+  };
   const headings = extractHeadings(post.content);
   const url = `https://zenwrit.com/blog/${post.slug}`;
   const readTime = post.reading_time || readingMinutes(post.content);
@@ -173,9 +206,9 @@ function BlogPostPage() {
             ) : null}
 
             <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 border-y border-border py-4 text-sm">
-              <img src={logo} alt="" width={36} height={36} className="h-9 w-9 rounded-full bg-surface p-1" />
-              <Link to="/about" className="font-semibold text-foreground hover:text-primary">
-                ZenWrit Editorial Team
+              <img src={SITE_AUTHOR.avatar} alt="" width={36} height={36} className="h-9 w-9 rounded-full bg-surface p-1" />
+              <Link to="/author/editorial-team" className="font-semibold text-foreground hover:text-primary">
+                {SITE_AUTHOR.name}
               </Link>
               <span className="text-muted-foreground">·</span>
               <span className={`rounded-full border px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide ${categoryBadgeClass(post.category)}`}>
@@ -203,6 +236,14 @@ function BlogPostPage() {
               heading="Found this helpful? Share it:"
               className="mt-10 border-t border-border pt-6"
             />
+
+            <ArticleRating
+              slug={post.slug}
+              initialAverage={rating?.average ?? 0}
+              initialCount={rating?.count ?? 0}
+            />
+
+            <NewsletterSignup source="blog_post" className="mt-8" />
 
             <AuthorCard />
             <RelatedPosts posts={related} />
