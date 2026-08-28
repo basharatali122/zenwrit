@@ -1,14 +1,17 @@
 import { ArticleCta } from "./ArticleCta";
-import { renderMarkdown, splitMarkdownBlocks } from "@/lib/content";
+import { KeyTakeaways } from "./KeyTakeaways";
+import { extractHeadings, renderMarkdown, splitMarkdownBlocks } from "@/lib/content";
 
 /**
- * Renders admin-authored markdown, adding a content-relevant tool CTA
- * roughly mid-article (after the 4th paragraph).
+ * Renders admin-authored markdown, adding a Key Takeaways box after the first
+ * paragraph and a content-relevant tool CTA roughly mid-article.
  */
 export function MarkdownArticle({ markdown }: { markdown: string }) {
   const blocks = splitMarkdownBlocks(markdown);
+  const headings = extractHeadings(markdown);
   let paragraphCount = 0;
   let ctaPlaced = false;
+  let takeawaysPlaced = false;
 
   return (
     <>
@@ -16,6 +19,8 @@ export function MarkdownArticle({ markdown }: { markdown: string }) {
         const isParagraph = !/^(#|>|-|\*|\d+\.|```|\||!\[)/.test(block);
         if (isParagraph) paragraphCount += 1;
         const isLead = isParagraph && paragraphCount === 1;
+        const showTakeaways = !takeawaysPlaced && isLead;
+        if (showTakeaways) takeawaysPlaced = true;
         const showCta = !ctaPlaced && isParagraph && paragraphCount >= 4;
         if (showCta) ctaPlaced = true;
 
@@ -25,6 +30,7 @@ export function MarkdownArticle({ markdown }: { markdown: string }) {
               className={isLead ? "lead-paragraph" : undefined}
               dangerouslySetInnerHTML={{ __html: renderMarkdown(block) }}
             />
+            {showTakeaways ? <KeyTakeaways points={headings} /> : null}
             {showCta ? <ArticleCta /> : null}
           </div>
         );
