@@ -142,13 +142,22 @@ function AuthorCard() {
   return (
     <aside className="mt-12 rounded-xl border border-border bg-surface p-6 sm:p-7">
       <div className="flex flex-col gap-4 sm:flex-row">
-        <img src={logo} alt="ZenWrit Editorial Team" width={48} height={48} className="h-12 w-12 shrink-0 rounded-full bg-card p-1.5" />
+        <img
+          src={SITE_AUTHOR.avatar}
+          alt={`${SITE_AUTHOR.name} avatar`}
+          width={56}
+          height={56}
+          className="h-14 w-14 shrink-0 rounded-full bg-card p-1.5"
+        />
         <div>
-          <p className="text-base font-semibold text-foreground">Written by ZenWrit Editorial Team</p>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            The ZenWrit team reviews hundreds of resumes and job postings every month. Our guides are written to
-            give job seekers practical, testable advice — not generic tips recycled from other career blogs.
+          <p className="text-base font-semibold text-foreground">
+            Written by{" "}
+            <Link to="/author/editorial-team" className="text-primary hover:underline">
+              {SITE_AUTHOR.name}
+            </Link>
           </p>
+          <p className="text-xs uppercase tracking-widest text-muted-foreground">{SITE_AUTHOR.role}</p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{SITE_AUTHOR_SHORT_BIO}</p>
           <Link
             to="/"
             className="mt-4 inline-flex items-center rounded-lg bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground transition-opacity hover:opacity-90"
@@ -162,7 +171,11 @@ function AuthorCard() {
 }
 
 function BlogPostPage() {
-  const { post, related } = Route.useLoaderData() as { post: BlogPostRecord; related: BlogPostRecord[] };
+  const { post, related, rating } = Route.useLoaderData() as {
+    post: BlogPostRecord;
+    related: BlogPostRecord[];
+    rating: { average: number; count: number };
+  };
   const headings = extractHeadings(post.content);
   const url = `https://zenwrit.com/blog/${post.slug}`;
   const readTime = post.reading_time || readingMinutes(post.content);
