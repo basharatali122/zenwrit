@@ -158,7 +158,11 @@ function BlogIndex() {
                 <h2 className="mt-3 text-2xl font-bold leading-snug sm:text-3xl">{featured.title}</h2>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{featured.excerpt}</p>
                 <p className="mt-5 text-xs text-muted-foreground">
-                  {AUTHOR_NAME} · {formatPostDate(featured.published_at)} · {featured.reading_time}
+                  <Link to="/author/editorial-team" className="font-medium hover:text-primary hover:underline">
+                    {AUTHOR_NAME}
+                  </Link>
+                  {" · "}
+                  {formatPostDate(featured.published_at)} · {featured.reading_time}
                 </p>
                 <span className="mt-5 text-sm font-semibold text-primary">Read the guide →</span>
               </div>

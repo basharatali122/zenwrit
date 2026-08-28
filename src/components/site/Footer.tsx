@@ -5,6 +5,7 @@ import logo from "@/assets/zenwrit-logo.png";
 
 const usefulLinks = [
   { to: "/about", label: "About Us" },
+  { to: "/author/editorial-team", label: "Our Editorial Team" },
   { to: "/contact", label: "Contact Us" },
   { to: "/privacy", label: "Privacy Policy" },
   { to: "/blog", label: "Blog" },

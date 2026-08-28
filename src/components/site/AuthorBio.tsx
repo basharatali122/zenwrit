@@ -17,7 +17,11 @@ export function AuthorByline({ date, readingTime }: { date?: string | null; read
         className="h-9 w-9 rounded-full bg-surface p-1"
       />
       <div className="text-sm">
-        <p className="font-semibold text-foreground">{AUTHOR_NAME}</p>
+        <p className="font-semibold text-foreground">
+          <Link to="/author/editorial-team" className="hover:text-primary hover:underline">
+            {AUTHOR_NAME}
+          </Link>
+        </p>
         <p className="text-xs text-muted-foreground">
           {date ? `${new Date(date).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}` : "Updated regularly"}
           {readingTime ? ` · ${readingTime}` : ""}
@@ -32,18 +36,27 @@ export function AuthorBio() {
     <aside className="mt-12 rounded-xl border border-border bg-surface p-6 sm:p-7">
       <span className="eyebrow">About the author</span>
       <div className="mt-4 flex flex-col gap-4 sm:flex-row">
-        <img
-          src={logo}
-          alt="ZenWrit editorial team"
-          width={64}
-          height={64}
-          className="h-16 w-16 shrink-0 rounded-full bg-card p-2"
-        />
+        <Link to="/author/editorial-team" className="shrink-0">
+          <img
+            src={logo}
+            alt="ZenWrit editorial team"
+            width={64}
+            height={64}
+            className="h-16 w-16 rounded-full bg-card p-2"
+          />
+        </Link>
         <div>
-          <p className="text-base font-semibold text-foreground">{AUTHOR_NAME}</p>
+          <p className="text-base font-semibold text-foreground">
+            <Link to="/author/editorial-team" className="hover:text-primary hover:underline">
+              {AUTHOR_NAME}
+            </Link>
+          </p>
           <p className="text-xs uppercase tracking-widest text-muted-foreground">{AUTHOR_ROLE}</p>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{AUTHOR_BIO}</p>
           <div className="mt-4 flex flex-wrap gap-3 text-sm">
+            <Link to="/author/editorial-team" className="font-medium text-primary hover:underline">
+              View author profile
+            </Link>
             <Link to="/about" className="font-medium text-primary hover:underline">
               Editorial policy
             </Link>
