@@ -95,7 +95,7 @@ export function extractHeadings(markdown: string): { id: string; text: string }[
   for (const line of markdown.split("\n")) {
     const match = /^##\s+(.+?)\s*$/.exec(line);
     if (!match) continue;
-    const text = match[1].replace(/[*_`]/g, "").trim();
+    const text = (match[1] ?? "").replace(/[*_`]/g, "").trim();
     out.push({ id: slugify(text), text });
   }
   return out;
@@ -123,7 +123,7 @@ const CATEGORY_BADGES = [
 export function categoryBadgeClass(category: string): string {
   let hash = 0;
   for (let i = 0; i < category.length; i += 1) hash = (hash * 31 + category.charCodeAt(i)) >>> 0;
-  return CATEGORY_BADGES[hash % CATEGORY_BADGES.length];
+  return CATEGORY_BADGES[hash % CATEGORY_BADGES.length]!;
 }
 
 export function formatPostDate(value?: string | null): string {
