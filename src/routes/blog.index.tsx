@@ -36,7 +36,6 @@ export const Route = createFileRoute("/blog/")({
   component: BlogIndex,
 });
 
-function BlogIndex() {
 function PostCard({ post }: { post: BlogPostRecord }) {
   return (
     <li>
