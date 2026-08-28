@@ -237,6 +237,14 @@ function BlogPostPage() {
               className="mt-10 border-t border-border pt-6"
             />
 
+            <ArticleRating
+              slug={post.slug}
+              initialAverage={rating?.average ?? 0}
+              initialCount={rating?.count ?? 0}
+            />
+
+            <NewsletterSignup source="blog_post" className="mt-8" />
+
             <AuthorCard />
             <RelatedPosts posts={related} />
 
