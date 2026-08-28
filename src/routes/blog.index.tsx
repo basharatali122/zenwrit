@@ -145,31 +145,26 @@ function BlogIndex() {
         {rest.length === 0 ? (
           <p className="mt-8 text-sm text-muted-foreground">No articles match your search yet.</p>
         ) : (
-          <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {rest.map((post) => (
-              <li key={post.slug}>
-                <Link
-                  to="/blog/$slug"
-                  params={{ slug: post.slug }}
-                  className="card-lift flex h-full flex-col overflow-hidden surface-panel p-0"
-                >
-                  <BlogCover src={post.cover_image_url} title={post.title} category={post.category} />
-                  <div className="flex flex-1 flex-col p-5">
-                    <span className={`w-fit rounded-full border px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide ${categoryBadgeClass(post.category)}`}>
-                      {post.category}
-                    </span>
-                    <h3 className="mt-3 text-lg font-bold leading-snug">{post.title}</h3>
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                    <p className="mt-4 border-t border-border pt-3 text-xs text-muted-foreground">
-                      {formatPostDate(post.published_at)} · {post.reading_time}
-                    </p>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {rest.slice(0, 3).map((post) => (
+                <PostCard key={post.slug} post={post} />
+              ))}
+            </ul>
+
+            {rest.length > 3 ? (
+              <>
+                <NewsletterSignup source="blog_listing" compact className="mt-10" />
+                <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {rest.slice(3).map((post) => (
+                    <PostCard key={post.slug} post={post} />
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <NewsletterSignup source="blog_listing" compact className="mt-10" />
+            )}
+          </>
         )}
 
         <section className="mt-16 rounded-xl border border-border bg-surface p-6 text-center sm:p-10">
