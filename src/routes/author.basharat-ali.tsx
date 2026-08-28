@@ -6,9 +6,9 @@ import { categoryBadgeClass, formatPostDate } from "@/lib/content";
 import type { BlogPostRecord } from "@/lib/content";
 import { SITE_AUTHOR } from "@/lib/author";
 
-const TITLE = "ZenWrit Editorial Team — Resume & Career Specialists";
+const TITLE = "Basharat Ali — Software Engineer & Founder of ZenWrit";
 const DESCRIPTION =
-  "Career and resume content from the ZenWrit team. Practical ATS and job search guides tested against real resumes.";
+  "Basharat Ali is a software engineer and the builder behind ZenWrit. He writes practical ATS and job search guides tested against real resumes.";
 const OG_IMAGE = "https://zenwrit.com/og-image.png";
 
 export const Route = createFileRoute("/author/basharat-ali")({
@@ -51,7 +51,7 @@ function AuthorPage() {
           alt={`${SITE_AUTHOR.name} avatar`}
           width={80}
           height={80}
-          className="mx-auto h-20 w-20 rounded-full bg-surface p-2"
+          className="mx-auto h-20 w-20 rounded-full object-cover ring-2 ring-gold/40"
         />
         <h1 className="mt-5 text-3xl font-bold sm:text-4xl">{SITE_AUTHOR.name}</h1>
         <span className="mt-3 inline-block rounded-full border border-gold/40 bg-gold/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-gold-foreground dark:text-gold">
