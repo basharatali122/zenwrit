@@ -25,7 +25,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
-import { Route as AuthorEditorialTeamRouteImport } from './routes/author.editorial-team'
+import { Route as AuthorBasharatAliRouteImport } from './routes/author.basharat-ali'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
@@ -114,9 +114,9 @@ const AdminMessagesRoute = AdminMessagesRouteImport.update({
   path: '/messages',
   getParentRoute: () => AdminRoute,
 } as any)
-const AuthorEditorialTeamRoute = AuthorEditorialTeamRouteImport.update({
-  id: '/author/editorial-team',
-  path: '/author/editorial-team',
+const AuthorBasharatAliRoute = AuthorBasharatAliRouteImport.update({
+  id: '/author/basharat-ali',
+  path: '/author/basharat-ali',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -172,7 +172,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/admin/messages': typeof AdminMessagesRoute
-  '/author/editorial-team': typeof AuthorEditorialTeamRoute
+  '/author/basharat-ali': typeof AuthorBasharatAliRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -197,7 +197,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/admin/messages': typeof AdminMessagesRoute
-  '/author/editorial-team': typeof AuthorEditorialTeamRoute
+  '/author/basharat-ali': typeof AuthorBasharatAliRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
@@ -224,7 +224,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/admin/messages': typeof AdminMessagesRoute
-  '/author/editorial-team': typeof AuthorEditorialTeamRoute
+  '/author/basharat-ali': typeof AuthorBasharatAliRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -252,7 +252,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/admin/messages'
-    | '/author/editorial-team'
+    | '/author/basharat-ali'
     | '/blog/$slug'
     | '/admin/'
     | '/blog/'
@@ -277,7 +277,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/admin/messages'
-    | '/author/editorial-team'
+    | '/author/basharat-ali'
     | '/blog/$slug'
     | '/admin'
     | '/blog'
@@ -303,7 +303,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/admin/messages'
-    | '/author/editorial-team'
+    | '/author/basharat-ali'
     | '/blog/$slug'
     | '/admin/'
     | '/blog/'
@@ -329,7 +329,7 @@ export interface RootRouteChildren {
   ResumeScannerRoute: typeof ResumeScannerRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
-  AuthorEditorialTeamRoute: typeof AuthorEditorialTeamRoute
+  AuthorBasharatAliRoute: typeof AuthorBasharatAliRoute
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
@@ -451,11 +451,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMessagesRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/author/editorial-team': {
-      id: '/author/editorial-team'
-      path: '/author/editorial-team'
-      fullPath: '/author/editorial-team'
-      preLoaderRoute: typeof AuthorEditorialTeamRouteImport
+    '/author/basharat-ali': {
+      id: '/author/basharat-ali'
+      path: '/author/basharat-ali'
+      fullPath: '/author/basharat-ali'
+      preLoaderRoute: typeof AuthorBasharatAliRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -541,7 +541,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResumeScannerRoute: ResumeScannerRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
-  AuthorEditorialTeamRoute: AuthorEditorialTeamRoute,
+  AuthorBasharatAliRoute: AuthorBasharatAliRoute,
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,

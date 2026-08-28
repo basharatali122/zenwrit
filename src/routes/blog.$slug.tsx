@@ -63,7 +63,7 @@ export const Route = createFileRoute("/blog/$slug")({
                   "@id": `https://zenwrit.com/blog/${post.slug}`,
                 },
                 author: {
-                  "@type": "Organization",
+                  "@type": "Person",
                   name: SITE_AUTHOR.name,
                   url: SITE_AUTHOR.profileUrlAbsolute,
                 },
@@ -147,12 +147,12 @@ function AuthorCard() {
           alt={`${SITE_AUTHOR.name} avatar`}
           width={56}
           height={56}
-          className="h-14 w-14 shrink-0 rounded-full bg-card p-1.5"
+          className="h-14 w-14 shrink-0 rounded-full object-cover"
         />
         <div>
           <p className="text-base font-semibold text-foreground">
             Written by{" "}
-            <Link to="/author/editorial-team" className="text-primary hover:underline">
+            <Link to="/author/basharat-ali" className="text-primary hover:underline">
               {SITE_AUTHOR.name}
             </Link>
           </p>
@@ -206,8 +206,8 @@ function BlogPostPage() {
             ) : null}
 
             <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 border-y border-border py-4 text-sm">
-              <img src={SITE_AUTHOR.avatar} alt="" width={36} height={36} className="h-9 w-9 rounded-full bg-surface p-1" />
-              <Link to="/author/editorial-team" className="font-semibold text-foreground hover:text-primary">
+              <img src={SITE_AUTHOR.avatar} alt={SITE_AUTHOR.name} width={36} height={36} className="h-9 w-9 rounded-full object-cover" />
+              <Link to="/author/basharat-ali" className="font-semibold text-foreground hover:text-primary">
                 {SITE_AUTHOR.name}
               </Link>
               <span className="text-muted-foreground">·</span>

@@ -106,7 +106,7 @@ function BlogIndex() {
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-brand-foreground/75 sm:text-base">
             Tested advice on applicant tracking systems, resume formatting and interviews — researched and
             fact-checked by the{" "}
-            <Link to="/author/editorial-team" className="font-semibold text-gold hover:underline">
+            <Link to="/author/basharat-ali" className="font-semibold text-gold hover:underline">
               {AUTHOR_NAME}
             </Link>
             .
@@ -162,7 +162,7 @@ function BlogIndex() {
                 <h2 className="mt-3 text-2xl font-bold leading-snug sm:text-3xl">{featured.title}</h2>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{featured.excerpt}</p>
                 <p className="mt-5 text-xs text-muted-foreground">
-                  <Link to="/author/editorial-team" className="font-medium hover:text-primary hover:underline">
+                  <Link to="/author/basharat-ali" className="font-medium hover:text-primary hover:underline">
                     {AUTHOR_NAME}
                   </Link>
                   {" · "}
