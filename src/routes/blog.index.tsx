@@ -105,7 +105,11 @@ function BlogIndex() {
           <h1 className="mt-3 text-4xl font-bold sm:text-5xl">Resume &amp; job search guides</h1>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-brand-foreground/75 sm:text-base">
             Tested advice on applicant tracking systems, resume formatting and interviews — researched and
-            fact-checked by the {AUTHOR_NAME}.
+            fact-checked by the{" "}
+            <Link to="/author/editorial-team" className="font-semibold text-gold hover:underline">
+              {AUTHOR_NAME}
+            </Link>
+            .
           </p>
         </div>
       </header>
@@ -158,7 +162,11 @@ function BlogIndex() {
                 <h2 className="mt-3 text-2xl font-bold leading-snug sm:text-3xl">{featured.title}</h2>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{featured.excerpt}</p>
                 <p className="mt-5 text-xs text-muted-foreground">
-                  {AUTHOR_NAME} · {formatPostDate(featured.published_at)} · {featured.reading_time}
+                  <Link to="/author/editorial-team" className="font-medium hover:text-primary hover:underline">
+                    {AUTHOR_NAME}
+                  </Link>
+                  {" · "}
+                  {formatPostDate(featured.published_at)} · {featured.reading_time}
                 </p>
                 <span className="mt-5 text-sm font-semibold text-primary">Read the guide →</span>
               </div>
