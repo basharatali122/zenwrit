@@ -318,7 +318,103 @@
     border-radius: var(--radius-lg);
     margin: 1.5rem 0;
   }
+
+  /* Stat callout: > [!stat] ... */
+  & .zw-stat {
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-gold);
+    background-color: color-mix(in oklch, var(--color-gold) 8%, var(--color-surface));
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    padding: 1.15rem 1.35rem;
+    margin: 1.75rem 0;
+  }
+
+  & .zw-stat p {
+    margin-bottom: 0.5rem;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    font-weight: 700;
+    color: var(--color-foreground);
+  }
+
+  & .zw-stat p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Pull quote: > [!quote] ... */
+  & blockquote.zw-pullquote {
+    border-left: 4px solid var(--color-gold);
+    background-color: transparent;
+    border-radius: 0;
+    margin: 2rem 0 2rem 1.25rem;
+    padding: 0.35rem 0 0.35rem 1.35rem;
+    font-style: normal;
+  }
+
+  & blockquote.zw-pullquote p {
+    font-size: 1.3rem;
+    line-height: 1.55;
+    font-weight: 600;
+    color: var(--color-foreground);
+    margin-bottom: 0.5rem;
+  }
+
+  & .zw-pullquote-cite {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+
+  /* Step cards: [!steps] above a list */
+  & .zw-steps {
+    list-style: none;
+    counter-reset: zw-step;
+    padding-left: 0;
+    margin: 1.75rem 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  & .zw-steps li {
+    counter-increment: zw-step;
+    position: relative;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.15rem 1rem 3.4rem;
+    margin-bottom: 0;
+    color: var(--color-muted-foreground);
+  }
+
+  & .zw-steps li::before {
+    content: counter(zw-step);
+    position: absolute;
+    left: 1rem;
+    top: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    background-color: var(--color-gold);
+    color: var(--color-gold-foreground);
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  & .zw-steps li p {
+    margin-bottom: 0.35rem;
+  }
+
+  & .zw-steps li p:last-child {
+    margin-bottom: 0;
+  }
 }
+
 
 @utility hero-glow {
   background-image:
