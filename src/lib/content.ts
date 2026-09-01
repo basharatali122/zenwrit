@@ -83,11 +83,41 @@ function stripTags(input: string): string {
 /** Renders admin-authored markdown to HTML for the shared `.prose-article` styles. */
 export function renderMarkdown(markdown: string): string {
   const html = marked.parse(markdown, { async: false, gfm: true, breaks: false }) as string;
-  return html
-    .replace(STRIP_UNSAFE, "")
-    .replace(/\son\w+="[^"]*"/gi, "")
-    .replace(/<h2>([\s\S]*?)<\/h2>/g, (_m, inner: string) => `<h2 id="${slugify(stripTags(inner))}">${inner}</h2>`);
+  return applyShortcodes(
+    html
+      .replace(STRIP_UNSAFE, "")
+      .replace(/\son\w+="[^"]*"/gi, "")
+      .replace(/<h2>([\s\S]*?)<\/h2>/g, (_m, inner: string) => `<h2 id="${slugify(stripTags(inner))}">${inner}</h2>`),
+  );
 }
+
+/**
+ * Editorial shortcodes authors can type while writing markdown:
+ *  - `> [!stat] …`  → Stat Callout box
+ *  - `> [!quote] …` → Pull quote (optional `— Source` line becomes the citation)
+ *  - `[!steps]` on the line right above a numbered/bulleted list → step cards
+ */
+function applyShortcodes(html: string): string {
+  return html
+    .replace(/<blockquote>\s*([\s\S]*?)\s*<\/blockquote>/g, (match, inner: string) => {
+      const stat = /^<p>\s*\[!stat\]\s*/i.exec(inner);
+      if (stat) {
+        return `<div class="zw-stat">${inner.replace(/^<p>\s*\[!stat\]\s*/i, "<p>")}</div>`;
+      }
+      const quote = /^<p>\s*\[!quote\]\s*/i.exec(inner);
+      if (quote) {
+        const body = inner.replace(/^<p>\s*\[!quote\]\s*/i, "<p>");
+        const cited = body.replace(
+          /<p>\s*(?:—|--|&mdash;)\s*([\s\S]*?)<\/p>\s*$/,
+          (_m, cite: string) => `<footer class="zw-pullquote-cite">— ${cite}</footer>`,
+        );
+        return `<blockquote class="zw-pullquote">${cited}</blockquote>`;
+      }
+      return match;
+    })
+    .replace(/<p>\s*\[!steps\]\s*<\/p>\s*<(ol|ul)([^>]*)>/gi, (_m, tag: string, attrs: string) => `<${tag}${attrs} class="zw-steps">`);
+}
+
 
 /** Top-level H2 headings of a markdown document, for the table of contents. */
 export function extractHeadings(markdown: string): { id: string; text: string }[] {
