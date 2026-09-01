@@ -406,6 +406,12 @@
     line-height: 1;
   }
 
+  & .zw-steps li > strong:first-child {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--color-foreground);
+  }
+
   & .zw-steps li p {
     margin-bottom: 0.35rem;
   }

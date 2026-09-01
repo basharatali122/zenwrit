@@ -107,10 +107,15 @@ function applyShortcodes(html: string): string {
       const quote = /^<p>\s*\[!quote\]\s*/i.exec(inner);
       if (quote) {
         const body = inner.replace(/^<p>\s*\[!quote\]\s*/i, "<p>");
-        const cited = body.replace(
-          /<p>\s*(?:—|--|&mdash;)\s*([\s\S]*?)<\/p>\s*$/,
-          (_m, cite: string) => `<footer class="zw-pullquote-cite">— ${cite}</footer>`,
-        );
+        const cited = body
+          .replace(
+            /\n\s*(?:—|--|&mdash;)\s*([^<\n]+?)\s*<\/p>/,
+            (_m, cite: string) => `</p><footer class="zw-pullquote-cite">— ${cite}</footer>`,
+          )
+          .replace(
+            /<p>\s*(?:—|--|&mdash;)\s*([\s\S]*?)<\/p>\s*$/,
+            (_m, cite: string) => `<footer class="zw-pullquote-cite">— ${cite}</footer>`,
+          );
         return `<blockquote class="zw-pullquote">${cited}</blockquote>`;
       }
       return match;
