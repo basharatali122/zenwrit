@@ -17,7 +17,9 @@ export const Route = createFileRoute("/dmca")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { property: "og:url", content: "https://zenwrit.com/dmca" },
     ],
+    links: [{ rel: "canonical", href: "https://zenwrit.com/dmca" }],
   }),
   component: () => (
     <LegalPage
@@ -27,7 +29,7 @@ export const Route = createFileRoute("/dmca")({
         {
           heading: "Our commitment",
           paragraphs: [
-            "ZenWrit, operated by SaaScript, respects the intellectual property rights of others and expects our users to do the same. We respond to notices of alleged copyright infringement that comply with the Digital Millennium Copyright Act (DMCA) and other applicable laws.",
+            "ZenWrit respects the intellectual property rights of others and expects our users to do the same. We respond to notices of alleged copyright infringement that comply with the Digital Millennium Copyright Act (DMCA) and other applicable laws.",
           ],
         },
         {
@@ -51,7 +53,7 @@ export const Route = createFileRoute("/dmca")({
         {
           heading: "Counter-notification",
           paragraphs: [
-            "If you believe material was removed by mistake or misidentification, you may send a counter-notification to support@zenwrit.app that includes your signature, identification of the removed material and where it appeared, a statement under penalty of perjury that you have a good-faith belief the removal was a mistake, and your consent to the jurisdiction of the courts where SaaScript is established.",
+            "If you believe material was removed by mistake or misidentification, you may send a counter-notification to support@zenwrit.app that includes your signature, identification of the removed material and where it appeared, a statement under penalty of perjury that you have a good-faith belief the removal was a mistake, and your consent to the jurisdiction of the courts where ZenWrit is established.",
             "Where a valid counter-notification is received, we may restore the material after 10–14 business days unless the original complainant files a court action.",
           ],
         },

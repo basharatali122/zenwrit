@@ -25,7 +25,7 @@ export function AtsReportEmail({
   scoreLabel = 'Good',
   summary = 'Your resume is readable by most ATS parsers but is missing measurable results.',
   quickWins = [],
-  reportUrl = 'https://zenwrit.com/tools/ats-resume-checker',
+  reportUrl = 'https://zenwrit.com/check',
 }: AtsReportProps) {
   return (
     <Html>
@@ -77,6 +77,6 @@ export const template = {
     scoreLabel: 'Good',
     summary: 'Your resume is readable by most ATS parsers but is missing measurable results.',
     quickWins: ['Add metrics to your top 3 bullets', 'Add a skills section', 'Shorten bullets to 2 lines'],
-    reportUrl: 'https://zenwrit.com/tools/ats-resume-checker',
+    reportUrl: 'https://zenwrit.com/check',
   },
 } satisfies TemplateEntry
