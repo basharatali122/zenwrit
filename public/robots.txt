@@ -3,7 +3,9 @@ Allow: /
 Disallow: /admin
 Disallow: /dashboard
 Disallow: /auth
+Allow: /api/public/image/
 Disallow: /api/
+
 
 # Allow AI crawlers explicitly
 User-agent: GPTBot

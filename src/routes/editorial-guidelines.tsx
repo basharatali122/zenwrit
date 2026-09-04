@@ -17,7 +17,9 @@ export const Route = createFileRoute("/editorial-guidelines")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { property: "og:url", content: "https://zenwrit.com/editorial-guidelines" },
     ],
+    links: [{ rel: "canonical", href: "https://zenwrit.com/editorial-guidelines" }],
   }),
   component: () => (
     <LegalPage

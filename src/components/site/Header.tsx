@@ -98,13 +98,16 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
-            <Link
-              to={user ? "/dashboard" : "/auth"}
-              onClick={() => setOpen(false)}
-              className="rounded-md px-2 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground"
-            >
-              {user ? "Dashboard" : "Log in"}
-            </Link>
+            {user ? (
+              <Link
+                to="/dashboard"
+                onClick={() => setOpen(false)}
+                className="rounded-md px-2 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground"
+              >
+                Dashboard
+              </Link>
+            ) : null}
+
             <Link
               to="/check"
               onClick={() => setOpen(false)}
