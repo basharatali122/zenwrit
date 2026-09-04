@@ -7,66 +7,68 @@ export const Route = createFileRoute("/terms")({
       { title: "Terms of Service | ZenWrit" },
       {
         name: "description",
-        content: "The terms governing your use of ZenWrit's free ATS resume checker, including acceptable use and liability.",
+        content:
+          "The terms governing your use of ZenWrit's free ATS resume checker, including acceptable use, content ownership and liability.",
       },
       { property: "og:title", content: "Terms of Service | ZenWrit" },
       { property: "og:description", content: "Acceptable use and liability terms for ZenWrit." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://zenwrit.com/terms" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://zenwrit.com/terms" }],
   }),
   component: () => (
     <LegalPage
       title="Terms of Service"
-      updated="16 August 2026"
+      updated="4 September 2026"
       sections={[
         {
-          heading: "Who you are contracting with",
+          heading: "Agreement to these terms",
           paragraphs: [
-            "ZenWrit is owned and operated by SaaScript (\"SaaScript\", \"we\", \"us\"). These terms form an agreement between you and SaaScript. By creating an account or continuing to use ZenWrit you agree to them. If you are using ZenWrit on behalf of an organisation, you confirm you have authority to bind it; otherwise you confirm you are of legal age to enter this agreement.",
+            "These terms form an agreement between you and ZenWrit (\"ZenWrit\", \"we\", \"us\"), the operator of zenwrit.com. By using the site you agree to them. If you are using ZenWrit on behalf of an organisation, you confirm you have authority to do so; otherwise you confirm you are of legal age to enter this agreement.",
           ],
         },
         {
           heading: "The service",
           paragraphs: [
-            "ZenWrit provides a free, AI-assisted ATS resume checker. Use is unlimited and requires no account, subject to fair use to prevent automated abuse.",
-            "We grant you a limited, non-exclusive, non-transferable right to use the service within the plan you have selected.",
+            "ZenWrit provides a free, AI-assisted ATS resume checker. It requires no account and no payment, and there are no usage limits beyond fair use to prevent automated abuse. There are no paid plans, subscriptions or refunds.",
+            "We grant you a limited, non-exclusive, non-transferable right to use the service for your own personal or internal business purposes.",
           ],
         },
         {
           heading: "Acceptable use",
           paragraphs: [
-            "You may not use ZenWrit for any unlawful purpose, for fraud or spam, to infringe anyone's intellectual property, to produce harassing, defamatory, hateful or deliberately misleading content, to impersonate another person, or to generate deceptive synthetic content about real people.",
-            "You may not interfere with the security of the service: no malware, probing, scraping, reverse engineering, circumventing usage limits, or reselling or redistributing the service.",
-            "You are responsible for your prompts, for having the rights to any content you submit, for verifying the accuracy of outputs, and for how you use them. AI output may be inaccurate and is not a substitute for professional legal, financial, medical or employment advice.",
+            "You may not use ZenWrit for any unlawful purpose, for fraud or spam, to infringe anyone's intellectual property, to produce harassing, defamatory, hateful or deliberately misleading content, or to impersonate another person.",
+            "You may not interfere with the security or availability of the service: no malware, probing, bulk scraping, reverse engineering, circumventing fair-use limits, or reselling and redistributing the service.",
+            "You are responsible for having the rights to any content you submit, for verifying the accuracy of the output, and for how you use it. AI output may be inaccurate and is not a substitute for professional legal, financial, medical or employment advice.",
           ],
         },
         {
-          heading: "Content, moderation and IP",
+          heading: "Your content",
           paragraphs: [
-            "You retain ownership of the text you submit and of the output produced for you, and you grant us a limited licence to host and process that content solely to operate the service. SaaScript retains all ownership of ZenWrit itself, including its software, documentation and branding.",
-            "We may remove or restrict content, filter or refuse outputs, and suspend accounts where use breaches these terms. Rights-holders can report infringing content to support@zenwrit.app; repeat infringers will have their accounts terminated.",
+            "You keep ownership of the resume text you submit and of the report produced for you. Resume content is processed to generate your report and then discarded — we do not store it. See our Privacy Policy for detail.",
+            "ZenWrit retains all ownership of the site itself, including its software, articles and branding. Articles may not be republished without permission; rights-holders can report infringing content to support@zenwrit.app.",
           ],
         },
         {
-          heading: "Suspension and termination",
+          heading: "Availability and changes",
           paragraphs: [
-            "We may suspend or terminate your access, with notice where practicable, for material breach of these terms, suspected fraud or security risk, or repeated or serious policy violations. You may close your account at any time from your dashboard.",
-            "On termination your access ends and your account data is deleted; export anything you need beforehand from your dashboard.",
+            "The service is provided as-is and free of charge. We may change, suspend or discontinue any part of it at any time, and we may block access where use breaches these terms or threatens the security of the service.",
+            "We do not guarantee uninterrupted or error-free performance, and to the fullest extent permitted by law we disclaim all implied warranties including merchantability and fitness for a particular purpose. Nothing here guarantees an interview or a job offer.",
           ],
         },
         {
-          heading: "Availability, warranties and liability",
+          heading: "Liability",
           paragraphs: [
-            "The service is provided as-is. We do not guarantee uninterrupted or error-free performance, and to the fullest extent permitted by law we disclaim all implied warranties including merchantability and fitness for a particular purpose.",
-            "To the maximum extent permitted by law, our aggregate liability is limited to USD 100, and we exclude indirect, consequential or special damages including loss of profits, data or goodwill. Nothing limits liability for fraud, death or personal injury where the law does not allow it.",
-            "You indemnify SaaScript against claims arising from your content, your unlawful use of the service, or your breach of these terms.",
+            "To the maximum extent permitted by law, our aggregate liability is limited to USD 100, and we exclude indirect, consequential or special damages including loss of profits, data, opportunities or goodwill. Nothing limits liability for fraud, death or personal injury where the law does not allow it.",
+            "You indemnify ZenWrit against claims arising from your content, your unlawful use of the service, or your breach of these terms.",
           ],
         },
         {
           heading: "General",
           paragraphs: [
-            "You may not assign this agreement without our consent; we may assign it in connection with a merger or acquisition. Neither party is liable for delays caused by events beyond reasonable control. These terms are governed by the laws of the jurisdiction in which SaaScript is established, and disputes will be heard by its competent courts. Questions: support@zenwrit.app.",
+            "You may not assign this agreement without our consent; we may assign it in connection with a merger or acquisition. Neither party is liable for delays caused by events beyond reasonable control. If a provision is unenforceable, the rest remains in force. Questions: support@zenwrit.app.",
           ],
         },
       ]}

@@ -7,53 +7,71 @@ export const Route = createFileRoute("/privacy")({
       { title: "Privacy Policy | ZenWrit" },
       {
         name: "description",
-        content: "How SaaScript collects, uses, shares and retains your data when you use ZenWrit, including cookies, security and your rights.",
+        content:
+          "How ZenWrit handles your resume: no account, no signup, nothing stored. Read what we collect, how cookies and ads work, and how to contact us.",
       },
       { property: "og:title", content: "Privacy Policy | ZenWrit" },
-      { property: "og:description", content: "What data ZenWrit collects and how it is used." },
+      {
+        property: "og:description",
+        content: "ZenWrit's ATS resume checker needs no account and never stores your resume.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://zenwrit.com/privacy" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://zenwrit.com/privacy" }],
   }),
   component: () => (
     <LegalPage
       title="Privacy Policy"
-      updated="16 August 2026"
+      updated="4 September 2026"
       sections={[
         {
           heading: "Who we are",
           paragraphs: [
-            "ZenWrit is operated by SaaScript (\"SaaScript\", \"we\", \"us\"). SaaScript is the data controller for the personal data described in this notice. You can reach us at support@zenwrit.app.",
+            "ZenWrit (zenwrit.com) is a free ATS resume checker. This notice explains what happens to your information when you use the site. You can reach us at any time at support@zenwrit.app.",
           ],
         },
         {
-          heading: "What we collect and why",
+          heading: "No account, no signup",
           paragraphs: [
-            "Account data (email address, display name, login credentials held by our authentication provider) — to create and secure your account. Legal basis: performance of our contract with you.",
-            "Content data (the text you submit to our tools and the output generated for you) — to produce your results and show your history. Legal basis: performance of our contract.",
-            "Usage and technical data (generation counts, an anonymous visitor identifier, a hashed IP address, device and browser information, error logs) — to enforce free-tier limits, prevent abuse and keep the service reliable. Legal basis: our legitimate interest in operating and securing the service.",
-            "Support messages you send us — to answer you. Legal basis: legitimate interest.",
-            "Marketing or product emails, where applicable — sent on the basis of your consent, which you can withdraw at any time.",
+            "You do not need to create an account, sign in or provide an email address to use the resume checker. There are no paid plans, no subscriptions and no usage limits, so we do not hold billing details or profile records for visitors.",
+          ],
+        },
+        {
+          heading: "Your resume is not stored",
+          paragraphs: [
+            "When you paste or upload a resume, the text is sent over an encrypted connection to our server, passed to the AI model that produces your score and suggestions, and then discarded. We do not save the file, we do not save the extracted text, and we do not keep a copy of your results. Closing or refreshing the page removes the report permanently.",
+            "Your resume content is not used to train AI models.",
+          ],
+        },
+        {
+          heading: "What we do collect",
+          paragraphs: [
+            "Technical data: standard server and error logs containing a truncated or hashed IP address, browser type and the page requested. These are used to keep the site available and to block automated abuse, and are kept for a short period before deletion.",
+            "Aggregate usage data: anonymous counts of page views and how often the checker is run. This tells us which pages are useful; it is not linked to an identifiable person.",
+            "Messages you send us: if you email us or use the contact form, we keep your message and email address only for as long as needed to answer you.",
+            "Optional email: if you ask us to email a copy of your report, or subscribe to article updates, we use your address only for that purpose and you can ask us to delete it at any time.",
+          ],
+        },
+        {
+          heading: "Cookies and advertising",
+          paragraphs: [
+            "We use a small amount of local storage to remember your light or dark theme preference. That is not tracking and cannot identify you.",
+            "This site is supported by advertising. Advertising and analytics partners may set their own cookies or similar technologies to measure and personalise the ads you see, under their own privacy policies. You can manage these through your browser settings or any consent prompt shown to you. Ads never influence how your resume is scored or what advice we give.",
           ],
         },
         {
           heading: "Who we share data with",
           paragraphs: [
-            "Service providers and subprocessors who host our infrastructure and database, send our transactional email, and provide the AI model that produces your output. They act on our instructions only.",
-            "Professional advisers (legal, accounting) where necessary, and authorities where required by law.",
-            "We do not sell personal data, and we do not use your content to train AI models.",
-          ],
-        },
-        {
-          heading: "Retention",
-          paragraphs: [
-            "Account and content records are kept for as long as your account is active. If you delete your account, your profile, generation and usage records are deleted immediately. Anonymous usage counters are kept for up to 12 months and then deleted or anonymised. Support emails are kept for up to 24 months.",
+            "Our hosting provider, our email provider and the AI provider that processes your resume text to generate a report. They act on our instructions and process data only to deliver the service.",
+            "We do not sell personal data, and we do not share your resume with recruiters, employers or anyone else.",
           ],
         },
         {
           heading: "Security",
           paragraphs: [
-            "We apply appropriate technical and organisational measures to protect your data, including encryption in transit (TLS) and at rest, row-level access control on our database so users can only read their own records, hashed IP addresses, restricted administrative access, and secrets held in a managed secret store rather than in application code.",
+            "All traffic to the site is encrypted in transit (TLS). Because resume content is discarded straight after your report is generated, there is no stored copy of it to lose. Administrative access to our systems is restricted and credentials are held in a managed secret store rather than in application code.",
           ],
         },
         {
@@ -63,21 +81,22 @@ export const Route = createFileRoute("/privacy")({
           ],
         },
         {
+          heading: "Children",
+          paragraphs: [
+            "ZenWrit is intended for people of working age and is not directed at children under 13. We do not knowingly collect information from them.",
+          ],
+        },
+        {
           heading: "Your rights",
           paragraphs: [
-            "You can delete individual generations or your entire account from your dashboard at any time. Depending on where you live, you also have the right to access, rectify, erase, restrict or object to processing of your data, to data portability, and to withdraw consent. Email support@zenwrit.app and we will respond within one month.",
-            "If you are in the UK or EEA you also have the right to lodge a complaint with your local data protection supervisory authority.",
+            "Because we do not keep your resume or hold an account for you, there is usually nothing stored to access or delete. Where we do hold something — a support email or a newsletter subscription — you can ask us to access, correct or erase it by emailing support@zenwrit.app, and we will respond within one month. If you are in the UK or EEA you also have the right to complain to your local data protection authority.",
           ],
         },
         {
-          heading: "Cookies and advertising",
+          heading: "Changes and contact",
           paragraphs: [
-            "We use essential cookies and local storage to keep you signed in and to count free daily generations; these cannot be switched off without breaking the service. If analytics or advertising cookies are used, they are set by our partners under their own privacy policies and you can manage them through your browser settings or any consent prompt shown. Pro subscribers do not see ads.",
+            "If this notice changes we will update the date at the top of this page. Questions can be sent to support@zenwrit.app.",
           ],
-        },
-        {
-          heading: "Contact",
-          paragraphs: ["Questions about this notice can be sent to support@zenwrit.app."],
         },
       ]}
     />
