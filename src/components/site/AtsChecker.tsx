@@ -757,11 +757,11 @@ export function AtsChecker() {
       </div>
 
       <div className="mt-6">
-        <Button size="lg" className="h-14 w-full text-base" disabled={!file || busy} onClick={onCheck}>
+        <Button size="lg" className="h-12 w-full text-sm sm:h-14 sm:text-base" disabled={!file || busy} onClick={onCheck}>
           {busy ? <Loader2 className="animate-spin" /> : null}
           {busy ? "Analyzing your resume…" : "Check ATS Score →"}
         </Button>
-        <p className="mt-3 text-center text-xs text-muted-foreground" aria-live="polite">
+        <p className="mt-3 text-center text-xs text-balance text-muted-foreground" aria-live="polite">
           Unlimited free checks — no account needed. Your resume is never stored.
         </p>
       </div>
