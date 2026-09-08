@@ -427,10 +427,10 @@ export function AtsChecker() {
     const totalChecks = report.categories.reduce((sum, category) => sum + category.checks.length, 0);
 
     return (
-      <div className={file ? "grid gap-8 md:grid-cols-[35%_minmax(0,1fr)]" : ""}>
+      <div className={file ? "grid w-full min-w-0 gap-8 lg:grid-cols-[34%_minmax(0,1fr)]" : "w-full min-w-0"}>
         <ResumePreview file={file} text={resumeText} />
-        <div className="space-y-8">
-        <div className="surface-panel p-6 text-center sm:p-8">
+        <div className="min-w-0 space-y-6 sm:space-y-8">
+        <div className="surface-panel p-4 text-center sm:p-8">
           <svg
             viewBox="0 0 120 120"
             className="mx-auto size-36"
