@@ -156,7 +156,7 @@ function ResumePreview({ file, text }: { file: File | null; text: string }) {
   if (!file) return null;
 
   return (
-    <aside className="hidden md:block">
+    <aside className="hidden lg:block">
       <div className="sticky top-24">
         <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold">
           <FileText className="size-4 text-primary" /> Your Resume
@@ -219,7 +219,7 @@ function CategoryBlock({ category }: { category: AtsCategory }) {
   const Icon = CATEGORY_ICONS[category.icon] ?? Shield;
   const mounted = useMounted();
   return (
-    <section id={categoryId(category.name)} className="surface-panel scroll-mt-24 p-5 sm:p-6">
+    <section id={categoryId(category.name)} className="surface-panel scroll-mt-24 p-4 sm:p-6">
       <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-foreground">
           <Icon className="size-4" />
@@ -513,7 +513,7 @@ export function AtsChecker() {
           ))}
         </div>
 
-        <section className="surface-panel p-6">
+        <section className="surface-panel p-4 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-lg font-semibold">Keyword Analysis</h2>
             {report.job_match_percent != null ? (
@@ -610,7 +610,7 @@ export function AtsChecker() {
           </section>
         ) : null}
 
-        <section className="surface-panel p-6">
+        <section className="surface-panel p-4 sm:p-6">
           <h2 className="flex items-center gap-2 text-base font-semibold">
             <Mail className="size-4" /> Get your full report by email
           </h2>
