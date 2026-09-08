@@ -156,7 +156,7 @@ function ResumePreview({ file, text }: { file: File | null; text: string }) {
   if (!file) return null;
 
   return (
-    <aside className="hidden md:block">
+    <aside className="hidden lg:block">
       <div className="sticky top-24">
         <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold">
           <FileText className="size-4 text-primary" /> Your Resume
@@ -219,7 +219,7 @@ function CategoryBlock({ category }: { category: AtsCategory }) {
   const Icon = CATEGORY_ICONS[category.icon] ?? Shield;
   const mounted = useMounted();
   return (
-    <section id={categoryId(category.name)} className="surface-panel scroll-mt-24 p-5 sm:p-6">
+    <section id={categoryId(category.name)} className="surface-panel scroll-mt-24 p-4 sm:p-6">
       <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-foreground">
           <Icon className="size-4" />
@@ -427,10 +427,10 @@ export function AtsChecker() {
     const totalChecks = report.categories.reduce((sum, category) => sum + category.checks.length, 0);
 
     return (
-      <div className={file ? "grid gap-8 md:grid-cols-[35%_minmax(0,1fr)]" : ""}>
+      <div className={file ? "grid w-full min-w-0 gap-8 lg:grid-cols-[34%_minmax(0,1fr)]" : "w-full min-w-0"}>
         <ResumePreview file={file} text={resumeText} />
-        <div className="space-y-8">
-        <div className="surface-panel p-6 text-center sm:p-8">
+        <div className="min-w-0 space-y-6 sm:space-y-8">
+        <div className="surface-panel p-4 text-center sm:p-8">
           <svg
             viewBox="0 0 120 120"
             className="mx-auto size-36"
@@ -513,7 +513,7 @@ export function AtsChecker() {
           ))}
         </div>
 
-        <section className="surface-panel p-6">
+        <section className="surface-panel p-4 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-lg font-semibold">Keyword Analysis</h2>
             {report.job_match_percent != null ? (
@@ -610,7 +610,7 @@ export function AtsChecker() {
           </section>
         ) : null}
 
-        <section className="surface-panel p-6">
+        <section className="surface-panel p-4 sm:p-6">
           <h2 className="flex items-center gap-2 text-base font-semibold">
             <Mail className="size-4" /> Get your full report by email
           </h2>
@@ -659,24 +659,24 @@ export function AtsChecker() {
   }
 
   return (
-    <div className="surface-panel p-5 sm:p-8">
-      <ul className="mb-6 flex flex-wrap gap-2">
+    <div className="surface-panel w-full min-w-0 p-4 sm:p-6 lg:p-8">
+      <ul className="mb-5 flex flex-wrap gap-1.5 sm:mb-6 sm:gap-2">
         {TRUST_BADGES.map(({ icon: Icon, label }) => (
           <li
             key={label}
-            className="flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-medium text-muted-foreground"
+            className="flex min-w-0 items-center gap-1.5 rounded-full border border-border bg-surface px-2.5 py-1 text-[11px] font-medium text-muted-foreground sm:px-3 sm:py-1.5 sm:text-xs"
           >
-            <Icon className="size-3.5 text-primary" />
-            {label}
+            <Icon className="size-3.5 shrink-0 text-primary" />
+            <span className="min-w-0">{label}</span>
           </li>
         ))}
       </ul>
 
-      <div className="flex items-baseline gap-2">
+      <div className="flex flex-wrap items-baseline gap-2">
         <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-bold text-primary-foreground">
           Step 1
         </span>
-        <h3 className="text-base font-semibold">Upload resume (PDF or DOCX)</h3>
+        <h3 className="text-sm font-semibold sm:text-base">Upload resume (PDF or DOCX)</h3>
       </div>
 
       <div
@@ -696,17 +696,17 @@ export function AtsChecker() {
           setDragging(false);
           acceptFile(e.dataTransfer.files?.[0]);
         }}
-        className={`mt-3 flex min-h-[220px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center transition-colors sm:min-h-[260px] ${
+        className={`mt-3 flex min-h-[170px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-4 py-8 text-center transition-colors sm:min-h-[240px] sm:p-10 ${
           dragging ? "border-primary bg-accent" : "border-border hover:border-primary/60 hover:bg-surface"
         }`}
       >
-        <span className="flex size-14 items-center justify-center rounded-2xl bg-accent text-accent-foreground">
-          <FileUp className="size-7" />
+        <span className="flex size-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground sm:size-14">
+          <FileUp className="size-6 sm:size-7" />
         </span>
-        <p className="mt-5 text-base font-semibold sm:text-lg">
+        <p className="mt-4 text-sm font-semibold text-balance sm:mt-5 sm:text-lg">
           Drop your resume here or click to browse
         </p>
-        <p className="mt-1.5 text-sm text-muted-foreground">PDF or DOCX, up to 5MB</p>
+        <p className="mt-1.5 text-xs text-muted-foreground sm:text-sm">PDF or DOCX, up to 5MB</p>
         <input
           ref={inputRef}
           type="file"
@@ -717,9 +717,9 @@ export function AtsChecker() {
       </div>
 
       {file ? (
-        <div className="mt-4 flex items-center gap-2 rounded-lg border border-green-500/30 bg-green-500/10 p-3 text-sm">
-          <CheckCircle2 className="size-4 text-green-600 dark:text-green-400" />
-          <span className="font-medium">{file.name}</span>
+        <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-green-500/30 bg-green-500/10 p-3 text-sm">
+          <CheckCircle2 className="size-4 shrink-0 text-green-600 dark:text-green-400" />
+          <span className="min-w-0 break-all font-medium">{file.name}</span>
           <span className="text-muted-foreground">({formatSize(file.size)})</span>
         </div>
       ) : null}
@@ -757,11 +757,11 @@ export function AtsChecker() {
       </div>
 
       <div className="mt-6">
-        <Button size="lg" className="h-14 w-full text-base" disabled={!file || busy} onClick={onCheck}>
+        <Button size="lg" className="h-12 w-full text-sm sm:h-14 sm:text-base" disabled={!file || busy} onClick={onCheck}>
           {busy ? <Loader2 className="animate-spin" /> : null}
           {busy ? "Analyzing your resume…" : "Check ATS Score →"}
         </Button>
-        <p className="mt-3 text-center text-xs text-muted-foreground" aria-live="polite">
+        <p className="mt-3 text-center text-xs text-balance text-muted-foreground" aria-live="polite">
           Unlimited free checks — no account needed. Your resume is never stored.
         </p>
       </div>
