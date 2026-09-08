@@ -338,7 +338,7 @@ function Home() {
 
       {/* THE TOOL */}
       <section id="ats-tool" className="border-y border-border bg-surface scroll-mt-20">
-        <div className="container-page py-14">
+        <div className="container-page py-10 sm:py-14">
           <Reveal>
             <div className="text-center">
               <span className="eyebrow">The tool</span>
@@ -347,7 +347,7 @@ function Home() {
               </h2>
             </div>
           </Reveal>
-          <div className="mx-auto mt-8 max-w-3xl rounded-3xl border border-border bg-card p-4 shadow-sm sm:p-6">
+          <div className="mx-auto mt-6 w-full min-w-0 max-w-3xl sm:mt-8">
             <AtsChecker />
           </div>
         </div>
