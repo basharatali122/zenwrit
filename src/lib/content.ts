@@ -99,6 +99,15 @@ export function renderMarkdown(markdown: string): string {
  */
 function applyShortcodes(html: string): string {
   return html
+    .replace(
+      /<p>\s*(<img\s[^>]*>)\s*<\/p>\s*<p><em>([\s\S]*?)<\/em><\/p>/gi,
+      (_match, image: string, caption: string) =>
+        `<figure class="zw-article-image">${image}<figcaption>${caption}</figcaption></figure>`,
+    )
+    .replace(
+      /<p>\s*(<img\s[^>]*>)\s*<\/p>/gi,
+      (_match, image: string) => `<figure class="zw-article-image">${image}</figure>`,
+    )
     .replace(/<blockquote>\s*([\s\S]*?)\s*<\/blockquote>/g, (match, inner: string) => {
       const stat = /^<p>\s*\[!stat\]\s*/i.exec(inner);
       if (stat) {

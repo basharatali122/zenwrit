@@ -72,6 +72,16 @@ function BlogEditor() {
 
   const set = <K extends keyof Form>(key: K, value: Form[K]) => setForm((prev) => ({ ...prev, [key]: value }));
 
+  const encodeImage = async (file: File, folder: "covers" | "articles") => {
+    const buffer = await file.arrayBuffer();
+    let binary = "";
+    const bytes = new Uint8Array(buffer);
+    for (let i = 0; i < bytes.length; i += 1) binary += String.fromCharCode(bytes[i] ?? 0);
+    return adminUploadCover({
+      data: { fileName: file.name, contentType: file.type, dataBase64: btoa(binary), folder },
+    });
+  };
+
   const save = useMutation({
     mutationFn: (publish: boolean) =>
       adminSavePost({
@@ -99,15 +109,7 @@ function BlogEditor() {
   });
 
   const upload = useMutation({
-    mutationFn: async (file: File) => {
-      const buffer = await file.arrayBuffer();
-      let binary = "";
-      const bytes = new Uint8Array(buffer);
-      for (let i = 0; i < bytes.length; i += 1) binary += String.fromCharCode(bytes[i]!);
-      return adminUploadCover({
-        data: { fileName: file.name, contentType: file.type, dataBase64: btoa(binary) },
-      });
-    },
+    mutationFn: (file: File) => encodeImage(file, "covers"),
     onSuccess: (result) => {
       set("cover_image_url", result.url);
       toast.success("Cover uploaded");
@@ -195,7 +197,15 @@ function BlogEditor() {
         <Textarea id="excerpt" rows={2} value={form.excerpt} onChange={(e) => set("excerpt", e.target.value)} />
       </div>
 
-      <MarkdownEditor id="content" value={form.content} onChange={(next) => set("content", next)} />
+      <MarkdownEditor
+        id="content"
+        value={form.content}
+        onChange={(next) => set("content", next)}
+        onUploadImage={async (file) => {
+          const result = await encodeImage(file, "articles");
+          return result.url;
+        }}
+      />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>

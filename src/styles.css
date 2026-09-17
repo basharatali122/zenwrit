@@ -315,8 +315,36 @@
   }
 
   & img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
     border-radius: var(--radius-lg);
     margin: 1.5rem 0;
+  }
+
+  & .zw-article-image {
+    width: 100%;
+    margin: 2rem 0;
+  }
+
+  & .zw-article-image img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    margin: 0;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    box-shadow: 0 12px 30px color-mix(in oklch, var(--color-brand) 10%, transparent);
+  }
+
+  & .zw-article-image figcaption {
+    margin-top: 0.65rem;
+    padding-inline: 0.25rem;
+    color: var(--color-muted-foreground);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    text-align: center;
   }
 
   /* Stat callout: > [!stat] ... */
