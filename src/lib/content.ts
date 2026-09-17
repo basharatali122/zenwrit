@@ -68,10 +68,22 @@ export function slugify(input: string): string {
 
 /** Splits markdown into top-level blocks so ad slots can be interleaved. */
 export function splitMarkdownBlocks(markdown: string): string[] {
-  return markdown
+  const blocks = markdown
     .split(/\n{2,}/)
     .map((block) => block.trim())
     .filter(Boolean);
+
+  return blocks.reduce<string[]>((combined, block) => {
+    const previous = combined.at(-1);
+    const isImage = /^!\[[^\]]*\]\([^\n]+\)$/.test(previous ?? "");
+    const isCaption = /^\*[^*\n].*\*$/.test(block) || /^_[^_\n].*_$/.test(block);
+    if (isImage && isCaption && previous) {
+      combined[combined.length - 1] = `${previous}\n\n${block}`;
+    } else {
+      combined.push(block);
+    }
+    return combined;
+  }, []);
 }
 
 const STRIP_UNSAFE = /<\/?(script|iframe|object|embed|style)[^>]*>/gi;
@@ -86,7 +98,8 @@ export function renderMarkdown(markdown: string): string {
   return applyShortcodes(
     html
       .replace(STRIP_UNSAFE, "")
-      .replace(/\son\w+="[^"]*"/gi, "")
+      .replace(/\son\w+=(?:"[^"]*"|'[^']*')/gi, "")
+      .replace(/<img\s/gi, '<img loading="lazy" decoding="async" ')
       .replace(/<h2>([\s\S]*?)<\/h2>/g, (_m, inner: string) => `<h2 id="${slugify(stripTags(inner))}">${inner}</h2>`),
   );
 }
@@ -99,6 +112,15 @@ export function renderMarkdown(markdown: string): string {
  */
 function applyShortcodes(html: string): string {
   return html
+    .replace(
+      /<p>\s*(<img\s[^>]*>)\s*<\/p>\s*<p><em>([\s\S]*?)<\/em><\/p>/gi,
+      (_match, image: string, caption: string) =>
+        `<figure class="zw-article-image">${image}<figcaption>${caption}</figcaption></figure>`,
+    )
+    .replace(
+      /<p>\s*(<img\s[^>]*>)\s*<\/p>/gi,
+      (_match, image: string) => `<figure class="zw-article-image">${image}</figure>`,
+    )
     .replace(/<blockquote>\s*([\s\S]*?)\s*<\/blockquote>/g, (match, inner: string) => {
       const stat = /^<p>\s*\[!stat\]\s*/i.exec(inner);
       if (stat) {

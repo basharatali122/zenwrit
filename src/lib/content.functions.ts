@@ -239,6 +239,7 @@ export const adminUploadCover = createServerFn({ method: "POST" })
         fileName: z.string().min(1).max(200),
         contentType: z.string().min(3).max(100),
         dataBase64: z.string().min(10).max(8_000_000),
+        folder: z.enum(["covers", "articles"]).default("covers"),
       })
       .parse(input),
   )
@@ -251,7 +252,7 @@ export const adminUploadCover = createServerFn({ method: "POST" })
     if (bytes.byteLength > 5_000_000) throw new Error("Image must be under 5 MB");
 
     const ext = (data.fileName.split(".").pop() ?? "png").toLowerCase().replace(/[^a-z0-9]/g, "");
-    const path = `covers/${crypto.randomUUID()}.${ext || "png"}`;
+    const path = `${data.folder}/${crypto.randomUUID()}.${ext || "png"}`;
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.storage
