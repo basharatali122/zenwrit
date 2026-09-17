@@ -1,4 +1,4 @@
-import avatarAsset from "@/assets/basharat-ali.jpg.asset.json";
+import avatarAsset from "@/assets/basharat-ali.png.asset.json";
 
 export const SITE_AUTHOR = {
   name: "Basharat Ali",
