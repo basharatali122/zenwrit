@@ -71,10 +71,10 @@ function BlogIndex() {
   const [query, setQuery] = useState("");
 
   const categories = useMemo(
-    () => Array.from(new Set(posts.map((post) => post.category).filter(Boolean))),
+    () => Array.from(new Set(posts.map((post) => post.category).filter((category) => category && category.trim().toLowerCase() !== "creators"))),
     [posts],
   );
-  const activeCategory = search.category ?? "All";
+  const activeCategory = search.category && categories.includes(search.category) ? search.category : "All";
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
