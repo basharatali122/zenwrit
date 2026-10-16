@@ -41,7 +41,7 @@ const FAQS = [
   },
   {
     q: "How accurate is the ATS score?",
-    a: "ZenWrit uses GPT-4o to simulate ATS analysis across 20+ checks. While no checker can replicate every ATS system exactly, our scoring is calibrated to real recruiter expectations and keyword-matching patterns used by major ATS platforms like Workday, Greenhouse, and Lever.",
+    a: "ZenWrit provides an AI-generated assessment of resume formatting, structure and keywords. It is designed around how major ATS platforms parse resumes, but it does not replicate or certify compatibility with any specific system. Treat the score as guidance, not a prediction of a hiring decision.",
   },
   {
     q: "Do I need to paste a job description?",
@@ -157,13 +157,13 @@ const START_CARDS = [
   {
     icon: BookOpen,
     title: "Learn what recruiters see",
-    body: "Practical, recruiter-reviewed guides on resumes, keywords and formatting.",
+    body: "Practical guides on resumes, keywords and formatting.",
     cta: "Read the guides",
     to: "/blog" as const,
   },
 ];
 
-const COMPANIES = ["Microsoft", "Google", "Amazon", "Meta", "Apple", "Stripe", "Shopify"];
+const RESUME_CHECKS = ["Formatting", "Structure", "Keywords", "Content"];
 
 const STEPS = [
   {
@@ -294,11 +294,11 @@ function Home() {
       <section className="border-b border-border bg-surface">
         <div className="container-page flex flex-wrap items-center justify-center gap-3 py-5 text-xs text-muted-foreground">
           <span className="font-semibold uppercase tracking-widest">
-            Used by job seekers applying to
+            Resume feedback covering
           </span>
-          {COMPANIES.map((company) => (
-            <span key={company} className="rounded-full bg-background px-3 py-1 font-medium">
-              {company}
+          {RESUME_CHECKS.map((check) => (
+            <span key={check} className="rounded-full bg-background px-3 py-1 font-medium">
+              {check}
             </span>
           ))}
         </div>
@@ -448,16 +448,16 @@ function Home() {
           <div>
             <span className="eyebrow">Who is behind ZenWrit</span>
             <h2 className="mt-1 font-display text-2xl font-bold tracking-tight sm:text-3xl">
-              Built by people who read resumes for a living
+              Focused on clearer, better-structured resumes
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               ZenWrit exists because most resume tools sell a subscription before they tell you
-              anything useful. Our checker applies the same parsing and keyword logic used by major
-              applicant tracking systems, then explains every deduction in plain English.
+              anything useful. Our checker assesses resume formatting, structure and keywords,
+              then explains suggested improvements in plain English.
             </p>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Every guide we publish is written and reviewed against current recruiter practice, and
-              updated when hiring platforms change. Ads keep the tool free — they never influence
+              Our guides cover resume formatting, keywords and job search topics.
+              Ads help keep the tool free — they never influence
               our scoring or our advice.
             </p>
             <Button asChild variant="outline" className="mt-6">
@@ -470,7 +470,7 @@ function Home() {
               { t: "20+ checks", d: "Across formatting, structure, keywords, content and red flags." },
               { t: "Nothing stored", d: "Your file is parsed in memory and discarded immediately." },
               { t: "No paywall", d: "Unlimited checks, no account, no credit card, ever." },
-              { t: "Real ATS logic", d: "Calibrated to Workday, Greenhouse, Lever, iCIMS and Taleo." },
+              { t: "ATS-focused feedback", d: "Designed around how major ATS platforms parse resumes, not certified by any specific platform." },
             ].map((item) => (
               <div key={item.t} className="surface-panel p-5">
                 <dt className="font-display text-base font-bold">{item.t}</dt>

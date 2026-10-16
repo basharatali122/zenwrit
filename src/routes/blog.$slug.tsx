@@ -28,8 +28,10 @@ export const Route = createFileRoute("/blog/$slug")({
       return { meta: [{ title: "Article not found | ZenWrit" }, { name: "robots", content: "noindex" }] };
     }
     const { post, rating } = loaderData;
-    const title = post.meta_title || `${post.title} | ZenWrit Blog`;
-    const description = post.meta_description || post.excerpt;
+    const seoTitle = post.meta_title.trim();
+    const title = seoTitle || `${post.title} | ZenWrit Blog`;
+    const shareTitle = seoTitle || post.title;
+    const description = post.meta_description.trim() || post.excerpt;
     const image = post.cover_image_url && /^https?:\/\//.test(post.cover_image_url) ? post.cover_image_url : "https://zenwrit.com/og-image.png";
     return {
       meta: [
@@ -37,13 +39,13 @@ export const Route = createFileRoute("/blog/$slug")({
         { name: "description", content: description },
         { name: "author", content: SITE_AUTHOR.name },
         { property: "article:author", content: SITE_AUTHOR.profileUrlAbsolute },
-        { property: "og:title", content: post.meta_title || post.title },
+        { property: "og:title", content: shareTitle },
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },
         { property: "og:url", content: `https://zenwrit.com/blog/${post.slug}` },
         { property: "og:image", content: image },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: post.meta_title || post.title },
+        { name: "twitter:title", content: shareTitle },
         { name: "twitter:description", content: description },
         { name: "twitter:image", content: image },
       ],
